@@ -2,6 +2,7 @@ package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.repository.RecordRepository;
 
@@ -27,7 +28,8 @@ public class RecordServiceImpl implements RoomService<RecordTable, Long> {
     }
 
     @Override
-    public Boolean deleteById(Long aLong) {
-        return null;
+    public RecordTable deleteById(Long id) {
+        return recordRepository.findById(id)
+                .orElseThrow(() -> new RecordTableException("Не найден ID"));
     }
 }

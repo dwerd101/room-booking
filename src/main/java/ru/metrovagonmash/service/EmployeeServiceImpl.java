@@ -25,7 +25,7 @@ public class EmployeeServiceImpl implements RoomService<Employee, Long> {
     }
 
     @Override
-    public Boolean deleteById(Long aLong) {
+    public Employee deleteById(Long aLong) {
         return null;
     }
 }

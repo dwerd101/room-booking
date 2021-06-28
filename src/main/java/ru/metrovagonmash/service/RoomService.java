@@ -6,5 +6,5 @@ public interface RoomService<T,ID> {
     T save(T model);
     T update(T model);
     List<T> findAll();
-    Boolean deleteById(ID id);
+    T deleteById(ID id);
 }
