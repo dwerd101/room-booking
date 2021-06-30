@@ -3,14 +3,14 @@ package ru.metrovagonmash.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.model.Department;
-import ru.metrovagonmash.repository.DepartRepo;
+import ru.metrovagonmash.repository.DepartmentRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements RoomService<Department, Long> {
-    private final DepartRepo departRepo;
+    private final DepartmentRepository departmentRepository;
     @Override
     public Department save(Department model) {
         return null;
@@ -23,11 +23,11 @@ public class DepartmentServiceImpl implements RoomService<Department, Long> {
 
     @Override
     public List<Department> findAll() {
-        return departRepo.findAll();
+        return departmentRepository.findAll();
     }
 
     @Override
-    public Boolean deleteById(Long aLong) {
+    public Department deleteById(Long aLong) {
         return null;
     }
 }

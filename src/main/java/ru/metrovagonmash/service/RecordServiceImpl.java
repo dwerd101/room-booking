@@ -24,7 +24,7 @@ public class RecordServiceImpl implements RoomService<RecordTable, Long> {
 
     @Override
     public List<RecordTable> findAll() {
-        return null;
+        return recordRepository.findAll();
     }
 
     @Override

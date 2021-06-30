@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.metrovagonmash.model.VscRoom;
 
 @Repository
-public interface VscRepo extends JpaRepository<VscRoom,Long> {
+public interface VscRepository extends JpaRepository<VscRoom,Long> {
 }

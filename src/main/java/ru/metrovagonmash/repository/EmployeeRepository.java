@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.metrovagonmash.model.Employee;
 
 @Repository
-public interface EmployeeRepo extends JpaRepository< Employee, Long> {
+public interface EmployeeRepository extends JpaRepository< Employee, Long> {
 }
