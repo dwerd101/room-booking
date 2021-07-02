@@ -1,6 +1,7 @@
 package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.exception.EmployeeException;
@@ -18,10 +19,10 @@ public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
     private final EmployeeRepository employeeRepository;
     private final Mapper<Employee, EmployeeDTO> mapper;
 
+
     @Override
     public EmployeeDTO save(EmployeeDTO model) {
-
-        return mapper.toDTO(employeeRepository.save(mapper.toModel(model)));
+        return mapper.toDTO(employeeRepository.save(toEmployee(model)));
     }
 
     @Override
@@ -42,6 +43,16 @@ public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
     public EmployeeDTO deleteById(Long aLong) {
         return mapper.toDTO( employeeRepository.findById(aLong)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
+    }
+
+    // изменить заглушку на будущее
+    private Employee toEmployee(EmployeeDTO model) {
+        Employee employee = mapper.toModel(model);
+        Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
+                employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
+        employee.setDepartmentId(temp.getDepartmentId());
+        employee.setProfileId(temp.getProfileId());
+        return employee;
     }
   /*  @Override
     public Employee save(Employee model) {
