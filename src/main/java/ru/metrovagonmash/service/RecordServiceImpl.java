@@ -14,11 +14,11 @@ public class RecordServiceImpl implements RoomService<RecordTable, Long> {
     private final RecordRepository recordRepository;
     @Override
     public RecordTable save(RecordTable model) {
-        return null;
+        return recordRepository.save(model);
     }
 
     @Override
-    public RecordTable update(RecordTable model) {
+    public RecordTable update(RecordTable model, Long id) {
         return null;
     }
 

@@ -2,6 +2,8 @@ package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.exception.DepartmentException;
+import ru.metrovagonmash.exception.VscRoomException;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.repository.VscRepository;
 
@@ -13,11 +15,11 @@ public class VscRoomServiceImpl implements RoomService<VscRoom, Long> {
     private final VscRepository vscRepository;
     @Override
     public VscRoom save(VscRoom model) {
-        return null;
+        return vscRepository.save(model);
     }
 
     @Override
-    public VscRoom update(VscRoom model) {
+    public VscRoom update(VscRoom model, Long id) {
         return null;
     }
 
@@ -28,6 +30,7 @@ public class VscRoomServiceImpl implements RoomService<VscRoom, Long> {
 
     @Override
     public VscRoom deleteById(Long aLong) {
-        return null;
+        return vscRepository.findById(aLong)
+                .orElseThrow(() -> new VscRoomException("Не найден ID"));
     }
 }

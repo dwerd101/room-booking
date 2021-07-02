@@ -2,6 +2,8 @@ package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.exception.DepartmentException;
+import ru.metrovagonmash.exception.ProfileException;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.repository.ProfileRepository;
 
@@ -13,11 +15,11 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
     private final ProfileRepository profileRepository;
     @Override
     public Profile save(Profile model) {
-        return null;
+        return profileRepository.save(model);
     }
 
     @Override
-    public Profile update(Profile model) {
+    public Profile update(Profile model, Long id) {
         return null;
     }
 
@@ -28,6 +30,7 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
 
     @Override
     public Profile deleteById(Long aLong) {
-        return null;
+        return profileRepository.findById(aLong)
+                .orElseThrow(() -> new ProfileException("Не найден ID"));
     }
 }
