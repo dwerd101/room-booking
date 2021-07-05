@@ -1,0 +1,29 @@
+<html lang="ru"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Метровагонмаш - производит вагоны метро, дизель поезда, рельсовые автобусы." />
+    <link
+            href="/css/userpagestyle.css"
+            type="text/css" data-template-style="true" rel="stylesheet" />
+    <title>ВКС</title>
+</head>
+<body>
+<header>
+    <nav class="b-nav">
+        <a href="/index.html" class="b-nav__logo hidden-sm hidden-xs">
+            <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
+        </a>
+        <div class="auth-panel">
+            <h2>
+                <a sec:authorize="isAnonymous()" class="btn btn-secondary" href="/auth/login" role="button">Вход</a>
+                <a sec:authorize="isAuthenticated()" class="btn btn-secondary ml-2" href="/auth/logout" role="button">Выход</a>
+            </h2>
+        </div>
+    </nav>
+</header>
+
+</body>
+</html>
