@@ -20,7 +20,8 @@ public class VscRoomServiceImpl implements RoomService<VscRoom, Long> {
 
     @Override
     public VscRoom update(VscRoom model, Long id) {
-        return null;
+        model.setId(id);
+        return vscRepository.save(model);
     }
 
     @Override

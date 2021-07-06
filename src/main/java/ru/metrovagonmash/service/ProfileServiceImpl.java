@@ -20,7 +20,8 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
 
     @Override
     public Profile update(Profile model, Long id) {
-        return null;
+        model.setId(id);
+        return profileRepository.save(model);
     }
 
     @Override
