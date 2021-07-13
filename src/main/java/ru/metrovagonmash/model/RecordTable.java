@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
         sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
 public class RecordTable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
     @Column(name = "email")
     private String email;

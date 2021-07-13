@@ -54,6 +54,7 @@ public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
         employee.setProfileId(temp.getProfileId());
         return employee;
     }
+
   /*  @Override
     public Employee save(Employee model) {
         return employeeRepository.save(model);

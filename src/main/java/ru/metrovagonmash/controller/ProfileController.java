@@ -34,4 +34,11 @@ public class ProfileController {
     public Callable<ResponseEntity<Profile>> deleteProfile( @PathVariable String id) {
         return () -> ResponseEntity.ok(profileService.deleteById(Long.parseLong(id)));
     }
+
+    @PutMapping("/temp-banned")
+    public Callable<ResponseEntity<Profile>> tempBanned(@RequestParam("id") String id,
+                                                        @RequestParam("status") String status) {
+        return () -> ResponseEntity.ok(profileService.changeAccountNonLocked(Boolean.parseBoolean(status),
+                Long.parseLong(id)));
+    }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
-import ru.metrovagonmash.service.RecordServiceImpl;
+import ru.metrovagonmash.service.RecordTableServiceImpl;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @RequestMapping("/record")
 public class RecordController {
-    private final RecordServiceImpl recordService;
+    private final RecordTableServiceImpl recordService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<RecordTableDTO>>> findAll() {
@@ -34,4 +34,13 @@ public class RecordController {
     public Callable<ResponseEntity<RecordTableDTO>> deleteEmployee( @PathVariable String id) {
         return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
+
+    //Подумать над названием
+    @GetMapping("/findAll")
+    public Callable<ResponseEntity<List<RecordTableDTO>>> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom() {
+        return () -> ResponseEntity.ok(recordService.findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom());
+    }
+
+
+
 }

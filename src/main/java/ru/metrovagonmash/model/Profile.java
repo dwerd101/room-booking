@@ -27,6 +27,8 @@ public class Profile {
     private Role role;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "account_non_locked")
+    private Boolean accountNonLocked;
 
 /*    @Override
     public Long getId() {
