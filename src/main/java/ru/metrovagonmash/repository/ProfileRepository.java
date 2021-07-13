@@ -1,11 +1,10 @@
-/*
 package ru.metrovagonmash.repository;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.metrovagonmash.model.DateRecords;
+import ru.metrovagonmash.model.Profile;
 
 @Repository
-public interface DateRecRepo extends JpaRepository<Long, DateRecords> {
+public interface ProfileRepository extends JpaRepository<Profile,Long> {
 }
-*/

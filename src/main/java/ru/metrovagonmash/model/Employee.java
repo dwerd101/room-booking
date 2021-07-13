@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -37,10 +38,12 @@ public class Employee {
     private Boolean isActive;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profileId;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department departmentId;
 

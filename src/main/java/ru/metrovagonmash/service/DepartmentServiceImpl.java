@@ -2,32 +2,36 @@ package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.exception.DepartmentException;
+import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.Department;
-import ru.metrovagonmash.repository.DepartRepo;
+import ru.metrovagonmash.repository.DepartmentRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements RoomService<Department, Long> {
-    private final DepartRepo departRepo;
+    private final DepartmentRepository departmentRepository;
     @Override
     public Department save(Department model) {
-        return null;
+        return departmentRepository.save(model);
     }
 
     @Override
-    public Department update(Department model) {
-        return null;
+    public Department update(Department model, Long id) {
+        model.setId(id);
+        return departmentRepository.save(model);
     }
 
     @Override
     public List<Department> findAll() {
-        return departRepo.findAll();
+        return departmentRepository.findAll();
     }
 
     @Override
-    public Boolean deleteById(Long aLong) {
-        return null;
+    public Department deleteById(Long aLong) {
+        return departmentRepository.findById(aLong)
+                .orElseThrow(() -> new DepartmentException("Не найден ID"));
     }
 }
