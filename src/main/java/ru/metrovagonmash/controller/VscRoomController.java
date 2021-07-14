@@ -22,16 +22,16 @@ public class VscRoomController {
     }
 
     @PostMapping("/save")
-    public Callable<ResponseEntity<VscRoom>> saveProfile(@RequestBody VscRoom vscRoom) {
+    public Callable<ResponseEntity<VscRoom>> saveRoom(@RequestBody VscRoom vscRoom) {
         return () -> ResponseEntity.ok(vscRoomService.save(vscRoom));
     }
 
     @PutMapping("/update/{id}")
-    public Callable<ResponseEntity<VscRoom>> updateProfile(@RequestBody VscRoom vscRoom, @PathVariable String id) {
+    public Callable<ResponseEntity<VscRoom>> updateRoom(@RequestBody VscRoom vscRoom, @PathVariable String id) {
         return () -> ResponseEntity.ok(vscRoomService.update(vscRoom,Long.parseLong(id)));
     }
     @DeleteMapping("/delete/{id}")
-    public Callable<ResponseEntity<VscRoom>> deleteProfile( @PathVariable String id) {
+    public Callable<ResponseEntity<VscRoom>> deleteRoom(@PathVariable String id) {
         return () -> ResponseEntity.ok(vscRoomService.deleteById(Long.parseLong(id)));
     }
 }

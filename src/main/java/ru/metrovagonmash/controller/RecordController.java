@@ -21,17 +21,17 @@ public class RecordController {
     }
 
     @PostMapping("/save")
-    public Callable<ResponseEntity<RecordTableDTO>> saveEmployee(@RequestBody RecordTableDTO recordTableDTO) {
+    public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
         return () -> ResponseEntity.ok(recordService.save(recordTableDTO));
     }
 
     @PostMapping("/update/{id}")
-    public Callable<ResponseEntity<RecordTableDTO>> updateEmployee(@RequestBody RecordTableDTO recordTableDTO, @PathVariable String id) {
+    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO, @PathVariable String id) {
         return () -> ResponseEntity.ok(recordService.update(recordTableDTO, Long.parseLong(id)));
     }
 
     @DeleteMapping("/delete/{id}")
-    public Callable<ResponseEntity<RecordTableDTO>> deleteEmployee( @PathVariable String id) {
+    public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@PathVariable String id) {
         return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
 
