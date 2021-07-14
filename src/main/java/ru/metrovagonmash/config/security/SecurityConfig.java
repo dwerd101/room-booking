@@ -28,17 +28,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login/**").anonymous()
+                .antMatchers("/auth/login/**").anonymous()
                 .antMatchers("/enable/**").authenticated()
                 .and()
-                .httpBasic()
+                .formLogin()
+                .loginPage("/auth/login")
+                .defaultSuccessUrl("/")
+                .and()
+                .rememberMe()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSISIONID","remember-me")
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/");
  /*       http
                 .csrf().disable()
                 .authorizeRequests()

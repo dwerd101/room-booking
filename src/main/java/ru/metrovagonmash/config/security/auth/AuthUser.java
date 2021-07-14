@@ -61,8 +61,8 @@ public class AuthUser implements UserDetails {
         return new org.springframework.security.core.userdetails.User(
                 profile.getLogin(), profile.getPassword(),
                 profile.getIsActive(),
-            true,
-                true,
+               true,
+               true,
                 profile.getAccountNonLocked(),
                 profile.getRole().getAuthorities()
         );

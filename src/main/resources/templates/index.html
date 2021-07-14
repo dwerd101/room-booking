@@ -16,8 +16,9 @@
         </a>
         <div class="auth-panel">
             <h2>
-                <a href="/login.html">Вход</a>
-                <a href="/registration.html">Регистрация</a>
+                <a href="/auth/login">Вход</a>
+                <a href="/registration">Регистрация</a>
+                <a sec:authorize = "isAuthenticated()" href="/auth/logout">Выход</a>
             </h2>
         </div>
     </nav>
