@@ -1,4 +1,4 @@
-<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,14 +22,14 @@
 
 <div class="login-p">
     <div class="login-f">
-    <form action="/registration" method="post">
+    <form th:action="@{/registration}" th:object="${userData}" method="post">
         <div>
             <p>Логин</p>
-             <input type="text" name="username"/>
+             <input type="text" name="username" th:field="*{login}"/>
         </div>
         <div>
             <p>Пароль</p>
-             <input type="password" name="password"/>
+             <input type="password" name="password" th:field="*{password}"/>
         </div>
         <div>
             <p>Имя</p>
