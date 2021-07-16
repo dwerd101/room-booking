@@ -3,7 +3,7 @@ package ru.metrovagonmash.mapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Lol implements Mapper<Long, String> {
+public class Lol implements MyMapper<Long, String> {
     @Override
     public String toDTO(Long aLong) {
         return null;

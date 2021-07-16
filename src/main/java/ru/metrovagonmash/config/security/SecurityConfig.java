@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.metrovagonmash.config.security.auth.UserService;
@@ -26,10 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/login/**").anonymous()
-                .antMatchers("/enable/**").authenticated()
+                .antMatchers("/enable/**").hasAnyAuthority("admin:read","user:read")
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
@@ -41,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSISIONID","remember-me")
+                // FIXME: 16.07.2021 исправить JSESSISIONID
+                .deleteCookies("sessionone","remember-me")
                 .logoutSuccessUrl("/");
  /*       http
                 .csrf().disable()

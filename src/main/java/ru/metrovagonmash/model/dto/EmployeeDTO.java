@@ -1,5 +1,6 @@
 package ru.metrovagonmash.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(value = "true")
 public class EmployeeDTO {
     private Long id;
     private String surname;
@@ -22,4 +24,6 @@ public class EmployeeDTO {
     private Boolean isActive;
     private Long profileId;
     private Long departmentId;
+
+
 }

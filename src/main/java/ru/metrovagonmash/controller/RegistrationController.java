@@ -31,7 +31,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y,12);
         String encodedPassword = passwordEncoder.encode(profile.getPassword());
         profile.setPassword(encodedPassword);
 
