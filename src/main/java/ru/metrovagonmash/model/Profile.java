@@ -1,3 +1,4 @@
+
 package ru.metrovagonmash.model;
 
 import com.google.common.collect.Sets;
@@ -62,3 +63,4 @@ public class Profile {
     }*/
 
 }
+

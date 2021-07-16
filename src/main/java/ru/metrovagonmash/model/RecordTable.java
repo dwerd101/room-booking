@@ -1,3 +1,4 @@
+
 package ru.metrovagonmash.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,4 +1,5 @@
-package ru.metrovagonmash.model;/*
+
+/*package ru.metrovagonmash.model;
 package ru.metrovagonmash.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

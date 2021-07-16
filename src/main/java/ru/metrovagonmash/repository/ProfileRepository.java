@@ -1,3 +1,4 @@
+
 package ru.metrovagonmash.repository;
 
 
@@ -12,3 +13,4 @@ public interface ProfileRepository extends JpaRepository<Profile,Long> {
 
     Optional<Profile> findByLogin(String login);
 }
+
