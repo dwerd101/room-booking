@@ -1,5 +1,7 @@
+
 package ru.metrovagonmash.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +19,10 @@ import java.time.LocalDateTime;
 /*@SequenceGenerator(
         name = "seqid-gen",
         sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RecordTable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
     @Column(name = "email")
     private String email;

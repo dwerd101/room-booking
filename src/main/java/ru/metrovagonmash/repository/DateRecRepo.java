@@ -1,4 +1,5 @@
-/*
+
+/*package ru.metrovagonmash.repository;
 package ru.metrovagonmash.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,3 +10,4 @@ import ru.metrovagonmash.model.DateRecords;
 public interface DateRecRepo extends JpaRepository<Long, DateRecords> {
 }
 */
+

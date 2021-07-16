@@ -1,4 +1,5 @@
-/*
+
+/*package ru.metrovagonmash.model;
 package ru.metrovagonmash.model;
 
 
@@ -31,3 +32,4 @@ public class DateRecords extends AbstractBaseEntity{
     }
 }
 */
+

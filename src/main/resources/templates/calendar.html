@@ -1,0 +1,106 @@
+<html lang="ru"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="index, follow" />
+    <META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <meta name="description" content="Метровагонмаш - производит вагоны метро, дизель поезда, рельсовые автобусы." />
+    <link
+            href="/css/userpagestyle.css"
+            type="text/css" data-template-style="true" rel="stylesheet" />
+            <link href='/css/calendar.css' rel='stylesheet' />
+<script src='/js/calendar.js'></script>
+    <title>ВКС</title>
+</head>
+<body>
+<header>
+    <nav class="b-nav">
+      
+        <a href="/templates/index.html" class="b-nav__logo hidden-sm hidden-xs">
+            <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
+        </a>
+        <div class="auth-panel">
+            <h2>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-primary" href="/auth/login" role="button">Вход</a>
+                <a sec:authorize="isAuthenticated()" class="btn btn-outline-primary" href="/auth/logout" role="button">Выход</a>
+            </h2>
+        </div>
+    </nav>
+</header>
+  
+<script src='/locales/ru.js'></script>
+
+<script>
+  document.getElementById('datePicker').value = new Date().toDateInputValue();
+</script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var initialLocaleCode = 'ru';
+    var localeSelectorEl = document.getElementById('locale-selector');
+    var calendarEl = document.getElemntById('calendar');
+    var a = document.getElementById('dad');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      locale: initialLocaleCode,
+      buttonIcons: false, // show the prev/next text
+      weekNumbers: true,
+      initialDate: '2020-09-12',
+      navLinks: true, // can click day/week names to navigate views
+      selectable: true,
+      selectMirror: true,
+      select: function(arg) {
+        var title = prompt('Event Title:');
+        if (title) {
+          calendar.addEvent({
+            title: title,
+            start: arg.start,
+            end: arg.end,
+            allDay: arg.allDay
+          })
+        }
+
+      },
+      eventClick: function(arg) {
+        if (confirm('Are you sure you want to delete this event?')) {
+          arg.event.remove()
+        }
+      },
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+    });
+
+    calendar.render();
+  });
+
+  
+
+</script>
+<style>
+
+  body {
+    margin: 100px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 810px;
+    margin: 0 auto;
+  }
+
+</style>
+
+<div id='top'>
+  
+<div id='calendar'></div>
+
+</body>
+</html>
