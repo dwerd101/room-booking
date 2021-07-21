@@ -22,10 +22,12 @@ import ru.metrovagonmash.config.security.auth.UserService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userDetailsService;
+
+    // FIXME: 21.07.2021 Это не окончательный вариант. Нужно будет его доработать.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
+      /*  http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login/**").anonymous()
@@ -38,11 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSISIONID","remember-me")
-                .logoutSuccessUrl("/login");
- /*       http
+                .logoutSuccessUrl("/login");*/
+       http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login/**").anonymous()
+                .antMatchers("/auth/login/**").anonymous()
                 .antMatchers("/department/**","/employees/**","/report/**").hasAuthority("admin:read")
                 .antMatchers("/reports/**").hasAnyAuthority("admin:read","user:read")
                 .and()
@@ -59,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSISIONID","remember-me")
                 .logoutSuccessUrl("/login");
-*/
+
 
     }
     @Override

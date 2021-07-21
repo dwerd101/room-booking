@@ -31,9 +31,12 @@ public class Employee {
     @Column(name = "middle_name")
     private String middleName;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "phone")
     private String phone;
-
+    // FIXME: 19.07.2021 Проверить
     @Column(name = "is_active")
     private Boolean isActive;
 

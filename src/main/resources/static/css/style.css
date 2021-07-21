@@ -12,6 +12,9 @@ body {
     -o-background-size: cover;
     background-size: cover;
 }
+form {
+    padding-bottom: 30px;
+}
 /* Для мобильных устройств */
 @media only screen and (max-width: 767px) {
     body {
