@@ -23,26 +23,30 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
 
 
     private final ProfileViewRepository profileViewRepository;
+
+    @Transactional
     @Override
     public ProfileView save(ProfileView model) {
-        return null;
+        return profileViewRepository.save(model);
     }
 
     @Override
     public ProfileView update(ProfileView model, Long aLong) {
         return null;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<ProfileView> findAll() {
         return profileViewRepository.findAll();
     }
 
+    @Transactional
     @Override
     public ProfileView deleteById(Long aLong) {
         return null;
     }
 
+    //  Анотацию эту разберем с вами на занятии
     @Transactional
     public void batchUpdateProfileAndEmployee(List<ProfileView> profileViewList) {
 
