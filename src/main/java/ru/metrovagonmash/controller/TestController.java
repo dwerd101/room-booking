@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.repository.ProfileViewRepository;
+import ru.metrovagonmash.repository.RecordTableViewRepository;
 import ru.metrovagonmash.service.ProfileViewService;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TestController {
     private final ProfileViewRepository profileViewRepository;
     private final ProfileViewService profileViewService;
+    private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
     public String userPage(){
         return "userpage";
@@ -36,6 +38,20 @@ public class TestController {
         List<ProfileView> list = profileViewRepository.findAll();
         modelMap.addAttribute("employeeList",list);
         return "adminpage";
+    }
+
+    @GetMapping("/admin/find-by-surname")
+    public String getBySurnamePage(ModelMap modelMap) {
+        List<ProfileView> list = null;
+        modelMap.addAttribute("employeeList",list);
+        return "adminpagefindemployee";
+    }
+    @PostMapping("/admin/find-by-surname/")
+    public String findBySurnamePage(ModelMap modelMap,@RequestParam String findBySurname ) {
+        List<ProfileView> list = profileViewRepository.findAllBySurname(findBySurname);
+        if(list.isEmpty()) list = null;
+        modelMap.addAttribute("employeeList",list);
+        return "adminpagefindemployee";
     }
 
     @PostMapping("/save-user")

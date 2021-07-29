@@ -1,3 +1,4 @@
+/*
 package ru.metrovagonmash.config.security;
 
 
@@ -17,7 +18,7 @@ import ru.metrovagonmash.config.security.auth.UserService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -27,7 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-      /*  http
+      */
+/*  http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login/**").anonymous()
@@ -40,8 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSISIONID","remember-me")
-                .logoutSuccessUrl("/login");*/
-       http
+                .logoutSuccessUrl("/login");*//*
+
+        */
+/* http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/login/**").anonymous()
@@ -57,10 +61,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 //*.logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))*//*
+*/
+/*
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSISIONID","remember-me")
                 .logoutSuccessUrl("/login");
+
+*//*
 
 
     }
@@ -82,3 +90,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
 }
+*/

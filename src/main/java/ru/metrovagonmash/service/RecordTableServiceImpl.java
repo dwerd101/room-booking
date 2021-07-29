@@ -26,6 +26,8 @@ public class RecordTableServiceImpl implements RoomService<RecordTableDTO, Long>
         return mapper.toDTO(recordRepository.save(toRecordTable(model)));
     }
 
+
+
     @Override
     public RecordTableDTO update(RecordTableDTO model, Long aLong) {
         model.setId(aLong);

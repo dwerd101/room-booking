@@ -1,3 +1,4 @@
+/*
 package ru.metrovagonmash.config.security.auth;
 
 import lombok.RequiredArgsConstructor;
@@ -22,3 +23,4 @@ public class UserService implements UserDetailsService {
         return AuthUser.fromUser(profile);
     }
 }
+*/
