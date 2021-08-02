@@ -10,6 +10,7 @@ import ru.metrovagonmash.config.security.Permission;
 import ru.metrovagonmash.config.security.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,15 +25,22 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
+
+    @NotNull
     @Column(name = "login")
     private String login;
+
+    @NotNull
     @Column(name = "password")
     private String password;
+
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
     @Column(name = "is_active")
     private Boolean isActive;
+
     @Column(name = "account_non_locked")
     private Boolean accountNonLocked;
 

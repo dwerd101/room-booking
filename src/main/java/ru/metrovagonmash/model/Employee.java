@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -22,9 +23,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
 
+    @NotNull
     @Column(name = "surname")
     private String surname;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
@@ -33,6 +36,11 @@ public class Employee {
 
     @Column(name = "phone")
     private String phone;
+
+    @Email
+    @NotNull
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "is_active")
     private Boolean isActive;

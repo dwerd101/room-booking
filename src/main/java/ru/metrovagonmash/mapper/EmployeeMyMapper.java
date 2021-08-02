@@ -18,6 +18,7 @@ public interface EmployeeMyMapper extends MyMapper<Employee, EmployeeDTO> {
             @Mapping(target="isActive", source="employee.isActive"),
             @Mapping(target="profileId", source="employee.profileId.id"),
             @Mapping(target="phone", source="employee.phone"),
+            @Mapping(target="email", source="employee.email"),
             @Mapping(target="departmentId", source="employee.departmentId.id")
     })
     EmployeeDTO toDTO(Employee employee);
@@ -30,6 +31,7 @@ public interface EmployeeMyMapper extends MyMapper<Employee, EmployeeDTO> {
             @Mapping(target="isActive", source="employeeDTO.isActive"),
             @Mapping(target="profileId.id", source="employeeDTO.profileId"),
             @Mapping(target="phone", source="employeeDTO.phone"),
+            @Mapping(target="email", source="employeeDTO.email"),
             @Mapping(target="departmentId.id", source="employeeDTO.departmentId")
     })
     Employee toModel(EmployeeDTO employeeDTO);
