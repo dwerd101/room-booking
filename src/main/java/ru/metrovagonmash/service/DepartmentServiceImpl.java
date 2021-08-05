@@ -34,4 +34,9 @@ public class DepartmentServiceImpl implements RoomService<Department, Long> {
         return departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentException("Не найден ID"));
     }
+
+    public Department findById(Long aLong) {
+        return departmentRepository.findById(aLong)
+                .orElseThrow(() -> new DepartmentException("Не найден ID"));
+    }
 }
