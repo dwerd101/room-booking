@@ -20,10 +20,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Long>  {
-    //private final EmployeeRepository employeeRepository;
-    //private final ProfileRepository profileRepository;
-    //private final DepartmentRepository departmentRepository;
+public class RegistrationServiceImpl implements RegistrationService  {
+
     private final EmployeeServiceImpl employeeService;
     private final ProfileServiceImpl profileService;
     private final DepartmentServiceImpl departmentService;
@@ -50,6 +48,7 @@ public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Lon
         return null;
     }
 
+    @Override
     @Transactional
     public void saveEmployeeAndProfile(RegistrationDTO model) {
         myProfileMapper.toDTO(profileService.save(myProfileMapper.toModel(model)));
@@ -75,6 +74,7 @@ public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Lon
         return employeeDTO;
     }
 
+    @Override
     public boolean doesUserExist(RegistrationDTO model) {
         if (model != null)
             return profileService.doesProfileExist(model.getLogin());
