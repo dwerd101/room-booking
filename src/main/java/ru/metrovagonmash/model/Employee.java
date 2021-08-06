@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+//@Builder
 @Entity
 @Table(name = "employee")
 /*@SequenceGenerator(
@@ -22,21 +23,25 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
 
+    @NotNull
     @Column(name = "surname")
     private String surname;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
     @Column(name = "middle_name")
     private String middleName;
 
+    @Column(name = "phone")
+    private String phone;
+
+    @Email
+    @NotNull
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone")
-    private String phone;
-    // FIXME: 19.07.2021 Проверить
     @Column(name = "is_active")
     private Boolean isActive;
 

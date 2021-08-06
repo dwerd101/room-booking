@@ -14,4 +14,8 @@ public interface EmployeeRepository extends JpaRepository< Employee, Long> {
     @Query( nativeQuery = true,
             value = "select * from employee where department_id=?1 and profile_id=?2")
     Optional<Employee> findByDepartmentIdAndProfileId(Long depId, Long profId);
+
+    @Query( nativeQuery = true,
+            value = "select * from employee where department_id=?")
+    Optional<Employee> findByDepartmentId(Long depId);
 }
