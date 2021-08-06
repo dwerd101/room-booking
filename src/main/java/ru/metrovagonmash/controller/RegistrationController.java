@@ -13,6 +13,7 @@ import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
 import ru.metrovagonmash.service.DepartmentServiceImpl;
 import ru.metrovagonmash.service.ProfileServiceImpl;
+import ru.metrovagonmash.service.RegistrationService;
 import ru.metrovagonmash.service.RegistrationServiceImpl;
 
 import javax.validation.Valid;
@@ -20,9 +21,10 @@ import javax.validation.Valid;
 @Controller
 @RequiredArgsConstructor
 public class RegistrationController {
-    private final RegistrationServiceImpl registrationService;
+    private final RegistrationService registrationService;
+
     private final DepartmentServiceImpl departmentService;
-    public boolean loginErrorMessage;
+    //public boolean loginErrorMessage;
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -40,8 +42,8 @@ public class RegistrationController {
         }*/
 
         if(!registrationService.doesUserExist(registrationDTO)) {
-            loginErrorMessage = false;
-            model.addAttribute("loginErrorMessage", loginErrorMessage);
+            //loginErrorMessage = false;
+            model.addAttribute("loginErrorMessage", false);
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
             String encodedPassword = passwordEncoder.encode(registrationDTO.getPassword());
             registrationDTO.setPassword(encodedPassword);
@@ -54,8 +56,8 @@ public class RegistrationController {
 
             return "redirect:/";
         } else {
-            loginErrorMessage = true;
-            model.addAttribute("loginErrorMessage", loginErrorMessage);
+            //loginErrorMessage = true;
+            model.addAttribute("loginErrorMessage", true);
             return "registration";
         }
     }

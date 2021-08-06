@@ -33,4 +33,18 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
         return profileRepository.findById(aLong)
                 .orElseThrow(() -> new ProfileException("Не найден ID"));
     }
+
+    public Profile findByLogin(String login) {
+        return profileRepository.findByLogin(login)
+                .orElseThrow(() -> new ProfileException("Профиль не найден"));
+    }
+
+    public Profile findById(Long profId) {
+        return profileRepository.findById(profId)
+                .orElseThrow(() -> new ProfileException("Профиль не найден"));
+    }
+
+    public boolean doesProfileExist(String login) {
+        return profileRepository.findByLogin(login).isPresent();
+    }
 }

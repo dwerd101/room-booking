@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
     private final EmployeeRepository employeeRepository;
     private final MyMapper<Employee, EmployeeDTO> myMapper;
+    private final DepartmentServiceImpl departmentService;
+    private final ProfileServiceImpl profileService;
 
 
     @Override
@@ -46,10 +48,13 @@ public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
     // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
-        Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
-                employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
-        employee.setDepartmentId(temp.getDepartmentId());
-        employee.setProfileId(temp.getProfileId());
+        //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
+        //        employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
+
+        employee.setDepartmentId(departmentService.findById(model.getDepartmentId()));
+
+
+        employee.setProfileId(profileService.findById(model.getProfileId()));
         return employee;
     }
   /*  @Override

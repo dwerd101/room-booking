@@ -20,11 +20,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Long> {
-    private final EmployeeRepository employeeRepository;
-    private final ProfileRepository profileRepository;
-    private final DepartmentRepository departmentRepository;
-    private final MyMapper<Employee, RegistrationDTO> myEmployeeMapper;
+public class RegistrationServiceImpl implements RegistrationService  {
+
+    private final EmployeeServiceImpl employeeService;
+    private final ProfileServiceImpl profileService;
+    private final DepartmentServiceImpl departmentService;
+    private final MyMapper<EmployeeDTO, RegistrationDTO> myEmployeeMapper;
     private final MyMapper<Profile, RegistrationDTO> myProfileMapper;
 
     @Override
@@ -47,21 +48,20 @@ public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Lon
         return null;
     }
 
+    @Override
     @Transactional
     public void saveEmployeeAndProfile(RegistrationDTO model) {
-        myProfileMapper.toDTO(profileRepository.save(myProfileMapper.toModel(model)));
-        myEmployeeMapper.toDTO(employeeRepository.save(toEmployee(model)));
+        myProfileMapper.toDTO(profileService.save(myProfileMapper.toModel(model)));
+        myEmployeeMapper.toDTO(employeeService.save(toEmployee(model)));
     }
 
     //Заглушка
-    private Employee toEmployee(RegistrationDTO model) {
-        Employee employee = myEmployeeMapper.toModel(model);
+    private EmployeeDTO toEmployee(RegistrationDTO model) {
+        EmployeeDTO employeeDTO = myEmployeeMapper.toModel(model);
 
-        employee.setProfileId(profileRepository.findByLogin(model.getLogin())
-                .orElseThrow(() -> new ProfileException("Профиль не найден")));
+        employeeDTO.setProfileId(profileService.findByLogin(model.getLogin()).getId());
 
-        employee.setDepartmentId(departmentRepository.findById(model.getDepartmentId())
-                .orElseThrow(() -> new DepartmentException("Департамент не найден")));
+        employeeDTO.setDepartmentId(departmentService.findById(model.getDepartmentId()).getId());
 
         //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
         //        employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
@@ -71,12 +71,13 @@ public class RegistrationServiceImpl implements RoomService<RegistrationDTO, Lon
         //Employee temp = employeeRepository.findByDepartmentId(employee.getDepartmentId()
         //        .getId()).orElseThrow(() -> new EmployeeException("Не найден"));
 
-        return employee;
+        return employeeDTO;
     }
 
+    @Override
     public boolean doesUserExist(RegistrationDTO model) {
         if (model != null)
-            return profileRepository.findByLogin(model.getLogin()).isPresent();
+            return profileService.doesProfileExist(model.getLogin());
         else return false;
     }
 }
