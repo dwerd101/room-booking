@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class RecordTableServiceImpl implements RoomService<RecordTableDTO, Long> {
+public class RecordTableServiceImpl implements RecordTableService {
     private final RecordRepository recordRepository;
     private final RecordTableViewRepository recordTableViewRepository;
     private final Mapper<RecordTable, RecordTableDTO> mapper;
@@ -58,6 +58,7 @@ public class RecordTableServiceImpl implements RoomService<RecordTableDTO, Long>
         return recordTable;
     }
 
+    @Override
     public List<RecordTableDTO> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom() {
         return recordTableViewRepository.findAll()
                 .stream()

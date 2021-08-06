@@ -15,7 +15,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
-    private final ProfileViewRepository profileViewRepository;
+
+    final ProfileViewRepository profileViewRepository;
     private final ProfileViewService profileViewService;
     private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
@@ -48,6 +49,21 @@ public class TestController {
     }
     @PostMapping("/admin/find-by-surname/")
     public String findBySurnamePage(ModelMap modelMap,@RequestParam String findBySurname ) {
+        List<ProfileView> list = profileViewRepository.findAllBySurname(findBySurname);
+        if(list.isEmpty()) list = null;
+        modelMap.addAttribute("employeeList",list);
+        return "adminpagefindemployee";
+    }
+
+
+    @GetMapping("/admin/find-by-name")
+    public String getByNamePage(ModelMap modelMap) {
+        List<ProfileView> list = null;
+        modelMap.addAttribute("employeeList",list);
+        return "adminpagefindemployee";
+    }
+    @PostMapping("/admin/find-by-name/")
+    public String findByNamePage(ModelMap modelMap,@RequestParam String findBySurname ) {
         List<ProfileView> list = profileViewRepository.findAllBySurname(findBySurname);
         if(list.isEmpty()) list = null;
         modelMap.addAttribute("employeeList",list);

@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProfileViewRepository extends JpaRepository<ProfileView, Long> {
     List<ProfileView> findAllBySurname(String surname);
+    List<ProfileView> findAllByName(String name);
 }
