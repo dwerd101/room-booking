@@ -29,10 +29,10 @@ public class TestController {
         return "calendar";
     }
 
-    @GetMapping("/auth/login")
+   /* @GetMapping("/auth/login")
     public String loginPage() {
         return "login";
-    }
+    }*/
 
     @GetMapping("/admin")
     public String admin(ModelMap modelMap){

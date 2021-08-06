@@ -1,4 +1,3 @@
-/*
 package ru.metrovagonmash.config.security.auth;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class  AuthUser implements UserDetails {
+public class AuthUser implements UserDetails {
 
     private final String username;
     private final String password;
@@ -62,11 +61,10 @@ public class  AuthUser implements UserDetails {
         return new org.springframework.security.core.userdetails.User(
                 profile.getLogin(), profile.getPassword(),
                 profile.getIsActive(),
-               true,
-               true,
+                true,
+                true,
                 profile.getAccountNonLocked(),
                 profile.getRole().getAuthorities()
         );
     }
 }
-*/

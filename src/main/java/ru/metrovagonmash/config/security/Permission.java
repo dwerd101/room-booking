@@ -1,4 +1,3 @@
-/*
 package ru.metrovagonmash.config.security;
 
 public enum Permission {
@@ -21,4 +20,3 @@ public enum Permission {
         return permission;
     }
 }
-*/
