@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.Profile;
-import ru.metrovagonmash.service.ProfileServiceImpl;
+import ru.metrovagonmash.service.ProfileService;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @RequestMapping("/profile")
 public class ProfileController {
-    private final ProfileServiceImpl profileService;
+    private final ProfileService profileService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<Profile>>> findAll() {

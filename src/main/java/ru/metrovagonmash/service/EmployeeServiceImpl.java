@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class EmployeeServiceImpl implements RoomService<EmployeeDTO, Long> {
+public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final MyMapper<Employee, EmployeeDTO> myMapper;
-    private final DepartmentServiceImpl departmentService;
-    private final ProfileServiceImpl profileService;
+    private final DepartmentService departmentService;
+    private final ProfileService profileService;
 
 
     @Override

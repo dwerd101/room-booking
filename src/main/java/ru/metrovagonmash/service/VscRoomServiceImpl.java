@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class VscRoomServiceImpl implements RoomService<VscRoom, Long> {
+public class VscRoomServiceImpl implements VscRoomService {
     private final VscRepository vscRepository;
     @Override
     public VscRoom save(VscRoom model) {

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DepartmentServiceImpl implements RoomService<Department, Long> {
+public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     @Override
     public Department save(Department model) {
@@ -35,6 +35,7 @@ public class DepartmentServiceImpl implements RoomService<Department, Long> {
                 .orElseThrow(() -> new DepartmentException("Не найден ID"));
     }
 
+    @Override
     public Department findById(Long aLong) {
         return departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentException("Не найден ID"));

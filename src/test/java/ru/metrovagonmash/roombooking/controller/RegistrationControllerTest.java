@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import ru.metrovagonmash.config.security.Role;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
 import ru.metrovagonmash.roombooking.RoomBookingApplication;
-import ru.metrovagonmash.service.DepartmentServiceImpl;
+import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.RegistrationService;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +30,7 @@ public class RegistrationControllerTest {
     private RegistrationService registrationService;
 
     @MockBean
-    private DepartmentServiceImpl departmentService;
+    private DepartmentService departmentService;
 
     @Test
     void saveEmployeeAndProfile_thenReturnOk() {

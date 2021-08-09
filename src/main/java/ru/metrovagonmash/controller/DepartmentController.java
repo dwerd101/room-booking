@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.Department;
-import ru.metrovagonmash.service.DepartmentServiceImpl;
+import ru.metrovagonmash.service.DepartmentService;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @RequestMapping("/department")
 public class DepartmentController {
-    private final DepartmentServiceImpl departmentService;
+    private final DepartmentService departmentService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<Department>>> findAll() {

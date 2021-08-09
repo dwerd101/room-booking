@@ -12,17 +12,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ProfileServiceImpl implements RoomService<Profile, Long> {
+public class ProfileServiceImpl implements ProfileService {
     //language=sql
     private final String SQL_CHANGE_ACCOUNT_NON_LOCKED = "update profile set account_non_locked = ? where id = ?";
     private final JdbcTemplate jdbcTemplate;
     private final ProfileRepository profileRepository;
+
     @Override
     public Profile save(Profile model) {
         return profileRepository.save(model);
     }
-
-
 
     @Override
     public List<Profile> findAll() {
@@ -35,22 +34,24 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
                 .orElseThrow(() -> new ProfileException("Не найден ID"));
     }
 
+    @Override
     public Profile findByLogin(String login) {
         return profileRepository.findByLogin(login)
                 .orElseThrow(() -> new ProfileException("Профиль не найден"));
     }
 
+    @Override
     public Profile findById(Long profId) {
         return profileRepository.findById(profId)
                 .orElseThrow(() -> new ProfileException("Профиль не найден"));
     }
 
+    @Override
     public boolean doesProfileExist(String login) {
         return profileRepository.findByLogin(login).isPresent();
     }
 
-
-
+    @Override
     public Profile changeAccountNonLocked(Boolean account_non_locked, Long id ) {
         jdbcTemplate.update(SQL_CHANGE_ACCOUNT_NON_LOCKED, account_non_locked, id);
         return profileRepository.findById(id)
@@ -66,7 +67,4 @@ public class ProfileServiceImpl implements RoomService<Profile, Long> {
         model.setId(id);
         return profileRepository.save(model);
     }
-
-
-
 }

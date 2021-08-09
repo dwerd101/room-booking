@@ -4,9 +4,8 @@ package ru.metrovagonmash.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
-import ru.metrovagonmash.service.EmployeeServiceImpl;
+import ru.metrovagonmash.service.EmployeeService;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -15,7 +14,7 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @RequestMapping("/employee")
 public class EmployeeController {
-    private final EmployeeServiceImpl employeeService;
+    private final EmployeeService employeeService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<EmployeeDTO>>> findAll() {

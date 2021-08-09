@@ -8,17 +8,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.repository.ProfileRepository;
+import ru.metrovagonmash.service.ProfileService;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Profile profile = profileRepository.findByLogin(login).orElseThrow(
-                () -> new UsernameNotFoundException("User doesn't exist")
-        );
+        Profile profile = profileService.findByLogin(login);
         return AuthUser.fromUser(profile);
     }
 }

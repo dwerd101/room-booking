@@ -22,9 +22,9 @@ import java.util.List;
 @Service
 public class RegistrationServiceImpl implements RegistrationService  {
 
-    private final EmployeeServiceImpl employeeService;
-    private final ProfileServiceImpl profileService;
-    private final DepartmentServiceImpl departmentService;
+    private final EmployeeService employeeService;
+    private final ProfileService profileService;
+    private final DepartmentService departmentService;
     private final MyMapper<EmployeeDTO, RegistrationDTO> myEmployeeMapper;
     private final MyMapper<Profile, RegistrationDTO> myProfileMapper;
 

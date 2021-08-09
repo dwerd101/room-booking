@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.VscRoom;
-import ru.metrovagonmash.service.VscRoomServiceImpl;
+import ru.metrovagonmash.service.VscRoomService;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @RequestMapping("/vsc_room")
 public class VscRoomController {
-    private final VscRoomServiceImpl vscRoomService;
+    private final VscRoomService vscRoomService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<VscRoom>>> findAll() {

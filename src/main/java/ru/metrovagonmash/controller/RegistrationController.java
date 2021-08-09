@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.metrovagonmash.config.security.Role;
-import ru.metrovagonmash.model.Profile;
+
 import ru.metrovagonmash.model.dto.RegistrationDTO;
-import ru.metrovagonmash.service.DepartmentServiceImpl;
-import ru.metrovagonmash.service.ProfileServiceImpl;
-import ru.metrovagonmash.service.RegistrationService;
-import ru.metrovagonmash.service.RegistrationServiceImpl;
+import ru.metrovagonmash.service.*;
 
 import javax.validation.Valid;
 
@@ -23,7 +20,7 @@ import javax.validation.Valid;
 public class RegistrationController {
     private final RegistrationService registrationService;
 
-    private final DepartmentServiceImpl departmentService;
+    private final DepartmentService departmentService;
     //public boolean loginErrorMessage;
 
     @GetMapping("/registration")
