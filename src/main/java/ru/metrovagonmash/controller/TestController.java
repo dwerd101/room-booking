@@ -5,12 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.ProfileView;
+import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.repository.ProfileViewRepository;
 import ru.metrovagonmash.repository.RecordTableViewRepository;
+import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
 import ru.metrovagonmash.service.ProfileViewService;
+import ru.metrovagonmash.specification.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class TestController {
 
     final ProfileViewRepository profileViewRepository;
     private final ProfileViewService profileViewService;
+    private final ProfileViewSearchCriteriaRepostitory recordTableViewSearchCriteriaRepostitory;
     private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
     public String userPage(){
@@ -33,6 +39,22 @@ public class TestController {
     public String loginPage() {
         return "login";
     }*/
+
+    @GetMapping("/source")
+    public String search(@RequestParam(value = "search", required = false) String search, ModelMap modelMap) {
+        List<SearchCriteria> params = new ArrayList<>();
+        if (search != null) {
+            Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+            }
+        }
+         List<ProfileView> list = recordTableViewSearchCriteriaRepostitory.searchProfile(params);
+        modelMap.addAttribute("employeeList",list);
+        return "adminpage";
+    }
+
 
     @GetMapping("/admin")
     public String admin(ModelMap modelMap){
