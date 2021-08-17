@@ -36,7 +36,7 @@ public class TestController {
 
     @GetMapping("/admin")
     public String admin(ModelMap modelMap){
-        List<ProfileView> list = profileViewRepository.findAll();
+        List<ProfileView> list = profileViewService.findAll();
         modelMap.addAttribute("employeeList",list);
         return "adminpage";
     }
@@ -104,5 +104,22 @@ public class TestController {
 
         return "redirect:/admin";
     }
+
+    @GetMapping("/admin/find-by-param")
+    public String getByParamPage(ModelMap modelMap) {
+        List<ProfileView> list = null;
+        modelMap.addAttribute("profileView", new ProfileView());
+        modelMap.addAttribute("employeeList",list);
+        return "adminpagefullfindemployee";
+    }
+
+    @PostMapping("/admin/find-by-param")
+    public String findByParamPage(@ModelAttribute("profileView")final ProfileView profileView, ModelMap modelMap) {
+
+        //List<ProfileView> list = profileViewService.findAllByParameters(profileView);
+        //modelMap.addAttribute("employeeList",list);
+        return "adminpagefullfindemployee";
+    }
+
 
 }

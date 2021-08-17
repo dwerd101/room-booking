@@ -1,6 +1,8 @@
 package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -8,11 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
+import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.ProfileViewRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +28,9 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
 
 
     private final ProfileViewRepository profileViewRepository;
+
+    private final ProfileService profileService;
+    private final EmployeeService employeeService;
 
     @Transactional
     @Override
@@ -37,7 +45,11 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
     @Transactional(readOnly = true)
     @Override
     public List<ProfileView> findAll() {
-        return profileViewRepository.findAll();
+        //return profileViewRepository.findAll();
+        //Временная заглушка
+        return employeeService.findAll().stream()
+                .map(this::toProfileView)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -112,5 +124,19 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
                         return profileList.size();
                     }
                 });
+    }
+
+    private ProfileView toProfileView(EmployeeDTO employeeDTO) {
+
+
+        return ProfileView.builder()
+                .id(employeeDTO.getProfileId())
+                .name(employeeDTO.getName())
+                .surname(employeeDTO.getSurname())
+                .middleName(employeeDTO.getMiddleName())
+                .phone(employeeDTO.getPhone())
+                .email(employeeDTO.getEmail())
+                .banned(profileService.findById(employeeDTO.getProfileId()).getAccountNonLocked())
+                .build();
     }
 }
