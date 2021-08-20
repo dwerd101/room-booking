@@ -27,8 +27,14 @@ public class RecordTable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "record")
-    private LocalDateTime record;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "start_event")
+    private LocalDateTime startEvent;
+
+    @Column(name = "end_event")
+    private LocalDateTime endEvent;
 
     @Column(name = "is_active")
     private Boolean isActive;

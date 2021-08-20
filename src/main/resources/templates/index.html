@@ -24,7 +24,9 @@
 
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
-            <a sec:authorize = "isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
+            <a sec:authorize = "isAuthenticated()" href="/auth/logout">
+                <img src="/img/icons/icon-exit-emergency.jpg" class="i-exit" alt="Выход">
+            </a>
         </div>
     </nav>
 </header>

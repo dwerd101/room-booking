@@ -7,5 +7,11 @@ insert into vsc_room (is_active, number_room) VALUES
 (true, '404');
 
 
-insert into record_table(email, is_active, record, employee_id, number_room_id) VALUES
-( 'asdsad@mnas',true, '1970-01-01 00:00:01',1,1);
+insert into record_table(email, title, start_event, end_event, is_active, employee_id, number_room_id) VALUES
+( 'asdsad@mnas', 'title', '2021-08-19 00:00:01', '2021-08-20 00:00:01', true,1,1);
+insert into record_table(email, title, start_event, end_event, is_active, employee_id, number_room_id) VALUES
+( 'asdsad@mnas', 'title', '2021-08-21 00:00:01', '2021-08-23 00:00:01', true,1,1);
+insert into record_table(email, title, start_event, end_event, is_active, employee_id, number_room_id) VALUES
+( 'asdsad@mnas', 'title', '2021-08-25 00:00:01', '2021-08-26 00:00:01', true,1,1);
+insert into record_table(email, title, start_event, end_event, is_active, employee_id, number_room_id) VALUES
+( 'asdsad@mnas', 'title', '2021-08-27 00:00:01', '2021-08-29 00:00:01', true,1,1);

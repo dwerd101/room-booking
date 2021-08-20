@@ -22,9 +22,14 @@ public class RecordTableDTO {
     private Long id;
     private String email;
 
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private LocalDateTime record;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDateTime start;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDateTime end;
+
+    private String title;
     private Boolean isActive;
     private Long numberRoomId;
 

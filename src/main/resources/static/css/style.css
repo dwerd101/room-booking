@@ -95,6 +95,11 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     background-color: #fff;
 }
+.nav .i-exit {
+    height: 45px;
+    width: 90px;
+    border-radius: 5%;
+}
 
 header {
     position: fixed;

@@ -10,21 +10,20 @@
             href="/css/userpagestyle.css"
             type="text/css" data-template-style="true" rel="stylesheet" />
             <link href='/css/calendar.css' rel='stylesheet' />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src='/js/calendar.js'></script>
-    <link rel="icon" href="/img/icons/favicon.ico?v=1" type="image/x-icon">
     <title>ВКС</title>
 </head>
 <body>
-<header>
-    <nav class="b-nav">
-      
-        <a href="/templates/index.html" class="b-nav__logo hidden-sm hidden-xs">
+  <header>
+    <nav class="nav">
+        <a href="/index.html" class="b-nav__logo hidden-sm hidden-xs">
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
         <div class="auth-panel">
             <h2>
-                <a sec:authorize="isAnonymous()" class="btn btn-outline-primary" href="/auth/login" role="button">Вход</a>
-                <a sec:authorize="isAuthenticated()" class="btn btn-outline-primary" href="/auth/logout" role="button">Выход</a>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
+                <a sec:authorize="isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
             </h2>
         </div>
     </nav>
@@ -41,8 +40,8 @@
   document.addEventListener('DOMContentLoaded', function() {
     var initialLocaleCode = 'ru';
     var localeSelectorEl = document.getElementById('locale-selector');
-    var calendarEl = document.getElemntById('calendar');
-    var a = document.getElementById('dad');
+    var calendarEl = document.getElementById('calendar');
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
       headerToolbar: {
         left: 'prev,next today',
@@ -56,25 +55,74 @@
       navLinks: true, // can click day/week names to navigate views
       selectable: true,
       selectMirror: true,
-      select: function(arg) {
-        var title = prompt('Event Title:');
-        if (title) {
-          calendar.addEvent({
-            title: title,
-            start: arg.start,
-            end: arg.end,
-            allDay: arg.allDay
-          })
-        }
+      select: async function (arg) {
+          var title = prompt('Event Title:');
+          if (title) {
+              calendar.addEvent({
+                  title: title,
+                  start: arg.start,
+                  end: arg.end,
+                  allDay: arg.allDay
+              })
+              const url = '/record/save';
+              let data = {
+                  title: title,
+                  start: '2021-08-13 00:00:01',
+                  end: '2021-08-14 00:00:01',
+                  allDay: arg.allDay
+              }
 
+              try {
+                  const response = await fetch(url, {
+                      method: 'POST', // или 'PUT'
+                      body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  });
+                  const json = await response.json();
+                  console.log('Успех:', JSON.stringify(json));
+              } catch (error) {
+                  console.error('Ошибка:', error);
+              }
+          }
+          calendar.unselect()
       },
-      eventClick: function(arg) {
-        if (confirm('Are you sure you want to delete this event?')) {
-          arg.event.remove()
-        }
+      eventClick: async function (arg) {
+          if (confirm('Are you sure you want to delete this event?')) {
+              arg.event.remove()
+              const url = '/record/delete/';
+              const data = arg.event;
+
+              try {
+                  const response = await fetch(url, {
+                      method: 'DELETE', // или 'PUT'
+                      body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  });
+                  const json = await response.json();
+                  console.log('Успех:', JSON.stringify(json));
+              } catch (error) {
+                  console.error('Ошибка:', error);
+              }
+          }
       },
       editable: true,
       dayMaxEvents: true, // allow "more" link when too many events
+
+      eventSources: [
+
+    // your event source
+    {
+      url: '/record/', // use the `url` property
+    }
+
+    // any other sources...
+
+  ]
+
     });
 
     calendar.render();
