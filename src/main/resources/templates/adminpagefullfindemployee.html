@@ -45,12 +45,13 @@
 </header>-->
 
 
-
+<!--
 <div th:if="${employeeList==null}">
+-->
 <div class="container">
-<form action="#" th:action="@{/admin/find-by-param}" th:object="${profileView}" method="post">
+<form action="#" th:action="@{/admin/find-by-param}"  method="post">
     <span class="content">
-        <table class="table">
+        <table class="table table-striped table-bordered table-responsive-sm text-center">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -64,25 +65,30 @@
 
                 <tr>
                     <th>
-                        <input type="text" size="2" id="findById" th:field="*{id}" style="text-align: center" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findById"  style="text-align: center" class="form-control" name="findById">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findByName" th:field="*{name}" style="text-align: center" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findByName"  style="text-align: center" class="form-control" name="findByName">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findBySurname" th:field="*{surname}" style="text-align: center" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findBySurname"  style="text-align: center" class="form-control" name="findBySurname">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findByMiddleName" th:field="*{middleName}" style="text-align: center" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findByMiddleName"  style="text-align: center" class="form-control" name="findByMiddleName">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findByPhone" style="text-align: center" th:field="*{phone}" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findByPhone" style="text-align: center"  class="form-control" name="findByPhone">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findByEmail" style="text-align: center" th:field="*{email}" class="form-control" name="findBySurname">
+                        <input type="text" size="2" id="findByEmail" style="text-align: center"  class="form-control" name="findByEmail">
                     </th>
                     <th>
-                        <input type="text" size="2" id="findByBanned" style="text-align: center" class="form-control" name="findBySurname">
+                        <select name="findByBanned"  >
+                            <option value=""  >all</option>
+                            <option value="true"  >true</option>
+                            <option value="false"  >false</option>
+                            <!--                    <option selected value="green">НЕ активный</option>-->
+                        </select>
                     </th>
                 </tr>
             </thead>
@@ -90,7 +96,7 @@
         <!--
         <input type="text" size="2" id="findBySurname" style="text-align: center" class="form-control" name="findBySurname">
         -->
-        <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Отправить"></p>
+        <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Найти"></p>
     </span>
 </form>
 </div>
@@ -143,23 +149,27 @@
         </thead>
 
     </table>
-    <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Отправить"></p>
+
+    <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Сохранить"></p>
+
     </div>
 
 </form>
 </div>
 
+<!--
 <div th:if="${employeeList!=null}">
     <div class="container">
         <form action="#" th:action="@{/admin/find-by-surname/}" method="post">
 
     <span class="content">
-   <input type="text" size="2" id="findBySurname1" style="text-align: center" class="form-control" name="findBySurname">
-    <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Отправить"></p>
-</span>
+       <input type="text" size="2" id="findBySurname1" style="text-align: center" class="form-control" name="findBySurname">
+        <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Отправить"></p>
+    </span>
         </form>
     </div>
 </div>
+-->
 
 </body>
 </html>

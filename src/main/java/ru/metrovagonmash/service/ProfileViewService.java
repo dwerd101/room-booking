@@ -45,11 +45,13 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
     @Transactional(readOnly = true)
     @Override
     public List<ProfileView> findAll() {
-        //return profileViewRepository.findAll();
-        //Временная заглушка
+        return profileViewRepository.findAll();
+        /*
         return employeeService.findAll().stream()
                 .map(this::toProfileView)
                 .collect(Collectors.toList());
+
+         */
     }
 
     @Transactional

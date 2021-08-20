@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+
+
 
 @Entity
 @Data
@@ -19,6 +22,8 @@ import java.time.LocalDateTime;
 @Table(name = "profile_view")
 @Immutable
 @Builder
+@Subselect("select profile.id, employee.name, employee.surname, employee.middle_name, employee.phone, employee.email, profile.account_non_locked as banned\n" +
+        "from employee inner join profile  on employee.profile_id = profile.id")
 public class ProfileView {
     @Id
     @Column(name = "id")
