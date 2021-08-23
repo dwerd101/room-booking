@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.DepartmentRepository;
+import ru.metrovagonmash.service.DepartmentService;
 
 import java.util.List;
 

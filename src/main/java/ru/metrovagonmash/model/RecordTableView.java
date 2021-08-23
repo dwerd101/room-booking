@@ -8,6 +8,7 @@ import org.hibernate.annotations.Immutable;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 
 // переделать потом hibernate. Используется заглушка прописанная в скрипте schema.sql
@@ -34,7 +35,7 @@ public class RecordTableView {
     @Column(name = "title")
     private String title;
     @Column(name = "start_event")
-    private LocalDateTime startEvent;
+    private ZonedDateTime startEvent;
     @Column(name = "end_event")
-    private LocalDateTime endEvent;
+    private ZonedDateTime  endEvent;
 }

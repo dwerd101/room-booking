@@ -65,10 +65,11 @@
                   allDay: arg.allDay
               })
               const url = '/record/save';
+            //  const data = arg.event;
               let data = {
                   title: title,
-                  start: '2021-08-13 00:00:01',
-                  end: '2021-08-14 00:00:01',
+                  start: arg.start,
+                  end: arg.end,
                   allDay: arg.allDay
               }
 
@@ -82,6 +83,7 @@
                   });
                   const json = await response.json();
                   console.log('Успех:', JSON.stringify(json));
+                  window.location.reload(true);
               } catch (error) {
                   console.error('Ошибка:', error);
               }
@@ -92,7 +94,12 @@
           if (confirm('Are you sure you want to delete this event?')) {
               arg.event.remove()
               const url = '/record/delete/';
-              const data = arg.event;
+             let data = arg.event;
+             /* let data = {
+                  start: arg.start,
+                  end: arg.end,
+                  allDay: arg.allDay
+              }*/
 
               try {
                   const response = await fetch(url, {

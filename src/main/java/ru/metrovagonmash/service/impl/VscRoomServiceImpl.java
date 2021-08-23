@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.exception.VscRoomException;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.repository.VscRepository;
+import ru.metrovagonmash.service.VscRoomService;
 
 import java.util.List;
 

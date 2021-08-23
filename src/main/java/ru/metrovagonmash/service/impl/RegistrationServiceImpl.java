@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,16 @@ import ru.metrovagonmash.model.dto.RegistrationDTO;
 import ru.metrovagonmash.repository.DepartmentRepository;
 import ru.metrovagonmash.repository.EmployeeRepository;
 import ru.metrovagonmash.repository.ProfileRepository;
+import ru.metrovagonmash.service.DepartmentService;
+import ru.metrovagonmash.service.EmployeeService;
+import ru.metrovagonmash.service.ProfileService;
+import ru.metrovagonmash.service.RegistrationService;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class RegistrationServiceImpl implements RegistrationService  {
+public class RegistrationServiceImpl implements RegistrationService {
 
     private final EmployeeService employeeService;
     private final ProfileService profileService;

@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,8 +7,12 @@ import ru.metrovagonmash.mapper.MyMapper;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
+import ru.metrovagonmash.service.DepartmentService;
+import ru.metrovagonmash.service.EmployeeService;
+import ru.metrovagonmash.service.ProfileService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO save(EmployeeDTO model) {
-        return myMapper.toDTO(employeeRepository.save(toEmployee(model)));
+        return myMapper.toDTO(employeeRepository.save(myMapper.toModel(model)));
     }
 
     @Override
@@ -45,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
-    // изменить заглушку на будущее
+ /*   // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
         //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),

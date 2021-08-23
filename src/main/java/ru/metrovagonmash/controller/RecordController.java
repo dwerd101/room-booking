@@ -2,10 +2,12 @@ package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.service.RecordTableService;
-import ru.metrovagonmash.service.RecordTableServiceImpl;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -23,7 +25,9 @@ public class RecordController {
 
     @PostMapping("/save")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        return () -> ResponseEntity.ok(recordService.save(recordTableDTO));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return () -> ResponseEntity.ok(recordService.save(recordTableDTO, user));
     }
 
     @PostMapping("/update/{id}")
@@ -31,9 +35,12 @@ public class RecordController {
         return () -> ResponseEntity.ok(recordService.update(recordTableDTO, Long.parseLong(id)));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@PathVariable String id) {
-        return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
+
+
+    @DeleteMapping("/delete/")
+    public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
+        return () -> ResponseEntity.ok(recordService.delete(recordTableDTO));
+       // return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
 
     //Подумать над названием

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
@@ -31,19 +32,19 @@ public class RecordTable {
     private String title;
 
     @Column(name = "start_event")
-    private LocalDateTime startEvent;
+    private ZonedDateTime startEvent;
 
     @Column(name = "end_event")
-    private LocalDateTime endEvent;
+    private ZonedDateTime  endEvent;
 
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "number_room_id", referencedColumnName = "id")
     private VscRoom numberRoomId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employeeId;
 
