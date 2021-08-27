@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.RecordTableView;
+import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.repository.ProfileViewRepository;
 import ru.metrovagonmash.repository.RecordTableViewRepository;
 import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
@@ -24,15 +26,23 @@ public class TestController {
     final ProfileViewRepository profileViewRepository;
     private final ProfileViewService profileViewService;
     private final ProfileViewSearchCriteriaRepostitory recordTableViewSearchCriteriaRepostitory;
-    private final RecordTableViewRepository recordTableViewRepository;
+   // private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
     public String userPage(){
         return "userpage";
     }
 
-    @GetMapping("/calendar")
-    public String calendar(){
-        return "calendar";
+
+    // FIXME: 28.08.2021 Здесть стоит заглушка, поэтому нужно сделать так, чтобы idroom сделал обращение к таблице vscroom
+    /*
+    Если idroom не найден сделать редирект на ошибучную страницу
+    RecordTableException() - создать ошибочный контроллер.
+     */
+    @GetMapping("/calendar/{idRoom}")
+    public String calendar(@PathVariable String idRoom){
+        Long five = Long.parseLong(idRoom);
+        if(five.equals(5L)) throw new RecordTableException();
+        else return "calendar";
     }
 
    /* @GetMapping("/auth/login")

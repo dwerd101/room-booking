@@ -1,14 +1,22 @@
 package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
+import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -17,17 +25,27 @@ import java.util.concurrent.Callable;
 @RequestMapping("/record")
 public class RecordController {
     private final RecordTableService recordService;
+    private final RecordTableAndEmployeeService recordTableAndEmployeeService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<RecordTableDTO>>> findAll() {
         return () -> ResponseEntity.ok(recordService.findAll());
     }
 
+    @GetMapping("/{index}")
+    public Callable<ResponseEntity<List<RecordTableDTO>>> findByIndex(@PathVariable String index) {
+        return () -> ResponseEntity.ok(recordService.findByNumberRoomId(Long.parseLong(index)));
+
+    }
+
     @PostMapping("/save")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        return () -> ResponseEntity.ok(recordService.save(recordTableDTO, user));
+        String[] urlMassive = recordTableDTO.getRoomId().split("/");
+        recordTableDTO.setRoomId(urlMassive[urlMassive.length-1]);
+      //  return null;
+        return () -> ResponseEntity.ok(recordTableAndEmployeeService.save(recordTableDTO, user));
     }
 
     @PostMapping("/update/{id}")

@@ -82,6 +82,10 @@ public class RecordTableServiceImpl implements RecordTableService {
             recordTable1.setNumberRoomId(recordTable.get().getNumberRoomId());
             return mapper.toDTO(recordTableRepository.save(recordTable1));
         }
+        else {
+
+        }
+
         throw new RecordTableException();
     }
 
@@ -92,6 +96,14 @@ public class RecordTableServiceImpl implements RecordTableService {
        ).orElseThrow(() -> new RecordTableException("Не найдена запись"));
        recordTableRepository.delete(recordTable);
         return recordTableDTO;
+    }
+
+    @Override
+    public List<RecordTableDTO> findByNumberRoomId(Long id) {
+        return recordTableRepository.findAllByNumberRoomId(id)
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 

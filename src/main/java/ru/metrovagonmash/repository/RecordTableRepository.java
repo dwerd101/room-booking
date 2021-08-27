@@ -32,4 +32,7 @@ public interface RecordTableRepository extends JpaRepository<RecordTable,Long> {
             "from record_table inner join employee  on record_table.employee_id = employee.id\n" +
             "join vsc_room  on record_table.number_room_id = vsc_room.id")
     List<RecordTable> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom();
+
+    @Query(nativeQuery = true, value = "select * from record_table where number_room_id=?1")
+    List<RecordTable> findAllByNumberRoomId(Long id);
 }

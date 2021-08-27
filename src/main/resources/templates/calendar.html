@@ -41,6 +41,9 @@
     var initialLocaleCode = 'ru';
     var localeSelectorEl = document.getElementById('locale-selector');
     var calendarEl = document.getElementById('calendar');
+    var url = window.location.href;
+    var urlMassive = url.split('/');
+    var index = urlMassive[urlMassive.length-1];
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
       headerToolbar: {
@@ -70,7 +73,8 @@
                   title: title,
                   start: arg.start,
                   end: arg.end,
-                  allDay: arg.allDay
+                  allDay: arg.allDay,
+                  roomId: window.location.href
               }
 
               try {
@@ -123,7 +127,8 @@
 
     // your event source
     {
-      url: '/record/', // use the `url` property
+      url: '/record/'+index
+        // use the `url` property
     }
 
     // any other sources...
