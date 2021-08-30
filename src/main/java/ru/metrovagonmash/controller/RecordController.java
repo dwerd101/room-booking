@@ -38,7 +38,7 @@ public class RecordController {
 
     }
 
-    @PostMapping("/save")
+    @PostMapping("/save/")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -57,7 +57,9 @@ public class RecordController {
 
     @DeleteMapping("/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        return () -> ResponseEntity.ok(recordService.delete(recordTableDTO));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return () -> ResponseEntity.ok(recordTableAndEmployeeService.delete(recordTableDTO, user));
        // return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
 

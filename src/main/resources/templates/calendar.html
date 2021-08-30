@@ -60,6 +60,13 @@
       selectMirror: true,
       select: async function (arg) {
           var title = prompt('Event Title:');
+          const response = await fetch('/get-user', {
+              method: 'GET', // или 'PUT'
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          const json = await response.json();
           if (title) {
               calendar.addEvent({
                   title: title,
@@ -70,7 +77,7 @@
               const url = '/record/save';
             //  const data = arg.event;
               let data = {
-                  title: title,
+                  title: title+' / '+json.name+' '+' '+json.surname,
                   start: arg.start,
                   end: arg.end,
                   allDay: arg.allDay,
@@ -114,7 +121,14 @@
                       }
                   });
                   const json = await response.json();
-                  console.log('Успех:', JSON.stringify(json));
+                //  console.log('Успех:', JSON.stringify(json));
+                  if(json.status=='404') {
+                      alert('Ошибка удаления. Скорее всего вы пытаетесь удалить запись другого участника');
+                      window.location.reload(true);
+                  }
+                  else {
+                      window.location.reload(true);
+                  }
               } catch (error) {
                   console.error('Ошибка:', error);
               }

@@ -61,10 +61,10 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     }
 
     @Override
-    public RecordTableDTO delete(RecordTableDTO recordTableDTO) {
-        RecordTable recordTable = recordTableRepository.findByStartEventAndEndEvent(
-                recordTableDTO.getStart(), recordTableDTO.getEnd()
-        ).orElseThrow(() -> new RecordTableException("Не найдена запись"));
+    public RecordTableDTO delete(RecordTableDTO recordTableDTO, User user) {
+        RecordTable recordTable= recordTableRepository.findByLoginAndStartEventAndEndEvent(
+                user.getUsername(), recordTableDTO.getStart(), recordTableDTO.getEnd())
+                .orElseThrow(() -> new RecordTableException("Не найдена запись"));
         recordTableRepository.delete(recordTable);
         return recordTableDTO;
     }

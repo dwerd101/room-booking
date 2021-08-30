@@ -5,5 +5,5 @@ import ru.metrovagonmash.model.dto.RecordTableDTO;
 
 public interface RecordTableAndEmployeeService  {
     RecordTableDTO save(RecordTableDTO recordTableDTO, User user);
-    RecordTableDTO delete(RecordTableDTO recordTableDTO);
+    RecordTableDTO delete(RecordTableDTO recordTableDTO, User user);
 }

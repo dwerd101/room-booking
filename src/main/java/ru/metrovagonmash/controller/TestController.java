@@ -1,21 +1,31 @@
 package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.exception.EmployeeException;
 import ru.metrovagonmash.exception.RecordTableException;
+import ru.metrovagonmash.mapper.EmployeeMyMapper;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.RecordTableView;
+import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.repository.ProfileViewRepository;
+import ru.metrovagonmash.repository.RecordTableRepository;
 import ru.metrovagonmash.repository.RecordTableViewRepository;
 import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
 import ru.metrovagonmash.service.ProfileViewService;
+import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.specification.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +36,8 @@ public class TestController {
     final ProfileViewRepository profileViewRepository;
     private final ProfileViewService profileViewService;
     private final ProfileViewSearchCriteriaRepostitory recordTableViewSearchCriteriaRepostitory;
+    private final RecordTableRepository recordTableRepository;
+    private final EmployeeMyMapper employeeMyMapper;
    // private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
     public String userPage(){
@@ -43,6 +55,19 @@ public class TestController {
         Long five = Long.parseLong(idRoom);
         if(five.equals(5L)) throw new RecordTableException();
         else return "calendar";
+    }
+
+    // FIXME: 30.08.2021 Сделать отправку сообщения с почты после того как пользователь сделал запись
+    // FIXME: 30.08.2021 Сделать проверку, что время занято при выделении календаря на сущ дату
+    // FIXME: 30.08.2021 Сделать возможность изменения личных данных пользователя
+    @GetMapping("/get-user")
+    @ResponseBody
+    public Callable<ResponseEntity<EmployeeDTO>> getEmployee() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+       EmployeeDTO employeeDTO =  employeeMyMapper.toDTO(recordTableRepository.findByLogin(user.getUsername()).orElseThrow(()-> new EmployeeException())
+       .getEmployeeId());
+       return () -> ResponseEntity.ok(employeeDTO);
     }
 
    /* @GetMapping("/auth/login")
@@ -146,10 +171,8 @@ public class TestController {
     }
 
     @PostMapping("/admin/find-by-param")
-    public String findByParamPage(@ModelAttribute("profileView")final ProfileView profileView, ModelMap modelMap) {
+    public String findByParamPage(@ModelAttribute("profileView")final ProfileView profileView) {
 
-        //List<ProfileView> list = profileViewService.findAllByParameters(profileView);
-        //modelMap.addAttribute("employeeList",list);
         return "adminpagefullfindemployee";
     }
 
