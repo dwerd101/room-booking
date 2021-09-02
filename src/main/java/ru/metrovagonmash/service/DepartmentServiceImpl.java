@@ -1,18 +1,23 @@
 package ru.metrovagonmash.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.exception.DepartmentException;
-import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.DepartmentRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final JdbcTemplate jdbcTemplate;
     @Override
     public Department save(Department model) {
         return departmentRepository.save(model);
@@ -31,13 +36,34 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department deleteById(Long aLong) {
-        return departmentRepository.findById(aLong)
+        Department department = departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentException("Не найден ID"));
+        departmentRepository.deleteById(aLong);
+        return department;
     }
 
     @Override
     public Department findById(Long aLong) {
         return departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentException("Не найден ID"));
+    }
+
+    @Transactional
+    @Override
+    public void batchUpdateDepartment(List<Department> departmentList) {
+        jdbcTemplate.batchUpdate("" + "update department set name_department=?, position=? where id=?",
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setString(1,departmentList.get(i).getNameDepartment());
+                        ps.setString(2,departmentList.get(i).getPosition());
+                        ps.setLong(3,departmentList.get(i).getId());
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return departmentList.size();
+                    }
+                });
     }
 }

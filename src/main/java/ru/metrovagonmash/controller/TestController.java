@@ -49,7 +49,7 @@ public class TestController {
                 params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
             }
         }
-         List<ProfileView> list = profileViewSearchCriteriaRepostitory.searchProfile(params);
+         List<ProfileView> list = profileViewSearchCriteriaRepostitory.search(params);
         modelMap.addAttribute("employeeList",list);
         return "adminpage";
     }
@@ -165,7 +165,7 @@ public class TestController {
 
 
 
-        List<ProfileView> list = profileViewSearchCriteriaRepostitory.searchProfile(params);
+        List<ProfileView> list = profileViewSearchCriteriaRepostitory.search(params);
         modelMap.addAttribute("employeeList",list);
         return "adminpagefullfindemployee";
     }

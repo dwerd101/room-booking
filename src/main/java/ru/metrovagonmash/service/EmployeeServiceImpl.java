@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.exception.EmployeeException;
 import ru.metrovagonmash.mapper.MyMapper;
+import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
@@ -56,6 +57,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setProfileId(profileService.findById(model.getProfileId()));
         return employee;
+    }
+
+    @Override
+    public boolean isPresentByDepartmentId(Long aLong) {
+        return !employeeRepository.findAllByDepartmentId(aLong).isEmpty();
     }
   /*  @Override
     public Employee save(Employee model) {

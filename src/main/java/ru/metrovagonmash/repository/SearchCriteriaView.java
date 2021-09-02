@@ -6,6 +6,6 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import java.util.List;
 
 public interface SearchCriteriaView<Model> {
-    List<Model> searchProfile(List<SearchCriteria> params);
+    List<Model> search(List<SearchCriteria> params);
     void save(Model entity);
 }
