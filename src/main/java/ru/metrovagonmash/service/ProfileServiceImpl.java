@@ -30,8 +30,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile deleteById(Long aLong) {
-        return profileRepository.findById(aLong)
+        Profile profile = profileRepository.findById(aLong)
                 .orElseThrow(() -> new ProfileException("Не найден ID"));
+        profileRepository.deleteById(aLong);
+        return profile;
     }
 
     @Override

@@ -131,23 +131,26 @@ public class TestController {
     public String getByParamPage(ModelMap modelMap) {
         List<ProfileView> list = profileViewService.findAll();
         modelMap.addAttribute("employeeList",list);
+        modelMap.addAttribute("findProfileView", new ProfileView());
         return "adminpagefullfindemployee";
     }
 
 
 
     @PostMapping("/admin/find-by-param")
-    public String findByParamPage(@RequestParam(name = "findById") String findById,
-                                  @RequestParam(name = "findByName") String findByName,
-                                  @RequestParam(name = "findBySurname") String findBySurname,
-                                  @RequestParam(name = "findByMiddleName") String findByMiddleName,
-                                  @RequestParam(name = "findByPhone") String findByPhone,
-                                  @RequestParam(name = "findByEmail") String findByEmail,
-                                  @RequestParam(name = "findByBanned") String findByBanned,
+    public String findByParamPage(//@RequestParam(name = "findById") String findById,
+                                  //@RequestParam(name = "findByName") String findByName,
+                                  //@RequestParam(name = "findBySurname") String findBySurname,
+                                  //@RequestParam(name = "findByMiddleName") String findByMiddleName,
+                                  //@RequestParam(name = "findByPhone") String findByPhone,
+                                  //@RequestParam(name = "findByEmail") String findByEmail,
+                                  //@RequestParam(name = "findByBanned") String findByBanned,
+                                  @ModelAttribute("findProfileView") ProfileView profileView,
                                   ModelMap modelMap) {
 
         List<SearchCriteria> params = new ArrayList<>();
 
+        /*
         if (!findById.isEmpty())
             params.add(new SearchCriteria("id",":",Long.valueOf(findById)));
         if (!findByName.isEmpty())
@@ -162,6 +165,23 @@ public class TestController {
             params.add(new SearchCriteria("email",":",findByEmail));
         if (!findByBanned.isEmpty())
             params.add(new SearchCriteria("banned",":",Boolean.valueOf(findByBanned)));
+
+         */
+
+        if (profileView.getId() != null)
+            params.add(new SearchCriteria("id",":",profileView.getId()));
+        if (profileView.getName() != null)
+            params.add(new SearchCriteria("name",":",profileView.getName()));
+        if (profileView.getSurname() != null)
+            params.add(new SearchCriteria("surname",":",profileView.getSurname()));
+        if (profileView.getMiddleName() != null)
+            params.add(new SearchCriteria("middleName",":",profileView.getMiddleName()));
+        if (profileView.getPhone() != null)
+            params.add(new SearchCriteria("phone",":",profileView.getPhone()));
+        if (profileView.getEmail() != null)
+            params.add(new SearchCriteria("email",":",profileView.getEmail()));
+        if (profileView.getBanned() != null)
+            params.add(new SearchCriteria("banned",":",profileView.getBanned()));
 
 
 

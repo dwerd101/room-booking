@@ -45,12 +45,12 @@ public class Employee {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profileId;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department departmentId;

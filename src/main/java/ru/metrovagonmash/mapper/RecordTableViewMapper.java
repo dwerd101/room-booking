@@ -15,8 +15,10 @@ public class RecordTableViewMapper implements Mapper<RecordTableView, RecordTabl
                 .employeeMiddleName(recordTableView.getEmployeeMiddleName())
                 .employeeSurname(recordTableView.getEmployeeSurname())
                 .isActive(recordTableView.getIsActive())
-                .vcsRoomNumberRoom(recordTableView.getVcsRoomNumberRoom())
-                .record(recordTableView.getRecord())
+                .vcsRoomNumberRoom(String.valueOf(recordTableView.getVcsRoomNumberRoom()))
+                .title(recordTableView.getTitle())
+                .start(recordTableView.getStartEvent())
+                .end(recordTableView.getEndEvent())
                 .build();
     }
 

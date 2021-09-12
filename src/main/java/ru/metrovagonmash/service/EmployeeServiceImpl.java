@@ -42,8 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO deleteById(Long aLong) {
-        return myMapper.toDTO( employeeRepository.findById(aLong)
+        EmployeeDTO employeeDTO = myMapper.toDTO( employeeRepository.findById(aLong)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
+        employeeRepository.deleteById(aLong);
+        return employeeDTO;
     }
 
     // изменить заглушку на будущее
@@ -62,6 +64,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean isPresentByDepartmentId(Long aLong) {
         return !employeeRepository.findAllByDepartmentId(aLong).isEmpty();
+    }
+
+    @Override
+    public EmployeeDTO findEmployeeByProfileId(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+    }
+
+    @Override
+    public EmployeeDTO findById(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findById(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
   /*  @Override
     public Employee save(Employee model) {
