@@ -38,13 +38,20 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     public RecordTableDTO save(RecordTableDTO recordTableDTO, User user) {
         Optional<RecordTable> recordTable= recordTableRepository.findByLogin(user.getUsername());
         if(recordTable.isPresent()) {
-            recordTableDTO.setEmail(recordTable.get().getEmployeeId().getEmail());
-            recordTableDTO.setIsActive(recordTable.get().getEmployeeId().getIsActive());
-            RecordTable recordTable1 = mapper.toModel(recordTableDTO);
-            recordTable1.setEmployeeId(recordTable.get().getEmployeeId());
-            recordTable1.setNumberRoomId(vscRepository.findById(Long.parseLong(recordTableDTO.getRoomId()))
-                    .orElseThrow(()-> new VscRoomException("Не найден id комнаты")));
-            return mapper.toDTO(recordTableRepository.save(recordTable1));
+            Optional<RecordTable> overlappingRecordTable = recordTableRepository
+                    .findOverlappingRecordsByStartEventAndEndEvent(recordTableDTO.getStart(),recordTableDTO.getEnd());
+            if (overlappingRecordTable.isPresent()) {
+                throw new RecordTableException("Данное время занято");
+            }
+            else {
+                recordTableDTO.setEmail(recordTable.get().getEmployeeId().getEmail());
+                recordTableDTO.setIsActive(recordTable.get().getEmployeeId().getIsActive());
+                RecordTable recordTable1 = mapper.toModel(recordTableDTO);
+                recordTable1.setEmployeeId(recordTable.get().getEmployeeId());
+                recordTable1.setNumberRoomId(vscRepository.findById(Long.parseLong(recordTableDTO.getRoomId()))
+                        .orElseThrow(() -> new VscRoomException("Не найден id комнаты")));
+                return mapper.toDTO(recordTableRepository.save(recordTable1));
+            }
         }
         else {
            Employee employee =  employeeRepository.findByLogin(user.getUsername()).orElseThrow(

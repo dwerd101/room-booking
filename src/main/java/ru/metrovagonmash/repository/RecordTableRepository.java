@@ -20,6 +20,15 @@ public interface RecordTableRepository extends JpaRepository<RecordTable,Long> {
 
     Optional<RecordTable> findByStartEventAndEndEvent(ZonedDateTime start, ZonedDateTime end);
 
+    @Query(nativeQuery = true, value = "select * from record_table\n" +
+            "where  (start_event<=?1 and end_event>=?2)\n" +
+            "    or (start_event>=?1 and end_event<=?2)\n" +
+            "    or ( start_event>?1 and  end_event>?2\n" +
+            "        and start_event<?2 )\n" +
+            "    or (start_event<?1 and  end_event<?2\n" +
+            "        and end_event>?1 )")
+    Optional<RecordTable> findOverlappingRecordsByStartEventAndEndEvent(ZonedDateTime start, ZonedDateTime end);
+
     @Query(nativeQuery = true,
     value = "select * " +
             "from record_table inner join employee e on e.id = record_table.employee_id " +
