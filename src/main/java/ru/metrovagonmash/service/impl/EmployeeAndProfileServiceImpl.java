@@ -20,10 +20,6 @@ public class EmployeeAndProfileServiceImpl implements EmployeeAndProfileService 
     public void update(EmployeeDTO employeeDTO, Profile profile) {
         EmployeeDTO tempEmployee = employeeService.findById(employeeDTO.getId());
         Profile tempProfile = profileService.findById(profile.getId());
-        employeeDTO.setIsActive(tempEmployee.getIsActive());
-        //profile.setIsActive(tempProfile.getIsActive());
-        profile.setPassword(tempProfile.getPassword());
-
         employeeService.save(employeeDTO);
         profileService.save(profile);
     }

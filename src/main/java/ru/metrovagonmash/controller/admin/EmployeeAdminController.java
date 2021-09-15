@@ -139,8 +139,12 @@ public class EmployeeAdminController {
     public String saveEmployee(@PathVariable String id,
                                @ModelAttribute("employeeData")final @Valid EmployeeDTO employeeDTO,
                                @ModelAttribute("profileData")final @Valid Profile profile) {
+        EmployeeDTO tempEmployeeDTO = employeeAndProfileService.findEmployeeByProfileId(Long.parseLong(id));
+        Profile tempProfile = employeeAndProfileService.findProfileById(Long.parseLong(id));
         profile.setId(Long.parseLong(id));
-        employeeDTO.setId(employeeAndProfileService.findEmployeeByProfileId(Long.parseLong(id)).getId());
+        profile.setPassword(tempProfile.getPassword());
+        employeeDTO.setIsActive(tempEmployeeDTO.getIsActive());
+        employeeDTO.setId(tempEmployeeDTO.getId());
         employeeDTO.setProfileId(Long.parseLong(id));
         employeeAndProfileService.update(employeeDTO, profile);
         return "redirect:/admin/employees/";

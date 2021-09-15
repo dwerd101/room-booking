@@ -40,11 +40,12 @@ public class UserEditController {
     @PostMapping("/user")
     public String saveEmployee(@ModelAttribute("employeeData")final @Valid EmployeeDTO employeeDTO,
                                @ModelAttribute("profileData")final @Valid Profile profile) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
+
         EmployeeDTO tempEmployeeDTO = employeeAndProfileService.findByLogin(profile.getLogin());
         Profile tempProfile = employeeAndProfileService.findProfileById(tempEmployeeDTO.getProfileId());
         profile.setId(tempProfile.getId());
+        profile.setPassword(tempProfile.getPassword());
+        employeeDTO.setIsActive(tempEmployeeDTO.getIsActive());
         employeeDTO.setId(tempEmployeeDTO.getId());
         employeeDTO.setProfileId(tempProfile.getId());
         employeeAndProfileService.update(employeeDTO, profile);
