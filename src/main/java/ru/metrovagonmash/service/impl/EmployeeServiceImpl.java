@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,9 @@ import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
+import ru.metrovagonmash.service.DepartmentService;
+import ru.metrovagonmash.service.EmployeeService;
+import ru.metrovagonmash.service.ProfileService;
 
 import java.util.List;
 import java.util.stream.Collectors;

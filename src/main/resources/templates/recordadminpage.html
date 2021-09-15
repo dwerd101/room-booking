@@ -43,23 +43,23 @@
 -->
 <ul class="nav nav-pills ">
     <li class="nav-item">
-        <a class="nav-link "  href="/admin/find-by-param">Сотрудники</a>
+        <a class="nav-link "  href="/admin/employees/">Сотрудники</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link " href="/admin/departments">Департаменты</a>
+        <a class="nav-link " href="/admin/departments/">Департаменты</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/admin/vscrooms">Комнаты</a>
+        <a class="nav-link" href="/admin/vscrooms/">Комнаты</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="/admin/records">Записи</a>
+        <a class="nav-link active" href="/admin/records/">Записи</a>
     </li>
 
 </ul>
 
 
 <div class="container">
-    <form action="#" th:action="@{/admin/records}" th:object="${findRecord}" method="post">
+    <form action="#" th:action="@{/admin/records/}" th:object="${findRecord}" method="post">
         <span class="content">
             <table class="table table-striped table-bordered table-responsive-sm text-center">
                 <thead>
@@ -100,7 +100,12 @@
                             <input type="text" size="2" id="findByVcsRoomNumberRoom" th:field="*{vcsRoomNumberRoom}" style="text-align: center" class="form-control" name="findByVcsRoomNumberRoom">
                         </th>
                         <th>
-                            <input type="text" size="2" id="findByIsActive" th:field="*{isActive}" style="text-align: center" class="form-control" name="findByIsActive">
+                            <select name="findByIsActive" th:field="*{isActive}" >
+                                <option value=""  >all</option>
+                                <option value="true"  >true</option>
+                                <option value="false"  >false</option>
+                            </select>
+                            <!-- <input type="text" size="2" id="findByIsActive" th:field="*{isActive}" style="text-align: center" class="form-control" name="findByIsActive"> -->
                         </th>
                         <th>
                             <input type="text" size="2" id="findByTitle" th:field="*{title}" style="text-align: center" class="form-control" name="findByTitle">
@@ -125,7 +130,7 @@
 
 
 <div class="container">
-<form action="#" th:action="@{/admin/save-records}" method="post">
+<form action="#" th:action="@{/admin/records/save}" method="post">
 
     <div th:if="${recordTableViewList!=null}">
     <table class="table table-striped table-bordered table-responsive-sm text-center">
@@ -142,6 +147,7 @@
                 <th>TITLE</th>
                 <th>START EVENT</th>
                 <th>END EVENT</th>
+                <th>DELETE</th>
             </tr>
 
         <tbody>
@@ -170,7 +176,14 @@
                 <input th:if="${record.vcsRoomNumberRoom!= null}" th:value="${record.vcsRoomNumberRoom}" type="text" size="2" id="vcsRoomNumberRoom" style="text-align: center" class="form-control" name="vcsRoomNumberRoom"/>
             </td>
             <td>
-                <input th:if="${record.isActive!= null}" th:value="${record.isActive}" type="text" size="2" id="isActive" style="text-align: center" class="form-control" name="isActive"/>
+                <div>
+                    <select tabindex="10" name="isActive" th:value="${record.isActive}" >
+                        <option th:value="${record.isActive}" th:text="${record.isActive}" ></option>
+                        <option th:value="false" th:if="${record.isActive != false}" >false</option>
+                        <option th:value="true" th:if="${record.isActive != true}" >true</option>
+                    </select>
+                </div>
+                <!-- <input th:if="${record.isActive!= null}" th:value="${record.isActive}" type="text" size="2" id="isActive" style="text-align: center" class="form-control" name="isActive"/> -->
             </td>
             <td>
                 <input th:if="${record.title!= null}" th:value="${record.title}" type="text" size="2" id="title" style="text-align: center" class="form-control" name="title"/>
@@ -180,6 +193,9 @@
             </td>
             <td>
                 <input th:if="${record.endEvent!= null}" th:value="${record.endEvent}" type="text" size="2" id="endEvent" style="text-align: center" class="form-control" name="endEvent"/>
+            </td>
+            <td>
+                <a th:href="${'/admin/records/delete/' + record.id}" class="btn btn-outline-danger">Удалить</a>
             </td>
 
         </tr>
@@ -195,7 +211,7 @@
 
     </div>
     <p style="text-align: center" size="10">
-        <a th:href="@{/admin/adddepartment}" style="text-align: center"  class="btn btn-outline-danger">Добавить департамент</a>
+        <a th:href="@{/calendar.html}" style="text-align: center"  class="btn btn-outline-danger">Добавить бронирование</a>
     </p>
 
 </form>

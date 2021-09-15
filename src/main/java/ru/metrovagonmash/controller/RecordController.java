@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.service.RecordTableService;
-import ru.metrovagonmash.service.RecordTableServiceImpl;
 
 import java.util.List;
 import java.util.concurrent.Callable;

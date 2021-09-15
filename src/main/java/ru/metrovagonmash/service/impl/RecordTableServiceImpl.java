@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -13,6 +13,7 @@ import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.repository.RecordTableRepository;
 import ru.metrovagonmash.repository.RecordTableViewRepository;
+import ru.metrovagonmash.service.RecordTableService;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -53,8 +54,10 @@ public class RecordTableServiceImpl implements RecordTableService {
 
     @Override
     public RecordTableDTO deleteById(Long aLong) {
-        return mapper.toDTO( recordTableRepository.findById(aLong)
+        RecordTableDTO recordTableDTO = mapper.toDTO( recordTableRepository.findById(aLong)
                 .orElseThrow(() -> new RecordTableException("Не найден ID")));
+        recordTableRepository.deleteById(aLong);
+        return recordTableDTO;
     }
 
     // изменить заглушку на будущее

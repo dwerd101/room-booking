@@ -1,4 +1,4 @@
-package ru.metrovagonmash.controller;
+package ru.metrovagonmash.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ import java.util.concurrent.Callable;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/departments")
 public class DepartmentsAdminController {
     private final DepartmentService departmentService;
     private final EmployeeService employeeService;
     private final DepartmentSearchCriteriaRepository departmentSearchCriteriaRepository;
 
-    @GetMapping("/departments")
+    @GetMapping("/")
     public String departments(ModelMap modelMap) {
         List<Department> departmentList = departmentService.findAll();
         modelMap.addAttribute("departmentList", departmentList);
@@ -33,7 +33,7 @@ public class DepartmentsAdminController {
         return "departmentadminpage";
     }
 
-    @PostMapping("/departments")
+    @PostMapping("/")
     public String findDepartments(//@RequestParam(name = "findById") String findById,
                                   //@RequestParam(name = "findByDepartmentName") String findByDepartmentName,
                                   //@RequestParam(name = "findByPosition") String findByPosition,
@@ -69,7 +69,7 @@ public class DepartmentsAdminController {
         return "departmentadminpage";
     }
 
-    @PostMapping("/save-department")
+    @PostMapping("/save")
     public String updateDepartments(@RequestParam(name = "id") String id,
                               @RequestParam(name = "departmentName") String departmentName,
                               @RequestParam(name = "position") String position
@@ -90,10 +90,10 @@ public class DepartmentsAdminController {
         }
         departmentService.batchUpdateDepartment(departmentList);
 
-        return "redirect:/admin/departments";
+        return "redirect:/admin/departments/";
     }
 
-    @GetMapping("/department/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String askDeleteDepartment(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("departmentId", id);
         String departmentName = departmentService.findById(Long.parseLong(id)).getNameDepartment();
@@ -104,22 +104,22 @@ public class DepartmentsAdminController {
         return "deletedepartment";
     }
 
-    @PostMapping("/department/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable String id) {
         departmentService.deleteById(Long.parseLong(id));
-        return "redirect:/admin/departments";
+        return "redirect:/admin/departments/";
     }
 
-    @GetMapping("/adddepartment")
+    @GetMapping("/add")
     public String addDepartment(ModelMap modelMap) {
         modelMap.addAttribute("departmentData", new Department());
         return "addingdepartment";
     }
 
-    @PostMapping("/adddepartment")
+    @PostMapping("/add")
     public String saveNewDepartment(@ModelAttribute("departmentData")final @Valid Department department) {
         departmentService.save(department);
-        return "redirect:/admin/departments";
+        return "redirect:/admin/departments/";
     }
 
 }

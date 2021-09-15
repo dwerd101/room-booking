@@ -25,8 +25,8 @@
 
 <div class="login-p">
     <div class="login-f">
-        <form class="pure-form" th:action="'/admin/employee/edit/' + ${profileData.id}" method="post">
-            <h2 class="form-registration-heading">Рдактирование пользователя</h2>
+        <form class="pure-form" th:action="'/admin/employees/edit/' + ${profileData.id}" method="post">
+            <h2 class="form-registration-heading">Редактирование пользователя</h2>
             <div class="form-group">
                 <p class="login-str"></p>
                 <!--
@@ -115,7 +115,7 @@
                         <p class="btn-p"></p>
                         <input tabindex="10" class="btn btn-primary" type="submit" value="Сохранить" />
                         <input tabindex="11" class="btn btn-outline-secondary" type="reset" value="Очистить" />
-                        <a class="btn btn-outline-secondary" href="/admin/find-by-param">Назад</a>
+                        <a class="btn btn-outline-secondary" href="/admin/employees/">Назад</a>
                     </div>
                 </div>
             </div>

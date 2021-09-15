@@ -1,10 +1,13 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
+import ru.metrovagonmash.service.EmployeeAndProfileService;
+import ru.metrovagonmash.service.EmployeeService;
+import ru.metrovagonmash.service.ProfileService;
 
 @Service
 @RequiredArgsConstructor

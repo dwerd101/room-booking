@@ -25,7 +25,7 @@
 
 <div class="login-p">
     <div class="login-f">
-        <form class="pure-form" th:action="@{/admin/adddepartment}" th:object="${departmentData}" method="post">
+        <form class="pure-form" th:action="@{/admin/departments/add}" th:object="${departmentData}" method="post">
             <h2 class="form-registration-heading">Добавление нового департамента</h2>
             <div class="form-group">
                 <p class="login-str"></p>
@@ -42,7 +42,7 @@
                         <p class="btn-p"></p>
                         <input tabindex="10" class="btn btn-primary" type="submit" value="Добавить" />
                         <input tabindex="11" class="btn btn-outline-secondary" type="reset" value="Очистить" />
-                        <a class="btn btn-outline-secondary" href="/admin/departments">Назад</a>
+                        <a class="btn btn-outline-secondary" href="/admin/departments/">Назад</a>
                     </div>
                 </div>
             </div>

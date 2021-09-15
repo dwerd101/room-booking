@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.DepartmentRepository;
+import ru.metrovagonmash.service.DepartmentService;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

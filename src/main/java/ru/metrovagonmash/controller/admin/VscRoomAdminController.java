@@ -1,10 +1,9 @@
-package ru.metrovagonmash.controller;
+package ru.metrovagonmash.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.service.VscRoomService;
 
@@ -14,17 +13,17 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/vscrooms")
 public class VscRoomAdminController {
     private final VscRoomService vscRoomService;
-    @GetMapping("/vscrooms")
+    @GetMapping("/")
     public String vscRooms(ModelMap modelMap) {
         List<VscRoom> vscRoomList = vscRoomService.findAll();
         modelMap.addAttribute("vscRoomList", vscRoomList);
         return "vscroomadminpage";
     }
 
-    @PostMapping("/save-vscrooms")
+    @PostMapping("/save")
     public String updateVscRoom(@RequestParam(name = "id") String id,
                                     @RequestParam(name = "isActive") String isActive,
                                     @RequestParam(name = "numberRoom") String numberRoom
@@ -45,19 +44,19 @@ public class VscRoomAdminController {
         }
         vscRoomService.batchUpdateVscRoom(vscRoomList);
 
-        return "redirect:/admin/vscrooms";
+        return "redirect:/admin/vscrooms/";
     }
 
-    @GetMapping("/vscrooms/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String askDeleteRoom(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("roomId", id);
         return "deleteroom";
     }
 
-    @PostMapping("/vscrooms/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteRoom(@PathVariable String id) {
         vscRoomService.deleteById(Long.parseLong(id));
-        return "redirect:/admin/vscrooms";
+        return "redirect:/admin/vscrooms/";
     }
 
     @GetMapping("/addroom")
@@ -69,6 +68,6 @@ public class VscRoomAdminController {
     @PostMapping("/addroom")
     public String saveNewRoom(@ModelAttribute("roomData")final @Valid VscRoom vscRoom) {
         vscRoomService.save(vscRoom);
-        return "redirect:/admin/vscrooms";
+        return "redirect:/admin/vscrooms/";
     }
 }

@@ -21,9 +21,9 @@
 </head>
 <body cz-shortcut-listen="true">
 <div class="container">
-    <form class="form-signin" method="post" th:action="'/admin/departments/delete/' + ${departmentId}">
-        <h2 class="form-signin-heading" th:text="${message}"></h2>
-        <a class="btn btn-lg btn-primary btn-block" href="/admin/departments/">Назад</a>
+    <form class="form-signin" method="post" th:action="'/admin/records/delete/' + ${recordTableId}">
+        <h2 class="form-signin-heading" >Удалить запись?</h2>
+        <a class="btn btn-lg btn-primary btn-block" href="/admin/records/">Назад</a>
         <button class="btn btn-lg btn-primary btn-block " type="submit">Удалить</button>
     </form>
 

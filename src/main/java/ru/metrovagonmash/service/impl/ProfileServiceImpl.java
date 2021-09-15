@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +7,7 @@ import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.exception.ProfileException;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.repository.ProfileRepository;
+import ru.metrovagonmash.service.ProfileService;
 
 import java.util.List;
 
