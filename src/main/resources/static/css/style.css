@@ -105,7 +105,7 @@ header {
 }
 
 .nav__logo {
-  padding-left: 10px;
+  padding-left: 13px;
 }
 
 article,
@@ -193,7 +193,7 @@ registration {
 
 .login-p .login-f {
   width: 250px;
-  height: 50%;
+  height: 75%;
   position: absolute;
   top: 0;
   right: 0;
@@ -209,20 +209,12 @@ registration {
 .login-p .login-f .form-group {
   display: block;
   line-height: 10px;
+  text-align: center;
 }
 
-.login-p .login-f .form-group .btn-group {
-  margin-left: 30px;
-}
-
-.form-signin-heading {
+.form-heading {
   text-align: center;
   position: static;
-}
-
-.form-registration-heading {
-  padding-left: 40px;
-  margin-bottom: 30px;
 }
 
 .sr-only {
@@ -240,4 +232,8 @@ registration {
 
 .butt-ent {
   margin-top: 30px;
+}
+
+.container {
+  padding-top: 15px;
 }

@@ -26,7 +26,7 @@
 <div class="login-p">
     <div class="login-f">
         <form class="pure-form" th:action="@{/registration}" th:object="${userData}" method="post">
-            <h2 class="form-registration-heading">Регистрация</h2>
+            <h2 class="form-heading">Регистрация</h2>
             <div class="form-group">
                 <p class="login-str"></p>
                 <p class="login-message" style="color: red" th:if="${loginErrorMessage == true}">Такой логин уже существует!</p>
