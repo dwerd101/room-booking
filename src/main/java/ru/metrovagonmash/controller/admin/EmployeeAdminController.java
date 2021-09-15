@@ -143,7 +143,7 @@ public class EmployeeAdminController {
         employeeDTO.setId(employeeAndProfileService.findEmployeeByProfileId(Long.parseLong(id)).getId());
         employeeDTO.setProfileId(Long.parseLong(id));
         employeeAndProfileService.update(employeeDTO, profile);
-        return "redirect:/admin/find-by-param";
+        return "redirect:/admin/employees/";
     }
 
     @GetMapping("/delete/{id}")
@@ -155,6 +155,6 @@ public class EmployeeAdminController {
     @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable String id) {
         employeeAndProfileService.deleteByProfileId(Long.parseLong(id));
-        return "redirect:/admin/find-by-param";
+        return "redirect:/admin/employees/";
     }
 }
