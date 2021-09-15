@@ -8,4 +8,5 @@ public interface EmployeeAndProfileService {
     void deleteByProfileId(Long aLong);
     EmployeeDTO findEmployeeByProfileId(Long aLong);
     Profile findProfileById(Long aLong);
+    EmployeeDTO findByLogin(String login);
 }

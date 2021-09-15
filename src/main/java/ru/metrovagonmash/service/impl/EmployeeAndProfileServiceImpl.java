@@ -46,5 +46,12 @@ public class EmployeeAndProfileServiceImpl implements EmployeeAndProfileService 
     }
 
 
+    @Override
+    public EmployeeDTO findByLogin(String login) {
+        return employeeService.findByLogin(login);
+    }
+
+
+
 
 }

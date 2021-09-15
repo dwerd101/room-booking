@@ -80,25 +80,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return myMapper.toDTO(employeeRepository.findById(aLong)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
-  /*  @Override
-    public Employee save(Employee model) {
-        return employeeRepository.save(model);
-    }
 
     @Override
-    public Employee update(Employee model, Long id) {
-        return null;
+    public EmployeeDTO findByLogin (String login) {
+        return myMapper.toDTO(employeeRepository.findByLogin(login)
+                .orElseThrow(() -> new EmployeeException("Логин не найден")));
     }
-
-    @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
-    }
-
-    @Override
-    public Employee deleteById(Long aLong) {
-        return employeeRepository.findById(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID"));
-    }
-*/
 }

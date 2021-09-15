@@ -100,8 +100,9 @@ registration {
 
 
 .form-signin-heading {
-    padding-left: 20px;
-    margin-bottom: 30px;
+    
+    text-align: center;
+    position:static;
 }
 .form-registration-heading{
     padding-left: 40px;
@@ -116,10 +117,8 @@ registration {
 }
 .form-check-text-center {
     margin-top: 15px;
-    padding-left: 50px;
 }
 .butt-ent {
     margin-top: 30px;
-    padding-left: 90px;
 }
 
