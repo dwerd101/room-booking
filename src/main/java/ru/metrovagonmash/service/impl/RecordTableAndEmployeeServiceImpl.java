@@ -39,7 +39,8 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
         Optional<RecordTable> recordTable= recordTableRepository.findByLogin(user.getUsername());
         if(recordTable.isPresent()) {
             Optional<RecordTable> overlappingRecordTable = recordTableRepository
-                    .findOverlappingRecordsByStartEventAndEndEvent(recordTableDTO.getStart(),recordTableDTO.getEnd());
+                    .findOverlappingRecordsByStartEventAndEndEvent(recordTableDTO.getStart(),recordTableDTO.getEnd(),
+                            Long.valueOf(recordTableDTO.getRoomId()));
             if (overlappingRecordTable.isPresent()) {
                 throw new RecordTableException("Данное время занято");
             }
