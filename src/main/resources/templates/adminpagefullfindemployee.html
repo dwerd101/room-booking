@@ -156,8 +156,14 @@
             <td>  <input th:if="${profile.email!= null}" th:value="${profile.email}" type="text" size="2" id="email" style="text-align: center" class="form-control" name="email" readonly></td>
             <td>
                 <div>
-                    <select tabindex="10" class="form-select" name="banned" th:value="${profile.banned}">
+                    <!--<select tabindex="10" class="form-select" name="banned" th:value="${profile.banned}">
                         <option th:value="${profile.banned}" th:text="${profile.banned}" ></option>
+                        <option th:value="false" th:if="${profile.banned != false}">Разблокирован</option>
+                        <option th:value="true" th:if="${profile.banned != true}">Заблокирован</option>
+                    </select>-->
+                    <select tabindex="10" class="form-select" name="banned" th:value="${profile.banned}">
+                        <option th:value="false" th:if="${!profile.banned}">Разблокирован</option>
+                        <option th:value="true" th:if="${profile.banned}">Заблокирован</option>
                         <option th:value="false" th:if="${profile.banned != false}">Разблокирован</option>
                         <option th:value="true" th:if="${profile.banned != true}">Заблокирован</option>
                     </select>
