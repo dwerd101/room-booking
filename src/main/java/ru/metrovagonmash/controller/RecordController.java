@@ -13,6 +13,7 @@ import ru.metrovagonmash.exception.RecordTableException;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
+import ru.metrovagonmash.service.mail.MailSenderService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.concurrent.Callable;
 public class RecordController {
     private final RecordTableService recordService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
+    private final MailSenderService mailSenderService;
 
     @GetMapping("/")
     public Callable<ResponseEntity<List<RecordTableDTO>>> findAll() {
@@ -44,7 +46,8 @@ public class RecordController {
         User user = (User) authentication.getPrincipal();
         String[] urlMassive = recordTableDTO.getRoomId().split("/");
         recordTableDTO.setRoomId(urlMassive[urlMassive.length-1]);
-      //  return null;
+        mailSenderService.send("79154472780@yandex.ru", "Ваша комната", recordTableDTO.getRoomId()+ ""+recordTableDTO.getStart()
+        +" "+ recordTableDTO.getEnd());
         return () -> ResponseEntity.ok(recordTableAndEmployeeService.save(recordTableDTO, user));
     }
 

@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.metrovagonmash.model.VscRoom;
 
+import java.util.Optional;
+
 @Repository
-public interface VscRepository extends JpaRepository<VscRoom,Long> {
+public interface VscRoomRepository extends JpaRepository<VscRoom,Long> {
+    Optional<VscRoom> findByNumberRoom(Long room);
 }
