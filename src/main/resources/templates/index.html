@@ -21,8 +21,8 @@
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
         <div class="auth-panel">
-            <a sec:authorize="hasAuthority('ADMIN')" class="btn btn-outline-secondary" href="/admin/vscrooms">Панель администратора</a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-secondary" href="/admin/vscrooms">Панель администратора</a>
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
             <a sec:authorize="isAuthenticated()" class="btn btn-outline-info" href="/user">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
