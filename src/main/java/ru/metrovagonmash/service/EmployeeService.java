@@ -6,5 +6,5 @@ import ru.metrovagonmash.model.dto.EmployeeDTO;
 import java.util.Optional;
 
 public interface EmployeeService extends RoomService<EmployeeDTO, Long> {
-
+    EmployeeDTO findByProfileID(Long profileID);
 }

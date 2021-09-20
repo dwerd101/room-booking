@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.exception.EmployeeException;
+import ru.metrovagonmash.exception.ProfileException;
 import ru.metrovagonmash.mapper.EmployeeMyMapper;
+import ru.metrovagonmash.model.PasswordConfirmationToken;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
@@ -17,6 +20,8 @@ import ru.metrovagonmash.repository.ProfileRepository;
 import ru.metrovagonmash.repository.ProfileViewRepository;
 import ru.metrovagonmash.repository.RecordTableRepository;
 import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
+import ru.metrovagonmash.service.EmployeeService;
+import ru.metrovagonmash.service.PasswordConfirmationTokenService;
 import ru.metrovagonmash.service.ProfileViewService;
 import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.service.mail.MailSenderService;
@@ -25,6 +30,7 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +47,8 @@ public class TestController {
     private final VscRoomService vscRoomService;
     private final ProfileRepository profileRepository;
     private final MailSenderService mailSenderService;
+    private final PasswordConfirmationTokenService passwordConfirmationTokenService;
+    private final EmployeeService employeeService;
 
 
     // private final RecordTableViewRepository recordTableViewRepository;
@@ -69,11 +77,27 @@ public class TestController {
         return () -> ResponseEntity.ok(employeeDTO);
     }
 
+    @GetMapping("/forget-password")
+    public String forgetPassword() {
+        return "forgetpassword";
+    }
+
     @PostMapping("/forget-password/send")
     public String forgetPassword(@RequestParam(value = "username") String username, ModelMap modelMap) {
         Optional<Profile> profileOptional = profileRepository.findByLogin(username);
+
         if(profileOptional.isPresent()) {
-            mailSenderService.send("79154472780@yandex.ru", "Forget password", "You forgot password");
+            PasswordConfirmationToken passwordConfirmationToken = PasswordConfirmationToken.builder()
+                    .profileId(Profile.builder().id(profileOptional.get().getId()).build())
+                    .token(UUID.randomUUID().toString())
+                    .build();
+
+            passwordConfirmationTokenService.save(passwordConfirmationToken);
+            EmployeeDTO employeeDTO = employeeService.findByProfileID(profileOptional.get().getId());
+            String email = employeeService.findByProfileID(profileOptional.get().getId()).getEmail();
+
+            mailSenderService.send(email, "Forget password", "You forgot password" +
+                    " link: " + "http://localhost:8080/reset-password?token=" + passwordConfirmationToken.getToken());
             return "succesfulSendEmailForgetPassword";
         }
         else {
@@ -83,10 +107,34 @@ public class TestController {
 
     }
 
-     @GetMapping("/forget-password")
-     public String forgetPassword() {
-         return "forgetpassword";
-     }
+    @GetMapping("/reset-password")
+    public String resetPassword(@RequestParam("token") String confirmationToken, ModelMap modelMap) {
+        PasswordConfirmationToken passwordConfirmationToken = passwordConfirmationTokenService.findByToken(confirmationToken);
+        if (passwordConfirmationToken != null) {
+            Profile profile = profileRepository.findById(passwordConfirmationToken.getProfileId().getId())
+                    .orElseThrow(() -> new ProfileException("Не найден профиль"));
+            modelMap.addAttribute("profileData", profile);
+            //Возможно это нужно реализовать по-другому
+            passwordConfirmationTokenService.deleteById(passwordConfirmationToken.getId());
+        }
+        else {
+            modelMap.addAttribute("error", true);
+        }
+        return "resetpassword";
+    }
+
+    @PostMapping("reset-password")
+    public String saveNewPassword(@ModelAttribute("profileData") Profile newProfileData) {
+        Profile profile = profileRepository.findByLogin(newProfileData.getLogin())
+                .orElseThrow(() -> new ProfileException("Не найден профиль"));
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
+        String encodedPassword = passwordEncoder.encode(newProfileData.getPassword());
+        profile.setPassword(encodedPassword);
+        profileRepository.save(profile);
+
+        return "succesfulSendEmailForgetPassword";
+    }
+
 
    /* @GetMapping("/auth/login")
     public String loginPage() {
