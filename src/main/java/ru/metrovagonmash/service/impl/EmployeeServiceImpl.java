@@ -49,6 +49,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
+    @Override
+    public EmployeeDTO findByProfileID(Long profileID) {
+        return myMapper.toDTO( employeeRepository.findByProfileId(profileID)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+    }
+
  /*   // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
