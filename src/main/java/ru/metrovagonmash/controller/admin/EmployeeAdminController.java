@@ -16,6 +16,8 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -63,8 +65,23 @@ public class EmployeeAdminController {
 
 
     @GetMapping("/")
-    public String getByParamPage(ModelMap modelMap) {
-        List<ProfileView> list = profileViewService.findAll();
+    public String getByParamPage(@RequestParam(value = "search", required = false) String search,
+                                 ModelMap modelMap) {
+        List<ProfileView> list;
+        if (search != null) {
+            List<SearchCriteria> params = new ArrayList<>();
+            Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+            }
+
+            list = profileViewSearchCriteriaRepostitory.search(params);
+        }
+        else {
+            list = profileViewService.findAll();
+        }
+
         modelMap.addAttribute("employeeList",list);
         modelMap.addAttribute("findProfileView", new ProfileView());
         return "adminpagefullfindemployee";
