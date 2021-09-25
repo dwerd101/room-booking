@@ -54,9 +54,18 @@
       locale: initialLocaleCode,
       buttonIcons: false, // show the prev/next text
       weekNumbers: true,
-      initialDate: '2020-09-12',
       navLinks: true, // can click day/week names to navigate views
-      selectable: true,
+      views: {
+          dayGridMonth: {
+              selectable: false
+          },
+          timeGridWeek: {
+              selectable: true
+          },
+          timeGridDay: {
+              selectable: true
+          },
+      },
       selectMirror: true,
       select: async function (arg) {
           var title = prompt('Event Title:');
