@@ -46,9 +46,18 @@ public class RecordController {
         User user = (User) authentication.getPrincipal();
         String[] urlMassive = recordTableDTO.getRoomId().split("/");
         recordTableDTO.setRoomId(urlMassive[urlMassive.length-1]);
-        mailSenderService.send("79154472780@yandex.ru", "Ваша комната", recordTableDTO.getRoomId()+ ""+recordTableDTO.getStart()
-        +" "+ recordTableDTO.getEnd());
-        return () -> ResponseEntity.ok(recordTableAndEmployeeService.save(recordTableDTO, user));
+        Callable<ResponseEntity<RecordTableDTO>> responseEntityCallableRecordTableDTO =
+                () -> ResponseEntity.ok(recordTableAndEmployeeService.save(recordTableDTO, user));
+        String email = null;
+        try {
+            email = responseEntityCallableRecordTableDTO.call().getBody().getEmail();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mailSenderService.send(email, "Ваша комната", recordTableDTO.getRoomId()+ ""+recordTableDTO.getStart()
+                +" "+ recordTableDTO.getEnd());
+        return responseEntityCallableRecordTableDTO;
+
     }
 
     @PostMapping("/update/{id}")
