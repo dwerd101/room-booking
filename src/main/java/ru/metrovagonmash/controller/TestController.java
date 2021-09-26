@@ -15,6 +15,7 @@ import ru.metrovagonmash.mapper.EmployeeMyMapper;
 import ru.metrovagonmash.model.PasswordConfirmationToken;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
+import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.ProfileRepository;
 import ru.metrovagonmash.repository.ProfileViewRepository;
@@ -59,8 +60,10 @@ public class TestController {
 
 
     @GetMapping("/calendar/{idRoom}")
-    public String calendar(@PathVariable String idRoom) {
+    public String calendar(@PathVariable String idRoom, ModelMap modelMap) {
         vscRoomService.findByNumberRoomIfNotFoundByNumberRoomThrowException(Long.parseLong(idRoom));
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
         return "calendar";
     }
 
