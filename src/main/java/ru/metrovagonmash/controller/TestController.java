@@ -58,6 +58,13 @@ public class TestController {
         return "userpage";
     }
 
+    @GetMapping("/")
+    public String indexPage(ModelMap modelMap) {
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+        return "index";
+    }
+
 
     @GetMapping("/calendar/{idRoom}")
     public String calendar(@PathVariable String idRoom, ModelMap modelMap) {
