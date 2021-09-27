@@ -20,8 +20,8 @@ public class HistoryRecordTableEmployeeImpl implements HistoryRecordTableEmpoyee
                 .start(recordTable.getStartEvent())
                 .end(recordTable.getEndEvent())
                 .isActive(recordTable.getIsActive())
-                .numberRoomId(recordTable.getNumberRoomId().getId())
-                .employeeId(recordTable.getEmployeeId().getId())
+                .numberRoomId(recordTable.getNumberRoomId())
+                .employeeId(recordTable.getEmployeeId())
                 .build();
     }
 
@@ -34,12 +34,8 @@ public class HistoryRecordTableEmployeeImpl implements HistoryRecordTableEmpoyee
                 .startEvent(recordTableDTO.getStart())
                 .endEvent(recordTableDTO.getEnd())
                 .isActive(recordTableDTO.getIsActive())
-                .numberRoomId(VscRoom.builder()
-                        .id(recordTableDTO.getNumberRoomId())
-                        .build())
-                .employeeId(Employee.builder()
-                        .id(recordTableDTO.getEmployeeId())
-                        .build())
+                .numberRoomId(recordTableDTO.getNumberRoomId())
+                .employeeId(recordTableDTO.getEmployeeId())
                 .build();
     }
 }

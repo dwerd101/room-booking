@@ -14,6 +14,8 @@ import java.time.ZonedDateTime;
 @Builder
 @Entity
 @Table(name = "history_record_table_employee")
+
+// FIXME: 27.09.2021 Постараться использовать реализию через hibernate
 public class HistoryRecordTableEmployee {
 
     @Id
@@ -35,12 +37,13 @@ public class HistoryRecordTableEmployee {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "number_room_id", referencedColumnName = "id")
-    private VscRoom numberRoomId;
+   // @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "number_room_id", referencedColumnName = "id")
+    private Long numberRoomId;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    private Employee employeeId;
+    // проверить работоспособность
+   // @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+   // @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Long employeeId;
 
 }

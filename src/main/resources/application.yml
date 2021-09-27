@@ -1,0 +1,28 @@
+mail:
+  debug: 'true'
+spring:
+  mail:
+    host: smtp.yandex.ru
+    username: testr0m@yandex.ru
+    protocol: smtps
+    port: '465'
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    password: epusodgawlgpvahr
+  datasource:
+    password: mysecretpassword
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/room
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: 'true'
+server:
+  port: 8093
+
+

@@ -46,7 +46,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
                 recordTableDTO.setIsActive(recordTable.get().getEmployeeId().getIsActive());
                 RecordTable recordTable1 = mapper.toModel(recordTableDTO);
                 recordTable1.setEmployeeId(recordTable.get().getEmployeeId());
-                recordTable1.setNumberRoomId(vscRoomRepository.findById(Long.parseLong(recordTableDTO.getRoomId()))
+                recordTable1.setNumberRoomId(vscRoomRepository.findByNumberRoom(Long.parseLong(recordTableDTO.getRoomId()))
                         .orElseThrow(() -> new VscRoomException("Не найден id комнаты")));
                 return mapper.toDTO(recordTableRepository.save(recordTable1));
             }
@@ -58,7 +58,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
            recordTableDTO.setIsActive(employee.getIsActive());
             RecordTable recordTable1 = mapper.toModel(recordTableDTO);
             recordTable1.setEmployeeId(employee);
-            recordTable1.setNumberRoomId(vscRoomRepository.findById(Long.parseLong(recordTableDTO.getRoomId()))
+            recordTable1.setNumberRoomId(vscRoomRepository.findByNumberRoom(Long.parseLong(recordTableDTO.getRoomId()))
             .orElseThrow(()-> new VscRoomException("Не найден id комнаты")));
             return mapper.toDTO(recordTableRepository.save(recordTable1));
         }
