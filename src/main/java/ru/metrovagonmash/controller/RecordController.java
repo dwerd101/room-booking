@@ -48,14 +48,21 @@ public class RecordController {
         recordTableDTO.setRoomId(urlMassive[urlMassive.length-1]);
         Callable<ResponseEntity<RecordTableDTO>> responseEntityCallableRecordTableDTO =
                 () -> ResponseEntity.ok(recordTableAndEmployeeService.save(recordTableDTO, user));
-        String email = null;
+        RecordTableDTO savedRecordTableDTO = null;
         try {
-            email = responseEntityCallableRecordTableDTO.call().getBody().getEmail();
+            savedRecordTableDTO = responseEntityCallableRecordTableDTO.call().getBody();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mailSenderService.send(email, "Ваша комната", recordTableDTO.getRoomId()+ ""+recordTableDTO.getStart()
-                +" "+ recordTableDTO.getEnd());
+        String subject = "Бронирование комнаты №" + savedRecordTableDTO.getNumberRoomId();
+        String message = "Вы забронировали комнату №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + "http://localhost:8080/calendar/" + savedRecordTableDTO.getNumberRoomId();
+        mailSenderService.send(savedRecordTableDTO.getEmail(), subject,
+                message);
         return responseEntityCallableRecordTableDTO;
 
     }
