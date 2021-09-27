@@ -1,6 +1,7 @@
-package ru.metrovagonmash.mapper;
+package ru.metrovagonmash.mapper.impl;
 
 import org.springframework.stereotype.Component;
+import ru.metrovagonmash.mapper.Mapper;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.VscRoom;

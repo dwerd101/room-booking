@@ -1,6 +1,7 @@
-package ru.metrovagonmash.mapper;
+package ru.metrovagonmash.mapper.impl;
 
 import org.springframework.stereotype.Component;
+import ru.metrovagonmash.mapper.Mapper;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 
