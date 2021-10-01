@@ -14,13 +14,13 @@ spring:
           auth: 'true'
     password: epusodgawlgpvahr
   datasource:
-    password: mysecretpassword
+    password: postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
     url: jdbc:postgresql://localhost:5432/room
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: 'true'
 server:
   port: 8093

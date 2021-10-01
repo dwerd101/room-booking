@@ -70,7 +70,7 @@
       eventOverlap: false,
       views: {
           dayGridMonth: {
-              selectable: false
+              selectable: true
           },
           timeGridWeek: {
               selectable: true
@@ -123,10 +123,72 @@
           }
           calendar.unselect()
       },
+      eventDrop: async function (arg) {
+          //arg.event.remove()
+          const url = '/record/update/' + arg.event.id;
+          let data = arg.event;
+          /* let data = {
+               start: arg.start,
+               end: arg.end,
+               allDay: arg.allDay
+           }*/
+
+          try {
+              const response = await fetch(url, {
+                  method: 'POST', // или 'PUT'
+                  body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              });
+              const json = await response.json();
+              //  console.log('Успех:', JSON.stringify(json));
+              if(json.status=='404') {
+                  alert('Ошибка перемещения.');
+                  window.location.reload(true);
+              }
+              else {
+                  window.location.reload(true);
+              }
+          } catch (error) {
+              console.error('Ошибка:', error);
+          }
+      },
+      eventResize: async function (arg) {
+            //arg.event.remove()
+            const url = '/record/update/' + arg.event.id;
+            let data = arg.event;
+            /* let data = {
+                 start: arg.start,
+                 end: arg.end,
+                 allDay: arg.allDay
+             }*/
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST', // или 'PUT'
+                    body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const json = await response.json();
+                //  console.log('Успех:', JSON.stringify(json));
+                if(json.status=='404') {
+                    alert('Ошибка перемещения.');
+                    window.location.reload(true);
+                }
+                else {
+                    window.location.reload(true);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        },
       eventClick: async function (arg) {
           if (confirm('Are you sure you want to delete this event?')) {
               arg.event.remove()
-              const url = '/record/delete/';
+              const url = '/admin/calendar/delete/';
              let data = arg.event;
              /* let data = {
                   start: arg.start,
@@ -145,7 +207,7 @@
                   const json = await response.json();
                 //  console.log('Успех:', JSON.stringify(json));
                   if(json.status=='404') {
-                      alert('Ошибка удаления. Скорее всего вы пытаетесь удалить запись другого участника');
+                      alert('Ошибка удаления.');
                       window.location.reload(true);
                   }
                   else {

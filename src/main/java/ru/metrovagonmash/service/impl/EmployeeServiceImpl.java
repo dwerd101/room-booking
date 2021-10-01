@@ -55,7 +55,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
- /*   // изменить заглушку на будущее
+    @Override
+    public EmployeeDTO findByLogin(String login) {
+        return myMapper.toDTO( employeeRepository.findByLogin(login)
+                .orElseThrow(() -> new EmployeeException("Не найден логин")));
+    }
+
+    /*   // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
         //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),

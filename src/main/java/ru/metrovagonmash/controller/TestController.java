@@ -17,14 +17,12 @@ import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
+import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.repository.ProfileRepository;
 import ru.metrovagonmash.repository.ProfileViewRepository;
 import ru.metrovagonmash.repository.RecordTableRepository;
 import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
-import ru.metrovagonmash.service.EmployeeService;
-import ru.metrovagonmash.service.PasswordConfirmationTokenService;
-import ru.metrovagonmash.service.ProfileViewService;
-import ru.metrovagonmash.service.VscRoomService;
+import ru.metrovagonmash.service.*;
 import ru.metrovagonmash.service.mail.MailSenderService;
 import ru.metrovagonmash.specification.SearchCriteria;
 
@@ -50,6 +48,7 @@ public class TestController {
     private final MailSenderService mailSenderService;
     private final PasswordConfirmationTokenService passwordConfirmationTokenService;
     private final EmployeeService employeeService;
+    private final RecordTableService recordTableService;
 
 
     // private final RecordTableViewRepository recordTableViewRepository;
@@ -74,6 +73,23 @@ public class TestController {
         return "calendar";
     }
 
+    @GetMapping("/admin/calendar/{idRoom}")
+    public String adminCalendar(@PathVariable String idRoom, ModelMap modelMap) {
+        vscRoomService.findByNumberRoomIfNotFoundByNumberRoomThrowException(Long.parseLong(idRoom));
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+        return "admincalendar";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/admin/calendar/delete/")
+    public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return () -> ResponseEntity.ok(recordTableService.delete(recordTableDTO));
+        // return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
+    }
+
     // FIXME: 30.08.2021 Сделать отправку сообщения с почты после того как пользователь сделал запись
     // FIXME: 30.08.2021 Сделать возможность изменения личных данных пользователя - частично добавили
     // FIXME: 13.09.2021 Сброс пароля добавить - частисно добавили
@@ -82,8 +98,8 @@ public class TestController {
     public Callable<ResponseEntity<EmployeeDTO>> getEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        EmployeeDTO employeeDTO = employeeMyMapper.toDTO(recordTableRepository.findByLogin(user.getUsername()).orElseThrow(() -> new EmployeeException())
-                .getEmployeeId());
+        //EmployeeDTO employeeDTO = employeeMyMapper.toDTO(recordTableRepository.findByLogin(user.getUsername()).orElseThrow(() -> new EmployeeException()).getEmployeeId());
+        EmployeeDTO employeeDTO = employeeService.findByLogin(user.getUsername());
         return () -> ResponseEntity.ok(employeeDTO);
     }
 

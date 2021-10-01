@@ -66,7 +66,10 @@ public class RecordController {
 
     @PostMapping("/update/{id}")
     public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO, @PathVariable String id) {
-        return () -> ResponseEntity.ok(recordService.update(recordTableDTO, Long.parseLong(id)));
+        RecordTableDTO resultRecordTableDTO = recordService.findById(Long.parseLong(id));
+        resultRecordTableDTO.setStart(recordTableDTO.getStart());
+        resultRecordTableDTO.setEnd(recordTableDTO.getEnd());
+        return () -> ResponseEntity.ok(recordService.update(resultRecordTableDTO, Long.parseLong(id)));
     }
 
 
