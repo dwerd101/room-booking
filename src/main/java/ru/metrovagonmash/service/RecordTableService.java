@@ -13,4 +13,5 @@ public interface RecordTableService extends RoomService<RecordTableDTO, Long>{
   RecordTableDTO delete(RecordTableDTO recordTableDTO);
   List<RecordTableDTO> findByNumberRoomId(Long id);
   RecordTableDTO findById(Long id);
+  List<RecordTableDTO> findByNumberRoom(Long id);
 }

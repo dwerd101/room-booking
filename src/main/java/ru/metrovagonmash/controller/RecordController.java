@@ -40,7 +40,7 @@ public class RecordController {
 
     @GetMapping("/{index}")
     public Callable<ResponseEntity<List<RecordTableDTO>>> findByIndex(@PathVariable String index) {
-        return () -> ResponseEntity.ok(recordService.findByNumberRoomId(Long.parseLong(index)));
+        return () -> ResponseEntity.ok(recordService.findByNumberRoom(Long.parseLong(index)));
 
     }
 

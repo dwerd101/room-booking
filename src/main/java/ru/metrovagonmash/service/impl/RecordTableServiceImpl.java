@@ -119,9 +119,18 @@ public class RecordTableServiceImpl implements RecordTableService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public RecordTableDTO findById(Long id) {
         return mapper.toDTO(recordTableRepository.findById(id).orElseThrow(() -> new RecordTableException("Не найдена запись")));
+    }
+
+    @Override
+    public List<RecordTableDTO> findByNumberRoom(Long id) {
+        return recordTableRepository.findAllByNumberRoom(id)
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 
