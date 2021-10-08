@@ -9,14 +9,14 @@
     <link
             href="/css/userpagestyle.css"
             type="text/css" data-template-style="true" rel="stylesheet" />
-    <link href='/css/calendar.css' rel='stylesheet' />
+            <link href='/css/calendar.css' rel='stylesheet' />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src='/js/calendar.js'></script>
     <title>ВКС</title>
 </head>
 <body>
-<header>
+  <header>
     <nav class="nav">
         <a href="/index.html" class="b-nav__logo hidden-sm hidden-xs">
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
@@ -40,226 +40,229 @@
         </div>
     </nav>
 </header>
-
+  
 <script src='/locales/ru.js'></script>
 
 <script>
-    document.getElementById('datePicker').value = new Date().toDateInputValue();
+  document.getElementById('datePicker').value = new Date().toDateInputValue();
 </script>
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var initialLocaleCode = 'ru';
-        var localeSelectorEl = document.getElementById('locale-selector');
-        var calendarEl = document.getElementById('calendar');
-        var url = window.location.href;
-        var urlMassive = url.split('/');
-        var index = urlMassive[urlMassive.length-1];
+  document.addEventListener('DOMContentLoaded', function() {
+    var initialLocaleCode = 'ru';
+    var localeSelectorEl = document.getElementById('locale-selector');
+    var calendarEl = document.getElementById('calendar');
+    var url = window.location.href;
+    var urlMassive = url.split('/');
+    var index = urlMassive[urlMassive.length-1];
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            locale: initialLocaleCode,
-            buttonIcons: false, // show the prev/next text
-            weekNumbers: true,
-            navLinks: true, // can click day/week names to navigate views
-            eventOverlap: false,
-            views: {
-                dayGridMonth: {
-                    selectable: false
-                },
-                timeGridWeek: {
-                    selectable: true
-                },
-                timeGridDay: {
-                    selectable: true
-                },
-            },
-            selectMirror: true,
-            select: async function (arg) {
-                var title = prompt('Event Title:');
-                const response = await fetch('/get-user', {
-                    method: 'GET', // или 'PUT'
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      locale: initialLocaleCode,
+      buttonIcons: false, // show the prev/next text
+      weekNumbers: true,
+      navLinks: true, // can click day/week names to navigate views
+      eventOverlap: false,
+      views: {
+          dayGridMonth: {
+              selectable: false
+          },
+          timeGridWeek: {
+              selectable: true
+          },
+          timeGridDay: {
+              selectable: true
+          },
+      },
+      selectMirror: true,
+      select: async function (arg) {
+          var title = prompt('Event Title:');
+          const response = await fetch('/get-user', {
+              method: 'GET', // или 'PUT'
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          const json = await response.json();
+          if (title) {
+              calendar.addEvent({
+                  title: title,
+                  start: arg.start,
+                  end: arg.end,
+                  allDay: arg.allDay
+              })
+              const url = '/record/save/';
+            //  const data = arg.event;
+              let data = {
+                  title: title+' / '+json.name+' '+' '+json.surname,
+                  start: arg.start,
+                  end: arg.end,
+                  allDay: arg.allDay,
+                  roomId: window.location.href
+              }
+
+              try {
+                  const response = await fetch(url, {
+                      method: 'POST', // или 'PUT'
+                      body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  });
+                  const json = await response.json();
+                  console.log('Успех:', JSON.stringify(json));
+                  window.location.reload(true);
+              } catch (error) {
+                  console.error('Ошибка:', error);
+              }
+          }
+          calendar.unselect()
+      },
+      eventDrop: async function (arg) {
+            //arg.event.remove()
+            const url = '/record/update/' + arg.event.id;
+            let data = arg.event;
+            /* let data = {
+                 start: arg.start,
+                 end: arg.end,
+                 allDay: arg.allDay
+             }*/
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST', // или 'PUT'
+                    body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
                 const json = await response.json();
-                if (title) {
-                    calendar.addEvent({
-                        title: title,
-                        start: arg.start,
-                        end: arg.end,
-                        allDay: arg.allDay
-                    })
-                    const url = '/record/save/';
-                    //  const data = arg.event;
-                    let data = {
-                        title: title+' / '+json.name+' '+' '+json.surname,
-                        start: arg.start,
-                        end: arg.end,
-                        allDay: arg.allDay,
-                        roomId: window.location.href
-                    }
-
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST', // или 'PUT'
-                            body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        const json = await response.json();
-                        console.log('Успех:', JSON.stringify(json));
-                        window.location.reload(true);
-                    } catch (error) {
-                        console.error('Ошибка:', error);
-                    }
+                //  console.log('Успех:', JSON.stringify(json));
+                if(json.status=='404') {
+                    alert('Ошибка перемещения.');
+                    window.location.reload(true);
                 }
-                calendar.unselect()
-            },
-            eventDrop: async function (arg) {
-                //arg.event.remove()
-                const url = '/record/update/' + arg.event.id;
-                let data = arg.event;
-                /* let data = {
-                     start: arg.start,
-                     end: arg.end,
-                     allDay: arg.allDay
-                 }*/
-
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST', // или 'PUT'
-                        body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    const json = await response.json();
-                    //  console.log('Успех:', JSON.stringify(json));
-                    if(json.status=='404') {
-                        alert('Ошибка перемещения.');
-                        window.location.reload(true);
-                    }
-                    else {
-                        window.location.reload(true);
-                    }
-                } catch (error) {
-                    console.error('Ошибка:', error);
+                else {
+                    window.location.reload(true);
                 }
-            },
-            eventResize: async function (arg) {
-                //arg.event.remove()
-                const url = '/record/update/' + arg.event.id;
-                let data = arg.event;
-                /* let data = {
-                     start: arg.start,
-                     end: arg.end,
-                     allDay: arg.allDay
-                 }*/
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        },
+      eventResize: async function (arg) {
+            //arg.event.remove()
+            const url = '/record/update/' + arg.event.id;
+            let data = arg.event;
+            /* let data = {
+                 start: arg.start,
+                 end: arg.end,
+                 allDay: arg.allDay
+             }*/
 
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST', // или 'PUT'
-                        body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    const json = await response.json();
-                    //  console.log('Успех:', JSON.stringify(json));
-                    if(json.status=='404') {
-                        alert('Ошибка перемещения.');
-                        window.location.reload(true);
+            try {
+                const response = await fetch(url, {
+                    method: 'POST', // или 'PUT'
+                    body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                    else {
-                        window.location.reload(true);
-                    }
-                } catch (error) {
-                    console.error('Ошибка:', error);
+                });
+                const json = await response.json();
+                //  console.log('Успех:', JSON.stringify(json));
+                if(json.status=='400') {
+                    console.log(json);
+                    alert('Ошибка перемещения.');
+                    window.location.reload(true);
                 }
-            },
-            eventClick: async function (arg) {
-                if (confirm('Are you sure you want to delete this event?')) {
-                    arg.event.remove()
-                    const url = '/record/delete/';
-                    let data = arg.event;
-                    /* let data = {
-                         start: arg.start,
-                         end: arg.end,
-                         allDay: arg.allDay
-                     }*/
+                else {
+                    console.log(json);
+                    window.location.reload(true);
 
-                    try {
-                        const response = await fetch(url, {
-                            method: 'DELETE', // или 'PUT'
-                            body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        const json = await response.json();
-                        //  console.log('Успех:', JSON.stringify(json));
-                        if(json.status=='404') {
-                            alert('Ошибка удаления. Скорее всего вы пытаетесь удалить запись другого участника');
-                            window.location.reload(true);
-                        }
-                        else {
-                            window.location.reload(true);
-                        }
-                    } catch (error) {
-                        console.error('Ошибка:', error);
-                    }
                 }
-            },
-            editable: true,
-            dayMaxEvents: true, // allow "more" link when too many events
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        },
+      eventClick: async function (arg) {
+          if (confirm('Are you sure you want to delete this event?')) {
+              arg.event.remove()
+              const url = '/record/delete/';
+             let data = arg.event;
+             /* let data = {
+                  start: arg.start,
+                  end: arg.end,
+                  allDay: arg.allDay
+              }*/
 
-            eventSources: [
+              try {
+                  const response = await fetch(url, {
+                      method: 'DELETE', // или 'PUT'
+                      body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  });
+                  const json = await response.json();
+                //  console.log('Успех:', JSON.stringify(json));
+                  if(json.status=='404') {
+                      alert('Ошибка удаления. Скорее всего вы пытаетесь удалить запись другого участника');
+                      window.location.reload(true);
+                  }
+                  else {
+                      window.location.reload(true);
+                  }
+              } catch (error) {
+                  console.error('Ошибка:', error);
+              }
+          }
+      },
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
 
-                // your event source
-                {
-                    url: '/record/'+index
-                    // use the `url` property
-                }
+      eventSources: [
 
-                // any other sources...
+    // your event source
+    {
+      url: '/record/'+index
+        // use the `url` property
+    }
 
-            ]
+    // any other sources...
 
-        });
+  ]
 
-        calendar.render();
     });
 
+    calendar.render();
+  });
 
+  
 
 </script>
 <style>
 
-    body {
-        margin: 100px 10px;
-        padding: 0;
-        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-        font-size: 14px;
-    }
+  body {
+    margin: 100px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
 
-    #calendar {
-        max-width: 810px;
-        margin: 0 auto;
-    }
+  #calendar {
+    max-width: 810px;
+    margin: 0 auto;
+  }
 
 </style>
 
 <div id='top'>
-
-    <div id='calendar'></div>
+  
+<div id='calendar'></div>
 
 </body>
 </html>

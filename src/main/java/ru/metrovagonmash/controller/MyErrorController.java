@@ -1,4 +1,4 @@
-package ru.metrovagonmash.controller;
+/*package ru.metrovagonmash.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -39,3 +39,6 @@ public class MyErrorController implements ErrorController {
     }
 
 }
+
+
+ */
