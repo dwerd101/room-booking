@@ -28,7 +28,8 @@ public class ProfileViewConsumer implements Consumer<SearchCriteria> {
             predicate = builder.and(predicate, builder.lessThan(r.get(param.getKey()), param.getValue().toString()));
         } else if (param.getOperation().equalsIgnoreCase(":")) {
             if (r.get(param.getKey()).getJavaType() == String.class) {
-                predicate = builder.and(predicate, builder.like(r.get(param.getKey()), "%" + param.getValue() + "%"));
+                predicate = builder.and(predicate, builder.like(builder.upper(r.get(param.getKey())),
+                        "%" + param.getValue().toString().toUpperCase() + "%"));
             } else {
                 predicate = builder.and(predicate, builder.equal(r.get(param.getKey()), param.getValue()));
             }

@@ -54,6 +54,8 @@ public class TestController {
 
 
     // private final RecordTableViewRepository recordTableViewRepository;
+    private final ProfileViewSearchCriteriaRepostitory profileViewSearchCriteriaRepostitory;
+    private final RecordTableViewRepository recordTableViewRepository;
     @GetMapping("/userpage")
     public String userPage() {
         return "userpage";
@@ -291,14 +293,14 @@ public class TestController {
         }
         profileViewService.batchUpdateProfileAndEmployee(profileViewList);
 
-        return "redirect:/admin";
+        return "redirect:/admin/find-by-param";
     }
 
     @GetMapping("/admin/find-by-param")
     public String getByParamPage(ModelMap modelMap) {
-        List<ProfileView> list = null;
-        modelMap.addAttribute("profileView", new ProfileView());
-        modelMap.addAttribute("employeeList", list);
+        List<ProfileView> list = profileViewService.findAll();
+        modelMap.addAttribute("employeeList",list);
+        modelMap.addAttribute("findProfileView", new ProfileView());
         return "adminpagefullfindemployee";
     }
 

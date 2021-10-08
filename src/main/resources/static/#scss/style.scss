@@ -78,7 +78,7 @@ registration {
     overflow: auto;
     .login-f {
         width: 250px;
-        height: 50%;
+        height: 75%;
         position: absolute;
         top: 0;
         right: 0;
@@ -91,21 +91,16 @@ registration {
         .form-group{
             display: block;
             line-height: 10px;
-            .btn-group{
-                margin-left: 30px;
-            }
+            text-align: center;
         }
     }
 }
 
 
-.form-signin-heading {
-    padding-left: 20px;
-    margin-bottom: 30px;
-}
-.form-registration-heading{
-    padding-left: 40px;
-    margin-bottom: 30px;
+.form-heading {
+    
+    text-align: center;
+    position: static;
 }
 .sr-only {
     padding-left: 40%;
@@ -116,10 +111,10 @@ registration {
 }
 .form-check-text-center {
     margin-top: 15px;
-    padding-left: 50px;
 }
 .butt-ent {
     margin-top: 30px;
-    padding-left: 90px;
 }
-
+.container {
+    padding-top: 15px;
+}

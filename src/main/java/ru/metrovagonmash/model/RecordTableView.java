@@ -38,7 +38,7 @@ public class RecordTableView {
     @Column(name ="middle_name")
     private String employeeMiddleName;
     @Column(name ="number_room")
-    private String vcsRoomNumberRoom;
+    private Long vcsRoomNumberRoom;
     @Column(name ="is_active")
     private Boolean isActive;
     @Column(name = "title")

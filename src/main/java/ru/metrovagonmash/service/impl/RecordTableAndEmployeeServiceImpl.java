@@ -95,5 +95,10 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     public boolean checkPermissionByLoginAndRecordId(String login, Long recordId) {
         return recordTableRepository.findById(recordId).get().getEmployeeId().getProfileId().getLogin().equals(login);
     }
+    public List<RecordTableView> findAll() {
+        return recordTableViewRepository.findAll();
+    }
+
+
 
 }

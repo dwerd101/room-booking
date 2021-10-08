@@ -8,4 +8,5 @@ public interface RecordTableAndEmployeeService  {
     RecordTableDTO delete(RecordTableDTO recordTableDTO, User user);
     RecordTableDTO update(RecordTableDTO recordTableDTO, Long id);
     boolean checkPermissionByLoginAndRecordId(String login, Long recordId);
+    List<RecordTableView> findAll();
 }

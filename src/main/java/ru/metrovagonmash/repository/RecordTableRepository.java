@@ -1,13 +1,11 @@
 package ru.metrovagonmash.repository;
 
 
-import net.bytebuddy.dynamic.scaffold.TypeWriter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
-import ru.metrovagonmash.model.dto.RecordTableDTO;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -52,6 +50,4 @@ public interface RecordTableRepository extends JpaRepository<RecordTable,Long> {
 
     @Query(nativeQuery = true, value = "select * from record_table where number_room_id=?1")
     List<RecordTable> findAllByNumberRoomId(Long id);
-    @Query(nativeQuery =  true, value = "select * from record_table inner join vsc_room vr on record_table.number_room_id = vr.id where number_room = ?1")
-    List<RecordTable> findAllByNumberRoom(Long numberRoom);
 }

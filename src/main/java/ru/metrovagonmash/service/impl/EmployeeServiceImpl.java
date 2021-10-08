@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.exception.EmployeeException;
 import ru.metrovagonmash.mapper.MyMapper;
+import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
@@ -45,8 +46,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO deleteById(Long aLong) {
-        return myMapper.toDTO( employeeRepository.findById(aLong)
+        EmployeeDTO employeeDTO = myMapper.toDTO( employeeRepository.findById(aLong)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
+        employeeRepository.deleteById(aLong);
+        return employeeDTO;
     }
 
     @Override
@@ -73,25 +76,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setProfileId(profileService.findById(model.getProfileId()));
         return employee;
     }
-  /*  @Override
-    public Employee save(Employee model) {
-        return employeeRepository.save(model);
+
+    @Override
+    public boolean isPresentByDepartmentId(Long aLong) {
+        return !employeeRepository.findAllByDepartmentId(aLong).isEmpty();
     }
 
     @Override
-    public Employee update(Employee model, Long id) {
-        return null;
+    public EmployeeDTO findEmployeeByProfileId(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
     @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public EmployeeDTO findById(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findById(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
     @Override
-    public Employee deleteById(Long aLong) {
-        return employeeRepository.findById(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID"));
+    public EmployeeDTO findByLogin (String login) {
+        return myMapper.toDTO(employeeRepository.findByLogin(login)
+                .orElseThrow(() -> new EmployeeException("Логин не найден")));
     }
-*/
 }

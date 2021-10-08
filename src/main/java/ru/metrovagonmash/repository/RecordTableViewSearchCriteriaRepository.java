@@ -1,7 +1,6 @@
 package ru.metrovagonmash.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.specification.ProfileViewConsumer;
 import ru.metrovagonmash.specification.SearchCriteria;
@@ -15,14 +14,14 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class ProfileViewSearchCriteriaRepostitory implements SearchCriteriaView<ProfileView> {
+public class RecordTableViewSearchCriteriaRepository implements SearchCriteriaView<RecordTableView> {
     @PersistenceContext
     private EntityManager entityManager;
     @Override
-    public List<ProfileView> search(List<SearchCriteria> params) {
+    public List<RecordTableView> search(List<SearchCriteria> params) {
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<ProfileView> query = builder.createQuery(ProfileView.class);
-        final Root r = query.from(ProfileView.class);
+        final CriteriaQuery<RecordTableView> query = builder.createQuery(RecordTableView.class);
+        final Root r = query.from(RecordTableView.class);
 
         Predicate predicate = builder.conjunction();
         ProfileViewConsumer searchConsumer = new ProfileViewConsumer(predicate, builder, r);
@@ -34,7 +33,7 @@ public class ProfileViewSearchCriteriaRepostitory implements SearchCriteriaView<
     }
 
     @Override
-    public void save(ProfileView entity) {
+    public void save(RecordTableView entity) {
         entityManager.persist(entity);
     }
 

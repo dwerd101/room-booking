@@ -14,4 +14,5 @@ public interface RecordTableService extends RoomService<RecordTableDTO, Long>{
   List<RecordTableDTO> findByNumberRoomId(Long id);
   RecordTableDTO findById(Long id);
   List<RecordTableDTO> findByNumberRoom(Long id);
+  void batchUpdateRecords(List<RecordTable> recordTableList);
 }
