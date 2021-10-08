@@ -9,7 +9,7 @@ import ru.metrovagonmash.exception.DepartmentException;
 import ru.metrovagonmash.exception.VscRoomException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.model.VscRoom;
-import ru.metrovagonmash.repository.VscRepository;
+import ru.metrovagonmash.repository.VscRoomRepository;
 import ru.metrovagonmash.service.VscRoomService;
 
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class VscRoomServiceImpl implements VscRoomService {
-    private final VscRepository vscRepository;
+    private final VscRoomRepository vscRepository;
     private final JdbcTemplate jdbcTemplate;
     @Override
     public VscRoom save(VscRoom model) {
@@ -43,13 +43,18 @@ public class VscRoomServiceImpl implements VscRoomService {
                 .orElseThrow(() -> new VscRoomException("Не найден ID"));
         vscRepository.deleteById(aLong);
         return vscRoom;
-
+    }
     @Override
     public void findByNumberRoomIfNotFoundByNumberRoomThrowException(Long number) {
-        vscRoomRepository.findByNumberRoom(number).orElseThrow(
+        vscRepository.findByNumberRoom(number).orElseThrow(
                 () -> new VscRoomException("Не найдена комната"));
     }
 
+    @Override
+    public VscRoom findById(Long aLong) {
+        return vscRepository.findById(aLong)
+                .orElseThrow(() -> new VscRoomException("Не найден ID"));
+    }
 
     @Transactional
     @Override

@@ -18,10 +18,7 @@ import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
-import ru.metrovagonmash.repository.ProfileRepository;
-import ru.metrovagonmash.repository.ProfileViewRepository;
-import ru.metrovagonmash.repository.RecordTableRepository;
-import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
+import ru.metrovagonmash.repository.*;
 import ru.metrovagonmash.service.*;
 import ru.metrovagonmash.service.mail.MailSenderService;
 import ru.metrovagonmash.specification.SearchCriteria;
@@ -217,7 +214,7 @@ public class TestController {
                 params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
             }
         }
-        List<ProfileView> list = recordTableViewSearchCriteriaRepostitory.searchProfile(params);
+        List<ProfileView> list = recordTableViewSearchCriteriaRepostitory.search(params);
         modelMap.addAttribute("employeeList", list);
         return "adminpage";
     }

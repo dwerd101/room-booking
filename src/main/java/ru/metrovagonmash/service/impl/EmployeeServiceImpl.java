@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO deleteById(Long aLong) {
-        EmployeeDTO employeeDTO = myMapper.toDTO( employeeRepository.findById(aLong)
+        EmployeeDTO employeeDTO = myMapper.toDTO(employeeRepository.findById(aLong)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
         employeeRepository.deleteById(aLong);
         return employeeDTO;
@@ -54,15 +54,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO findByProfileID(Long profileID) {
-        return myMapper.toDTO( employeeRepository.findByProfileId(profileID)
+        return myMapper.toDTO(employeeRepository.findByProfileId(profileID)
                 .orElseThrow(() -> new EmployeeException("Не найден ID")));
     }
 
     @Override
     public EmployeeDTO findByLogin(String login) {
-        return myMapper.toDTO( employeeRepository.findByLogin(login)
+        return myMapper.toDTO(employeeRepository.findByLogin(login)
                 .orElseThrow(() -> new EmployeeException("Не найден логин")));
     }
+
+    @Override
+    public Boolean isPresentByDepartmentId(Long aLong) {
+        return !employeeRepository.findAllByDepartmentId(aLong).isEmpty();
+    }
+
+    @Override
+    public EmployeeDTO findById(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findById(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+    }
+
+    @Override
+    public EmployeeDTO findEmployeeByProfileId(Long aLong) {
+        return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
+                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+    }
+}
 
     /*   // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
@@ -100,3 +118,4 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new EmployeeException("Логин не найден")));
     }
 }
+*/

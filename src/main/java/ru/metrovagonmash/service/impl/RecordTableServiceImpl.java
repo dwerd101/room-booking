@@ -3,6 +3,7 @@ package ru.metrovagonmash.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.exception.RecordTableException;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -77,6 +79,47 @@ public class RecordTableServiceImpl implements RecordTableService {
                 .map(mapperView::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public RecordTableDTO save(RecordTableDTO recordTableDTO, User user) {
+        Optional<RecordTable> recordTable= recordTableRepository.findByLogin(user.getUsername());
+        if(recordTable.isPresent()) {
+            recordTableDTO.setEmail(recordTable.get().getEmployeeId().getEmail());
+            recordTableDTO.setIsActive(recordTable.get().getEmployeeId().getIsActive());
+            RecordTable recordTable1 = mapper.toModel(recordTableDTO);
+            recordTable1.setEmployeeId(recordTable.get().getEmployeeId());
+            recordTable1.setNumberRoomId(recordTable.get().getNumberRoomId());
+            return mapper.toDTO(recordTableRepository.save(recordTable1));
+        }
+
+        throw new RecordTableException();
+    }
+
+    @Override
+    public RecordTableDTO delete(RecordTableDTO recordTableDTO) {
+        RecordTable recordTable = recordTableRepository.findByStartEventAndEndEvent(
+                recordTableDTO.getStart(), recordTableDTO.getEnd()
+        ).orElseThrow(() -> new RecordTableException("Не найдена запись"));
+        recordTableRepository.delete(recordTable);
+        return recordTableDTO;
+    }
+
+
+
+    @Override
+    public List<RecordTableDTO> findByNumberRoom(Long id) {
+        return recordTableRepository.findAllByNumberRoom(id)
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RecordTableDTO findById(Long id) {
+        return mapper.toDTO(recordTableRepository.findById(id).orElseThrow(() -> new RecordTableException("Не найдена запись")));
+    }
+
+
 
 
     @Transactional
