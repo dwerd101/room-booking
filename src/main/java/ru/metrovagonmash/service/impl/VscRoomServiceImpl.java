@@ -41,4 +41,10 @@ public class VscRoomServiceImpl implements VscRoomService {
         vscRoomRepository.findByNumberRoom(number).orElseThrow(
                 () -> new VscRoomException("Не найдена комната"));
     }
+
+    @Override
+    public VscRoom findById(Long aLong) {
+        return vscRoomRepository.findById(aLong)
+                .orElseThrow(() -> new VscRoomException("Не найден ID"));
+    }
 }

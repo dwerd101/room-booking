@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface VscRoomService extends RoomService<VscRoom, Long> {
    void findByNumberRoomIfNotFoundByNumberRoomThrowException(Long number);
+   VscRoom findById(Long aLong);
 }

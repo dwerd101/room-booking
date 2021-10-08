@@ -36,7 +36,7 @@ public class RecordTableServiceImpl implements RecordTableService {
     @Override
     public RecordTableDTO update(RecordTableDTO model, Long aLong) {
         model.setId(aLong);
-        //mapper.toModel(model) не работает должным образом
+
         RecordTable recordTable = recordTableRepository.findById(aLong)
                 .orElseThrow(() -> new RecordTableException("Не найдена запись"));
 
@@ -48,7 +48,7 @@ public class RecordTableServiceImpl implements RecordTableService {
         recordTableRepository.save(recordTable);
 
         return mapper.toDTO(recordTable);
-        //return mapper.toDTO(recordTableRepository.save(mapper.toModel(model)));
+
 
     }
 

@@ -26,6 +26,7 @@ import ru.metrovagonmash.service.*;
 import ru.metrovagonmash.service.mail.MailSenderService;
 import ru.metrovagonmash.specification.SearchCriteria;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,7 @@ public class TestController {
     private final PasswordConfirmationTokenService passwordConfirmationTokenService;
     private final EmployeeService employeeService;
     private final RecordTableService recordTableService;
+    private final HistoryRecordTableEmployeeAndRecordTableService historyRecordTableEmployeeAndRecordTableService;
 
 
     // private final RecordTableViewRepository recordTableViewRepository;
@@ -82,11 +84,47 @@ public class TestController {
     }
 
     @ResponseBody
+    @PostMapping("/admin/calendar/update/{id}")
+    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO,
+                                                                 @PathVariable String id) {
+        RecordTableDTO tempRecordTableDTO = recordTableService.findById(Long.parseLong(id));
+        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        String message = "Изменение в бронировании комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
+                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
+                + "Старое время: " + "\n"
+                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
+                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n";
+        tempRecordTableDTO.setStart(recordTableDTO.getStart());
+        tempRecordTableDTO.setEnd(recordTableDTO.getEnd());
+        RecordTableDTO resultRecordTableDTO = historyRecordTableEmployeeAndRecordTableService.update(tempRecordTableDTO,
+                Long.parseLong(id));
+        String subject = "Изменение в бронирование комнаты №" + tempRecordTableDTO.getRoomId();
+        message = message
+                + "Новое время: " + "\n"
+                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + tempRecordTableDTO.getStart().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime()
+                + " по " + tempRecordTableDTO.getEnd().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime() + "\n"
+                + "Подробнее: " + "http://localhost:8080/calendar/" + recordTableDTO.getRoomId();
+        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+        return () -> ResponseEntity.ok(resultRecordTableDTO);
+    }
+
+    @ResponseBody
     @DeleteMapping("/admin/calendar/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        return () -> ResponseEntity.ok(recordTableService.delete(recordTableDTO));
+        RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
+        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        RecordTableDTO resultRecordTableDTO = recordTableService.delete(recordTableDTO);
+        String subject = "Отмена бронирования комнаты №" + tempRecordTableDTO.getRoomId();
+        String message = "Отменено бронирование комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
+                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
+                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
+                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + "http://localhost:8080/calendar/" + tempRecordTableDTO.getRoomId();
+        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+        return () -> ResponseEntity.ok(resultRecordTableDTO);
         // return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
 

@@ -33,7 +33,7 @@ public class HistoryRecordTableEmployeeAndRecordTableServiceImpl implements Hist
     @Transactional
     public RecordTableDTO update(RecordTableDTO model, Long aLong) {
         model.setId(aLong);
-        recordTableService.save(model);
+        recordTableService.update(model, aLong);
         historyRecordTableEmployeeService.save(model);
         return model ;
     }

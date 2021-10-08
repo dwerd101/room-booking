@@ -91,4 +91,9 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
         return null;
     }
 
+    @Override
+    public boolean checkPermissionByLoginAndRecordId(String login, Long recordId) {
+        return recordTableRepository.findById(recordId).get().getEmployeeId().getProfileId().getLogin().equals(login);
+    }
+
 }

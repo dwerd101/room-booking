@@ -125,7 +125,7 @@
       },
       eventDrop: async function (arg) {
           //arg.event.remove()
-          const url = '/record/update/' + arg.event.id;
+          const url = '/admin/calendar/update/' + arg.event.id;
           let data = arg.event;
           /* let data = {
                start: arg.start,
@@ -156,7 +156,7 @@
       },
       eventResize: async function (arg) {
             //arg.event.remove()
-            const url = '/record/update/' + arg.event.id;
+            const url = '/admin/calendar/update/' + arg.event.id;
             let data = arg.event;
             /* let data = {
                  start: arg.start,
