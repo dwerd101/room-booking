@@ -53,10 +53,6 @@ public class TestController {
     // private final RecordTableViewRepository recordTableViewRepository;
     private final ProfileViewSearchCriteriaRepostitory profileViewSearchCriteriaRepostitory;
     private final RecordTableViewRepository recordTableViewRepository;
-    @GetMapping("/userpage")
-    public String userPage() {
-        return "userpage";
-    }
 
     @GetMapping("/")
     public String indexPage(ModelMap modelMap) {

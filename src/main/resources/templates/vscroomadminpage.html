@@ -24,15 +24,17 @@
 
 
 <header>
-    <nav class="nav ">
+    <nav class="nav">
         <a href="/" class="nav__logo hidden-sm hidden-xs">
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
-        <div class="auth-panel">
 
+        <div class="auth-panel">
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
-            <a sec:authorize = "isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
         </div>
     </nav>
 </header>
@@ -57,6 +59,9 @@
 
 </ul>
 
+<p style="text-align: center; padding-top: 15px;" size="10">
+    <a th:href="@{/admin/vscrooms/addroom}" style="text-align: center"  class="btn btn-secondary btn-lg">Добавить комнату</a>
+</p>
 
 <div class="container">
 <form action="#" th:action="@{/admin/vscrooms/save}" method="post">
@@ -83,10 +88,10 @@
             <td>
                 <div>
                     <select tabindex="10" class="form-select" name="isActive" th:value="${vscroom.isActive}" >
-                        <option th:value="false" th:if="${!vscroom.isActive}" >Разблокирован</option>
-                        <option th:value="true" th:if="${vscroom.isActive}" >Заблокирован</option>
-                        <option th:value="false" th:if="${vscroom.isActive != false}" >Разблокирован</option>
-                        <option th:value="true" th:if="${vscroom.isActive != true}" >Заблокирован</option>
+                        <option th:value="false" th:if="${!vscroom.isActive}" >Заблокирован</option>
+                        <option th:value="true" th:if="${vscroom.isActive}" >Разблокирован</option>
+                        <option th:value="false" th:if="${vscroom.isActive != false}" >Заблокирован</option>
+                        <option th:value="true" th:if="${vscroom.isActive != true}" >Разблокирован</option>
                     </select>
                 </div>
             </td>
@@ -106,10 +111,6 @@
     <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"   style="text-align: center; " value="Сохранить"></p>
 
     </div>
-
-    <p style="text-align: center" size="10">
-        <a th:href="@{/admin/vscrooms/addroom}" style="text-align: center"  class="btn btn-outline-danger">Добавить комнату</a>
-    </p>
 
 </form>
 </div>

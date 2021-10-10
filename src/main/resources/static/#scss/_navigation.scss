@@ -30,11 +30,12 @@
     background-color: #fff;
 }
 header {
-    position:static;
+    position: static;
     z-index: 101;
     top: 0;
     left: 0;
     width: 100%;
+    min-width: 1000px;
 }
 .nav__logo {
     padding-left: 13px;

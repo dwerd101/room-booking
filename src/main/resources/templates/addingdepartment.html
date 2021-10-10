@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,12 +21,20 @@
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
 
         </a>
+
+        <div class="auth-panel">
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
+            <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
+            <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
+        </div>
     </nav>
 </header>
 
 <div class="login-p">
     <div class="login-f">
-        <form class="pure-form" th:action="@{/admin/departments/add}" th:object="${departmentData}" method="post">
+        <form class="form-heading" th:action="@{/admin/departments/add}" th:object="${departmentData}" method="post">
             <h2 class="form-registration-heading">Добавление нового департамента</h2>
             <div class="form-group">
                 <p class="login-str"></p>
@@ -40,8 +49,8 @@
                     <input type="hidden" name="_csrf" value="{{_csrf.token}}">
                     <div>
                         <p class="btn-p"></p>
-                        <input tabindex="10" class="btn btn-primary" type="submit" value="Добавить" />
-                        <input tabindex="11" class="btn btn-outline-secondary" type="reset" value="Очистить" />
+                        <input tabindex="3" class="btn btn-primary" type="submit" value="Добавить" />
+                        <input tabindex="4" class="btn btn-outline-secondary" type="reset" value="Очистить" />
                         <a class="btn btn-outline-secondary" href="/admin/departments/">Назад</a>
                     </div>
                 </div>

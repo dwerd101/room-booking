@@ -29,18 +29,15 @@
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
         <div class="auth-panel">
-
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
-            <a sec:authorize = "isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
         </div>
     </nav>
 </header>
 
-
-<!--
-<div th:if="${employeeList==null}">
--->
 <ul class="nav nav-pills ">
     <li class="nav-item">
         <a class="nav-link "  href="/admin/employees/">Сотрудники</a>
@@ -54,9 +51,11 @@
     <li class="nav-item">
         <a class="nav-link" href="/admin/records/">Записи</a>
     </li>
-
 </ul>
 
+<p style="text-align: center; padding-top: 15px;" size="10">
+    <a th:href="@{/admin/departments/add}" class="btn btn-secondary btn-lg">Добавить департамент</a>
+</p>
 
 <div class="container">
     <form action="#" th:action="@{/admin/departments/}" th:object="${findDepartment}" method="post">
@@ -135,9 +134,6 @@
 
 
     </div>
-    <p style="text-align: center" size="10">
-        <a th:href="@{/admin/departments/add}" style="text-align: center"  class="btn btn-outline-danger">Добавить департамент</a>
-    </p>
 
 </form>
 </div>
