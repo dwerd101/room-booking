@@ -141,9 +141,10 @@
                       'Content-Type': 'application/json'
                   }
               });
-              const json = await response.json();
+              //const json = await response.json();
+              const status = response.status;
               //  console.log('Успех:', JSON.stringify(json));
-              if(json.status=='404') {
+              if(status=='400') {
                   alert('Ошибка перемещения.');
                   window.location.reload(true);
               }
@@ -172,9 +173,10 @@
                         'Content-Type': 'application/json'
                     }
                 });
-                const json = await response.json();
+                //const json = await response.json();
+                const status = response.status;
                 //  console.log('Успех:', JSON.stringify(json));
-                if(json.status=='404') {
+                if(status=='400') {
                     alert('Ошибка перемещения.');
                     window.location.reload(true);
                 }
@@ -204,9 +206,10 @@
                           'Content-Type': 'application/json'
                       }
                   });
-                  const json = await response.json();
+                  //const json = await response.json();
+                  const status = response.status;
                 //  console.log('Успех:', JSON.stringify(json));
-                  if(json.status=='404') {
+                  if(status=='400') {
                       alert('Ошибка удаления.');
                       window.location.reload(true);
                   }
