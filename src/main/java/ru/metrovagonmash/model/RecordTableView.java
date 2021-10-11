@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 
-// переделать потом hibernate. Используется заглушка прописанная в скрипте schema.sql
+
 @Entity
 @Data
 @AllArgsConstructor

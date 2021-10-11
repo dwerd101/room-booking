@@ -17,9 +17,6 @@ import java.time.ZonedDateTime;
 @Builder
 @Entity
 @Table(name = "record_table")
-/*@SequenceGenerator(
-        name = "seqid-gen",
-        sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecordTable {
     @Id

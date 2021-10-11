@@ -3,18 +3,10 @@ package ru.metrovagonmash.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.exception.DepartmentException;
-import ru.metrovagonmash.exception.EmployeeException;
-import ru.metrovagonmash.exception.ProfileException;
 import ru.metrovagonmash.mapper.MyMapper;
-import ru.metrovagonmash.model.Department;
-import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
-import ru.metrovagonmash.repository.DepartmentRepository;
-import ru.metrovagonmash.repository.EmployeeRepository;
-import ru.metrovagonmash.repository.ProfileRepository;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeService;
 import ru.metrovagonmash.service.ProfileService;
@@ -66,14 +58,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         employeeDTO.setProfileId(profileService.findByLogin(model.getLogin()).getId());
 
         employeeDTO.setDepartmentId(departmentService.findById(model.getDepartmentId()).getId());
-
-        //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
-        //        employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
-
-
-
-        //Employee temp = employeeRepository.findByDepartmentId(employee.getDepartmentId()
-        //        .getId()).orElseThrow(() -> new EmployeeException("Не найден"));
 
         return employeeDTO;
     }

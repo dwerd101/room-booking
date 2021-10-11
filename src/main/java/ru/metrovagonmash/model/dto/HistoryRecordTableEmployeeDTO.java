@@ -18,12 +18,9 @@ import java.time.ZonedDateTime;
 public class HistoryRecordTableEmployeeDTO {
     private Long id;
     private String email;
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime start;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    //@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private ZonedDateTime end;
 
     private String title;
@@ -33,7 +30,7 @@ public class HistoryRecordTableEmployeeDTO {
     private Long employeeId;
     private String employeeName, employeeSurname, employeeMiddleName;
     private String vcsRoomNumberRoom;
-    // FIXME: 28.08.2021 Передалать нейминг roomId
+
     @JsonProperty("roomId")
     private String roomId;
 }

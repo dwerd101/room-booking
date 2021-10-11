@@ -14,9 +14,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Entity
 @Table(name = "employee")
-/*@SequenceGenerator(
-        name = "seqid-gen",
-        sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
 public class Employee {
 
     @Id
@@ -45,7 +42,6 @@ public class Employee {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    // Почититать merge all
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
@@ -56,8 +52,4 @@ public class Employee {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department departmentId;
 
-/*    @Override
-    public Long getId() {
-        return id;
-    }*/
 }

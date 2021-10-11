@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.exception.DepartmentException;
+import ru.metrovagonmash.exception.DepartmentBadRequestException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.roombooking.RoomBookingApplication;
 import ru.metrovagonmash.service.DepartmentService;
-import ru.metrovagonmash.service.ProfileViewService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +86,7 @@ public class DepartmentServiceTest {
     }
     @Test
     void deleteById_thenReturnFalse() {
-        DepartmentException departmentException =  assertThrows(DepartmentException.class, () -> {
+        DepartmentBadRequestException departmentException =  assertThrows(DepartmentBadRequestException.class, () -> {
             departmentService.deleteById(6L);
         });
         String expetedMessage = "Не найден ID";
@@ -105,7 +103,7 @@ public class DepartmentServiceTest {
     }
     @Test
     void findById_thenReturnFalse() {
-        DepartmentException departmentException = assertThrows(DepartmentException.class, () -> {
+        DepartmentBadRequestException departmentException = assertThrows(DepartmentBadRequestException.class, () -> {
             departmentService.findById(6L);
         });
         String expetedMessage = "Не найден ID";

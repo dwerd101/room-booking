@@ -1,4 +1,4 @@
-package ru.metrovagonmash.controller.user;
+package ru.metrovagonmash.controller.user.edit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,7 +25,7 @@ public class UserEditController {
     private final EmployeeAndProfileService employeeAndProfileService;
     private final DepartmentService departmentService;
 
-    @GetMapping("/user")
+    @GetMapping("/user/edit")
     public String editEmployee(ModelMap modelMap) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();

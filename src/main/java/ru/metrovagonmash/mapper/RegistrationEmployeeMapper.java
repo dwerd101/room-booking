@@ -11,7 +11,7 @@ import ru.metrovagonmash.model.dto.RegistrationDTO;
 public interface RegistrationEmployeeMapper extends MyMapper<EmployeeDTO, RegistrationDTO> {
     @Override
     @Mappings({
-            //@Mapping(target="id", source="employee.id"),
+
             @Mapping(target="surname", source="employeeDTO.surname"),
             @Mapping(target="name", source="employeeDTO.name"),
             @Mapping(target="middleName", source="employeeDTO.middleName"),

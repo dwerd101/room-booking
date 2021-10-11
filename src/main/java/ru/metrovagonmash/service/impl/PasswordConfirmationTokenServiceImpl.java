@@ -2,15 +2,11 @@ package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.metrovagonmash.exception.ProfileException;
 import ru.metrovagonmash.model.PasswordConfirmationToken;
-import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.repository.PasswordConfirmationTokenRepository;
 import ru.metrovagonmash.service.PasswordConfirmationTokenService;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 
 @RequiredArgsConstructor

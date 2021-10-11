@@ -1,7 +1,8 @@
-package ru.metrovagonmash.repository;
+package ru.metrovagonmash.repository.search;
 
 import org.springframework.stereotype.Repository;
-import ru.metrovagonmash.model.Department;
+import ru.metrovagonmash.model.ProfileView;
+import ru.metrovagonmash.repository.SearchCriteriaViewRepository;
 import ru.metrovagonmash.specification.ProfileViewConsumer;
 import ru.metrovagonmash.specification.SearchCriteria;
 
@@ -14,15 +15,14 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class DepartmentSearchCriteriaRepository implements SearchCriteriaView<Department> {
+public class ProfileViewSearchCriteriaRepostitoryImpl implements SearchCriteriaViewRepository<ProfileView> {
     @PersistenceContext
     private EntityManager entityManager;
-
     @Override
-    public List<Department> search(List<SearchCriteria> params) {
+    public List<ProfileView> search(List<SearchCriteria> params) {
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Department> query = builder.createQuery(Department.class);
-        final Root r = query.from(Department.class);
+        final CriteriaQuery<ProfileView> query = builder.createQuery(ProfileView.class);
+        final Root r = query.from(ProfileView.class);
 
         Predicate predicate = builder.conjunction();
         ProfileViewConsumer searchConsumer = new ProfileViewConsumer(predicate, builder, r);
@@ -34,7 +34,8 @@ public class DepartmentSearchCriteriaRepository implements SearchCriteriaView<De
     }
 
     @Override
-    public void save(Department entity) {
+    public void save(ProfileView entity) {
         entityManager.persist(entity);
     }
+
 }

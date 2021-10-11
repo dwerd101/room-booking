@@ -3,8 +3,7 @@ package ru.metrovagonmash.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import ru.metrovagonmash.exception.DepartmentException;
-import ru.metrovagonmash.exception.ProfileException;
+import ru.metrovagonmash.exception.ProfileNotFoundException;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.repository.ProfileRepository;
 import ru.metrovagonmash.service.ProfileService;
@@ -32,7 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Profile deleteById(Long aLong) {
         Profile profile = profileRepository.findById(aLong)
-                .orElseThrow(() -> new ProfileException("Не найден ID"));
+                .orElseThrow(() -> new ProfileNotFoundException("Не найден ID"));
         profileRepository.deleteById(aLong);
         return profile;
     }
@@ -40,13 +39,13 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Profile findByLogin(String login) {
         return profileRepository.findByLogin(login)
-                .orElseThrow(() -> new ProfileException("Профиль не найден"));
+                .orElseThrow(() -> new ProfileNotFoundException("Профиль не найден"));
     }
 
     @Override
     public Profile findById(Long profId) {
         return profileRepository.findById(profId)
-                .orElseThrow(() -> new ProfileException("Профиль не найден"));
+                .orElseThrow(() -> new ProfileNotFoundException("Профиль не найден"));
     }
 
     @Override
@@ -58,7 +57,7 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile changeAccountNonLocked(Boolean account_non_locked, Long id ) {
         jdbcTemplate.update(SQL_CHANGE_ACCOUNT_NON_LOCKED, account_non_locked, id);
         return profileRepository.findById(id)
-                .orElseThrow(() -> new ProfileException("Не найден ID"));
+                .orElseThrow(() -> new ProfileNotFoundException("Не найден ID"));
     }
 
     // FIXME: 13.07.2021 Настроить корректную реализацию метода
