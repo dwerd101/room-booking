@@ -20,11 +20,6 @@ public class TestMailController {
                 "sent to you from spring-boot");
     }
 
-    @GetMapping("/index")
-    public String index() {
-        return "rooms";
-    }
-
     @GetMapping("/enable")
     @ResponseBody
     public String active() {

@@ -95,11 +95,6 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   background-color: #fff;
 }
-.nav .i-exit {
-    height: 45px;
-    width: 90px;
-    border-radius: 5%;
-}
 
 header {
   position: static;
@@ -107,6 +102,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 1000px;
 }
 
 .nav__logo {
@@ -241,4 +237,9 @@ registration {
 
 .container {
   padding-top: 15px;
+}
+
+.forget-pass {
+  padding-top: 10px;
+  text-decoration: none;
 }

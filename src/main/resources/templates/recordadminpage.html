@@ -29,10 +29,11 @@
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
         <div class="auth-panel">
-
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
-            <a sec:authorize = "isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
         </div>
     </nav>
 </header>
@@ -57,6 +58,9 @@
 
 </ul>
 
+<p style="text-align: center; padding-top: 15px;" size="10">
+    <a th:href="@{/calendar.html}" class="btn btn-secondary btn-lg">Добавить бронирование</a>
+</p>
 
 <div class="container">
     <form action="#" th:action="@{/admin/records/}" th:object="${findRecord}" method="post">
@@ -102,9 +106,9 @@
                         </th>
                         <th>
                             <select name="findByIsActive" class="form-select" th:field="*{isActive}" >
-                                <option value=""  >Все</option>
-                                <option value="true"  >Заблокирован</option>
-                                <option value="false"  >Разблокирован</option>
+                                <option value="">Все</option>
+                                <option value="true">Разблокирован</option>
+                                <option value="false">Заблокирован</option>
                             </select>
                             <!-- <input type="text" size="2" id="findByIsActive" th:field="*{isActive}" style="text-align: center" class="form-control" name="findByIsActive"> -->
                         </th>
@@ -180,10 +184,10 @@
             <td>
                 <div>
                     <select tabindex="10" class="form-select" name="isActive" th:value="${record.isActive}" >
-                        <option th:value="false" th:if="${!record.isActive}">Разблокирован</option>
-                        <option th:value="true" th:if="${record.isActive}">Заблокирован</option>
-                        <option th:value="false" th:if="${record.isActive != false}" >Разблокирован</option>
-                        <option th:value="true" th:if="${record.isActive != true}" >Заблокирован</option>
+                        <option th:value="false" th:if="${!record.isActive}">Заблокирован</option>
+                        <option th:value="true" th:if="${record.isActive}">Разблокирован</option>
+                        <option th:value="false" th:if="${record.isActive != false}">Заблокирован</option>
+                        <option th:value="true" th:if="${record.isActive != true}">Разблокирован</option>
                     </select>
                 </div>
                 <!-- <input th:if="${record.isActive!= null}" th:value="${record.isActive}" type="text" size="2" id="isActive" style="text-align: center" class="form-control" name="isActive"/> -->
@@ -208,14 +212,8 @@
 
     </table>
 
-
             <p style="text-align: center" size="10"><input type="submit" class="btn btn-outline-danger"  value="Сохранить"></p>
-
-
     </div>
-    <p style="text-align: center" size="10">
-        <a th:href="@{/calendar.html}" style="text-align: center"  class="btn btn-outline-danger">Добавить бронирование</a>
-    </p>
 
 </form>
 </div>

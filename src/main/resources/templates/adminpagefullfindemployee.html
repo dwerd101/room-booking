@@ -23,15 +23,16 @@
 
 
 <header>
-    <nav class="nav ">
+    <nav class="nav">
         <a href="/" class="nav__logo hidden-sm hidden-xs">
             <img width="223" src="/img/logo_rus.gif" height="41" alt="Метровагонмаш">
         </a>
         <div class="auth-panel">
-
+            <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
-            <a sec:authorize = "isAuthenticated()" class="btn btn-outline-secondary" href="/auth/logout" role="button">Выход</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
         </div>
     </nav>
 </header>
@@ -103,8 +104,8 @@
                     <th>
                         <select name="findByBanned" class="form-select" th:field="*{banned}" >
                             <option value="" selected>Все</option>
-                            <option value="true">Заблокирован</option>
-                            <option value="false">Разблокирован</option>
+                            <option value="true">Разблокирован</option>
+                            <option value="false">Заблокирован</option>
                         </select>
                     </th>
                 </tr>
@@ -162,10 +163,10 @@
                         <option th:value="true" th:if="${profile.banned != true}">Заблокирован</option>
                     </select> -->
                     <select tabindex="10" class="form-select" name="banned" th:value="${profile.banned}">
-                        <option th:value="false" th:if="${!profile.banned}">Разблокирован</option>
-                        <option th:value="true" th:if="${profile.banned}">Заблокирован</option>
-                        <option th:value="false" th:if="${profile.banned != false}">Разблокирован</option>
-                        <option th:value="true" th:if="${profile.banned != true}">Заблокирован</option>
+                        <option th:value="false" th:if="${!profile.banned}">Заблокирован</option>
+                        <option th:value="true" th:if="${profile.banned}">Разблокирован</option>
+                        <option th:value="false" th:if="${profile.banned != false}">Заблокирован</option>
+                        <option th:value="true" th:if="${profile.banned != true}">Разблокирован</option>
                     </select>
                 </div>
             </td>
