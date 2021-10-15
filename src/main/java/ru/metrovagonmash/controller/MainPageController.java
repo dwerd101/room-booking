@@ -1,6 +1,7 @@
 package ru.metrovagonmash.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,7 @@ import ru.metrovagonmash.service.mail.MailSenderService;
 
 import java.util.List;
 
-@RestController
+@Controller
 @AllArgsConstructor
 public class MainPageController {
     private final VscRoomService vscRoomService;

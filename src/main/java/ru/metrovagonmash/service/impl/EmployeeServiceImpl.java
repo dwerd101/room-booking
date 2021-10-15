@@ -19,11 +19,13 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final MyMapper<Employee, EmployeeDTO> myMapper;
+    private final DepartmentService departmentService;
+    private final ProfileService profileService;
 
 
     @Override
     public EmployeeDTO save(EmployeeDTO model) {
-        return myMapper.toDTO(employeeRepository.save(myMapper.toModel(model)));
+        return myMapper.toDTO(employeeRepository.save(toEmployee(model)));
     }
 
     @Override
@@ -75,5 +77,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO findEmployeeByProfileId(Long aLong) {
         return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
                 .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
+    }
+
+    private Employee toEmployee(EmployeeDTO model) {
+        Employee employee = myMapper.toModel(model);
+        //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
+        //        employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
+
+        employee.setDepartmentId(departmentService.findById(model.getDepartmentId()));
+
+
+        employee.setProfileId(profileService.findById(model.getProfileId()));
+        return employee;
     }
 }

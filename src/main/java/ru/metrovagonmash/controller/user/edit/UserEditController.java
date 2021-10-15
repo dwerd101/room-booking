@@ -43,13 +43,22 @@ public class UserEditController {
 
         EmployeeDTO tempEmployeeDTO = employeeAndProfileService.findByLogin(profile.getLogin());
         Profile tempProfile = employeeAndProfileService.findProfileById(tempEmployeeDTO.getProfileId());
-        profile.setId(tempProfile.getId());
+
+        tempEmployeeDTO.setName(employeeDTO.getName());
+        tempEmployeeDTO.setSurname(employeeDTO.getSurname());
+        tempEmployeeDTO.setMiddleName(employeeDTO.getMiddleName());
+        tempEmployeeDTO.setPhone(employeeDTO.getPhone());
+        tempEmployeeDTO.setEmail(employeeDTO.getEmail());
+        tempEmployeeDTO.setDepartmentId(employeeDTO.getDepartmentId());
+
+        /*profile.setId(tempProfile.getId());
         profile.setPassword(tempProfile.getPassword());
         employeeDTO.setIsActive(tempEmployeeDTO.getIsActive());
         employeeDTO.setId(tempEmployeeDTO.getId());
-        employeeDTO.setProfileId(tempProfile.getId());
-        employeeAndProfileService.update(employeeDTO, profile);
-        return "redirect:/user";
+        employeeDTO.setProfileId(tempProfile.getId());*/
+
+        employeeAndProfileService.update(tempEmployeeDTO, tempProfile);
+        return "redirect:/user/edit";
     }
 }
 
