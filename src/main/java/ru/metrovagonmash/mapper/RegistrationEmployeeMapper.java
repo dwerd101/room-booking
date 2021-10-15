@@ -3,15 +3,13 @@ package ru.metrovagonmash.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
 
 @Mapper(componentModel = "spring")
-public interface RegistrationEmployeeMapper extends MyMapper<EmployeeDTO, RegistrationDTO> {
+public interface RegistrationEmployeeMapper extends VCMapper<EmployeeDTO, RegistrationDTO> {
     @Override
     @Mappings({
-            //@Mapping(target="id", source="employee.id"),
             @Mapping(target="surname", source="employeeDTO.surname"),
             @Mapping(target="name", source="employeeDTO.name"),
             @Mapping(target="middleName", source="employeeDTO.middleName"),
@@ -24,7 +22,6 @@ public interface RegistrationEmployeeMapper extends MyMapper<EmployeeDTO, Regist
 
     @Override
     @Mappings({
-            //@Mapping(target="id", source="registrationDTO.id"),
             @Mapping(target="surname", source="registrationDTO.surname"),
             @Mapping(target="name", source="registrationDTO.name"),
             @Mapping(target="middleName", source="registrationDTO.middleName"),

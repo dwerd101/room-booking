@@ -5,9 +5,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.exception.DepartmentException;
-import ru.metrovagonmash.exception.VscRoomException;
-import ru.metrovagonmash.model.Department;
+import ru.metrovagonmash.exception.VscRoomBadRequestException;
 import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.repository.VscRoomRepository;
 import ru.metrovagonmash.service.VscRoomService;
@@ -40,20 +38,20 @@ public class VscRoomServiceImpl implements VscRoomService {
     @Override
     public VscRoom deleteById(Long aLong) {
         VscRoom vscRoom = vscRepository.findById(aLong)
-                .orElseThrow(() -> new VscRoomException("Не найден ID"));
+                .orElseThrow(() -> new VscRoomBadRequestException("Не найден ID"));
         vscRepository.deleteById(aLong);
         return vscRoom;
     }
     @Override
     public void findByNumberRoomIfNotFoundByNumberRoomThrowException(Long number) {
         vscRepository.findByNumberRoom(number).orElseThrow(
-                () -> new VscRoomException("Не найдена комната"));
+                () -> new VscRoomBadRequestException("Не найдена комната"));
     }
 
     @Override
     public VscRoom findById(Long aLong) {
         return vscRepository.findById(aLong)
-                .orElseThrow(() -> new VscRoomException("Не найден ID"));
+                .orElseThrow(() -> new VscRoomBadRequestException("Не найден ID"));
     }
 
     @Transactional

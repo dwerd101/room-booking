@@ -5,8 +5,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.exception.DepartmentException;
-import ru.metrovagonmash.exception.RecordTableException;
+import ru.metrovagonmash.exception.DepartmentBadRequestException;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.DepartmentRepository;
 import ru.metrovagonmash.service.DepartmentService;
@@ -39,13 +38,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department deleteById(Long aLong) {
         return departmentRepository.findById(aLong)
-                .orElseThrow(() -> new DepartmentException("Не найден ID"));
+                .orElseThrow(() -> new DepartmentBadRequestException("Не найден ID"));
     }
 
     @Override
     public Department findById(Long aLong) {
         return departmentRepository.findById(aLong)
-                .orElseThrow(() -> new DepartmentException("Не найден ID"));
+                .orElseThrow(() -> new DepartmentBadRequestException("Не найден ID"));
     }
 
     @Transactional

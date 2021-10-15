@@ -3,13 +3,12 @@ package ru.metrovagonmash.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.springframework.stereotype.Component;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 
 //@Component
 @Mapper(componentModel = "spring")
-public interface EmployeeMyMapper extends MyMapper<Employee, EmployeeDTO> {
+public interface EmployeeMyMapper extends VCMapper<Employee, EmployeeDTO> {
     @Mappings({
             @Mapping(target="id", source="employee.id"),
             @Mapping(target="surname", source="employee.surname"),

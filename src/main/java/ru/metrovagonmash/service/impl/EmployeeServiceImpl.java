@@ -2,9 +2,8 @@ package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.metrovagonmash.exception.EmployeeException;
-import ru.metrovagonmash.mapper.MyMapper;
-import ru.metrovagonmash.model.Department;
+import ru.metrovagonmash.exception.EmployeeBadRequestException;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
@@ -13,14 +12,13 @@ import ru.metrovagonmash.service.EmployeeService;
 import ru.metrovagonmash.service.ProfileService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final MyMapper<Employee, EmployeeDTO> myMapper;
+    private final VCMapper<Employee, EmployeeDTO> myMapper;
     private final DepartmentService departmentService;
     private final ProfileService profileService;
 
@@ -47,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO deleteById(Long aLong) {
         EmployeeDTO employeeDTO = myMapper.toDTO(employeeRepository.findById(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+                .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
         employeeRepository.deleteById(aLong);
         return employeeDTO;
     }
@@ -55,13 +53,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO findByProfileID(Long profileID) {
         return myMapper.toDTO(employeeRepository.findByProfileId(profileID)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+                .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
     }
 
     @Override
     public EmployeeDTO findByLogin(String login) {
         return myMapper.toDTO(employeeRepository.findByLogin(login)
-                .orElseThrow(() -> new EmployeeException("Не найден логин")));
+                .orElseThrow(() -> new EmployeeBadRequestException("Не найден логин")));
     }
 
     @Override
@@ -72,13 +70,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO findById(Long aLong) {
         return myMapper.toDTO(employeeRepository.findById(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+                .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
     }
 
     @Override
     public EmployeeDTO findEmployeeByProfileId(Long aLong) {
         return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
+                .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
     }
 }
 

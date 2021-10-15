@@ -6,9 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.exception.RecordTableException;
-import ru.metrovagonmash.mapper.Mapper;
-import ru.metrovagonmash.model.Department;
+import ru.metrovagonmash.exception.RecordTableBadRequestException;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
@@ -19,7 +18,6 @@ import ru.metrovagonmash.service.RecordTableService;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,8 +27,8 @@ import java.util.stream.Collectors;
 public class RecordTableServiceImpl implements RecordTableService {
     private final RecordTableRepository recordTableRepository;
     private final RecordTableViewRepository recordTableViewRepository;
-    private final Mapper<RecordTable, RecordTableDTO> mapper;
-    private final Mapper<RecordTableView, RecordTableDTO> mapperView;
+    private final VCMapper<RecordTable, RecordTableDTO> mapper;
+    private final VCMapper<RecordTableView, RecordTableDTO> mapperView;
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -45,7 +43,7 @@ public class RecordTableServiceImpl implements RecordTableService {
         model.setId(aLong);
 
         RecordTable recordTable = recordTableRepository.findById(aLong)
-                .orElseThrow(() -> new RecordTableException("Не найдена запись"));
+                .orElseThrow(() -> new RecordTableBadRequestException("Не найдена запись"));
 
         recordTable.setTitle(model.getTitle());
         recordTable.setEmail(model.getEmail());
@@ -70,7 +68,7 @@ public class RecordTableServiceImpl implements RecordTableService {
     @Override
     public RecordTableDTO deleteById(Long aLong) {
         RecordTableDTO recordTableDTO = mapper.toDTO( recordTableRepository.findById(aLong)
-                .orElseThrow(() -> new RecordTableException("Не найден ID")));
+                .orElseThrow(() -> new RecordTableBadRequestException("Не найден ID")));
         recordTableRepository.deleteById(aLong);
         return recordTableDTO;
     }
@@ -79,7 +77,7 @@ public class RecordTableServiceImpl implements RecordTableService {
     private RecordTable toRecordTable(RecordTableDTO model) {
         RecordTable recordTable = mapper.toModel(model);
         RecordTable temp = recordTableRepository.findByNumberRoomIdAndEmployeeId(recordTable.getNumberRoomId().getId(),
-                recordTable.getEmployeeId().getId()).orElseThrow(() -> new RecordTableException("Не найден"));
+                recordTable.getEmployeeId().getId()).orElseThrow(() -> new RecordTableBadRequestException("Не найден"));
         recordTable.setNumberRoomId(temp.getNumberRoomId());
         recordTable.setEmployeeId(temp.getEmployeeId());
         return recordTable;
@@ -105,14 +103,14 @@ public class RecordTableServiceImpl implements RecordTableService {
             return mapper.toDTO(recordTableRepository.save(recordTable1));
         }
 
-        throw new RecordTableException();
+        throw new RecordTableBadRequestException();
     }
 
     @Override
     public RecordTableDTO delete(RecordTableDTO recordTableDTO) {
         RecordTable recordTable = recordTableRepository.findByStartEventAndEndEvent(
                 recordTableDTO.getStart(), recordTableDTO.getEnd()
-        ).orElseThrow(() -> new RecordTableException("Не найдена запись"));
+        ).orElseThrow(() -> new RecordTableBadRequestException("Не найдена запись"));
         recordTableRepository.delete(recordTable);
         return recordTableDTO;
     }
@@ -129,7 +127,7 @@ public class RecordTableServiceImpl implements RecordTableService {
 
     @Override
     public RecordTableDTO findById(Long id) {
-        return mapper.toDTO(recordTableRepository.findById(id).orElseThrow(() -> new RecordTableException("Не найдена запись")));
+        return mapper.toDTO(recordTableRepository.findById(id).orElseThrow(() -> new RecordTableBadRequestException("Не найдена запись")));
     }
 
 
@@ -159,33 +157,4 @@ public class RecordTableServiceImpl implements RecordTableService {
                     }
                 });
     }
-
-
-
-
-
-
-    /*
-    @Override
-    public RecordTable save(RecordTable model) {
-        return recordRepository.save(model);
-    }
-
-    @Override
-    public RecordTable update(RecordTable model, Long id) {
-        return null;
-    }
-
-    @Override
-    public List<RecordTable> findAll() {
-        return recordRepository.findAll();
-    }
-
-    @Override
-    public RecordTable deleteById(Long id) {
-        return recordRepository.findById(id)
-                .orElseThrow(() -> new RecordTableException("Не найден ID"));
-    }
-
-     */
 }

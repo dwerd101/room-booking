@@ -2,12 +2,9 @@ package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.metrovagonmash.exception.RecordTableException;
-import ru.metrovagonmash.mapper.HistoryRecordTableEmpoyeeMapper;
-import ru.metrovagonmash.mapper.impl.RecordTableMapperImpl;
+import ru.metrovagonmash.exception.RecordTableBadRequestException;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.HistoryRecordTableEmployee;
-import ru.metrovagonmash.model.RecordTable;
-import ru.metrovagonmash.model.dto.HistoryRecordTableEmployeeDTO;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.repository.HistoryRecordTableEmployeeRepository;
 import ru.metrovagonmash.service.HistoryRecordTableEmployeeService;
@@ -20,7 +17,7 @@ import java.util.stream.Collectors;
 public class HistoryRecordTableEmployeeServiceImpl implements HistoryRecordTableEmployeeService {
 
     private final HistoryRecordTableEmployeeRepository recordTableRepository;
-    private final HistoryRecordTableEmpoyeeMapper mapper;
+    private final VCMapper<HistoryRecordTableEmployee, RecordTableDTO> mapper;
 
 
     @Override
@@ -47,7 +44,7 @@ public class HistoryRecordTableEmployeeServiceImpl implements HistoryRecordTable
     @Override
     public RecordTableDTO deleteById(Long aLong) {
         return mapper.toDTO( recordTableRepository.findById(aLong)
-                .orElseThrow(() -> new RecordTableException("Не найден ID")));
+                .orElseThrow(() -> new RecordTableBadRequestException("Не найден ID")));
     }
 
 

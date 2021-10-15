@@ -9,8 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.metrovagonmash.exception.EmployeeException;
-import ru.metrovagonmash.exception.ProfileException;
+import ru.metrovagonmash.exception.ProfileNotFoundException;
 import ru.metrovagonmash.mapper.EmployeeMyMapper;
 import ru.metrovagonmash.model.PasswordConfirmationToken;
 import ru.metrovagonmash.model.Profile;
@@ -171,7 +170,7 @@ public class TestController {
         PasswordConfirmationToken passwordConfirmationToken = passwordConfirmationTokenService.findByToken(confirmationToken);
         if (passwordConfirmationToken != null) {
             Profile profile = profileRepository.findById(passwordConfirmationToken.getProfileId().getId())
-                    .orElseThrow(() -> new ProfileException("Не найден профиль"));
+                    .orElseThrow(() -> new ProfileNotFoundException("Не найден профиль"));
             modelMap.addAttribute("profileData", profile);
             //Возможно это нужно реализовать по-другому
             passwordConfirmationTokenService.deleteById(passwordConfirmationToken.getId());
@@ -185,7 +184,7 @@ public class TestController {
     @PostMapping("reset-password")
     public String saveNewPassword(@ModelAttribute("profileData") Profile newProfileData) {
         Profile profile = profileRepository.findByLogin(newProfileData.getLogin())
-                .orElseThrow(() -> new ProfileException("Не найден профиль"));
+                .orElseThrow(() -> new ProfileNotFoundException("Не найден профиль"));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
         String encodedPassword = passwordEncoder.encode(newProfileData.getPassword());
         profile.setPassword(encodedPassword);

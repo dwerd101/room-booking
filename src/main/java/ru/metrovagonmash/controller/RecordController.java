@@ -1,13 +1,12 @@
 package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import ru.metrovagonmash.exception.RecordTableException;
+import ru.metrovagonmash.exception.RecordTableBadRequestException;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
 import ru.metrovagonmash.service.HistoryRecordTableEmployeeAndRecordTableService;
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
@@ -15,9 +14,7 @@ import ru.metrovagonmash.service.RecordTableService;
 import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.service.mail.MailSenderService;
 
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -67,7 +64,7 @@ public class RecordController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (!recordTableAndEmployeeService.checkPermissionByLoginAndRecordId(user.getUsername(),Long.parseLong(id))) {
-            throw new RecordTableException("Нет доступа к записи!");
+            throw new RecordTableBadRequestException("Нет доступа к записи!");
         }
 
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(Long.parseLong(id));
