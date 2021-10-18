@@ -13,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 public class MyErrorController implements ErrorController {
 
 
-    public String getErrorPath() {
-        return "/error";
-    }
 
     @RequestMapping ("/error")
     public String handleError(HttpServletRequest request, ModelMap modelMap) {

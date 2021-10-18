@@ -1,6 +1,7 @@
 package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +21,11 @@ import java.util.concurrent.Callable;
 
 @RestController
 @RequiredArgsConstructor
+@PropertySource("classpath:record-text.properties")
 @RequestMapping("/record")
 public class RecordController {
+    @Value("${record.url}")
+    private String recordUrl;
     private final RecordTableService recordTableService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
     private final HistoryRecordTableEmployeeAndRecordTableService<RecordTableDTO, User, Long> historyRecordTableEmployeeAndRecordTableService;
@@ -52,7 +56,7 @@ public class RecordController {
                 + "Дата бронирования: " + resultRecordTableDto.getStart().toLocalDate() + "\n"
                 + "Время бронирования: с " + resultRecordTableDto.getStart().toLocalTime()
                 + " по " + resultRecordTableDto.getEnd().toLocalTime() + "\n"
-                + "Подробнее: " + "http://localhost:8080/calendar/" + recordTableDTO.getRoomId();
+                + "Подробнее: " + recordUrl + recordTableDTO.getRoomId();
         mailSenderService.send(resultRecordTableDto.getEmail(), subject, message);
         return () -> ResponseEntity.ok(recordTableDTO);
 
@@ -85,7 +89,7 @@ public class RecordController {
                 + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
                 + "Время бронирования: с " + tempRecordTableDTO.getStart().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime()
                 + " по " + tempRecordTableDTO.getEnd().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime() + "\n"
-                + "Подробнее: " + "http://localhost:8080/calendar/" + recordTableDTO.getRoomId();
+                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
         mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
     }
@@ -104,10 +108,9 @@ public class RecordController {
                 + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
                 + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
                 + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n"
-                + "Подробнее: " + "http://localhost:8080/calendar/" + tempRecordTableDTO.getRoomId();
+                + "Подробнее: " + recordUrl  + tempRecordTableDTO.getRoomId();
         mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
-        // return () -> ResponseEntity.ok(recordService.deleteById(Long.parseLong(id)));
     }
 
     //Подумать над названием

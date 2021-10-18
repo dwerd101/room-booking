@@ -31,7 +31,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     private final VCMapper<RecordTable, RecordTableDTO> mapper;
     private final VCMapper<RecordTableView, RecordTableDTO> mapperView;
 
-
+    // FIXME: 17.09.2021 Добавить отпарвку почту в другой сервис (создать сервис)
     @Override
     public RecordTableDTO save(RecordTableDTO recordTableDTO, User user) {
         Optional<RecordTable> recordTable= recordTableRepository.findByLogin(user.getUsername());
@@ -72,6 +72,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
 
     }
 
+    // FIXME: 01.10.2021 Проверить как работает если есть 2 одинаковые записи в разных комнатах
     @Override
     public RecordTableDTO delete(RecordTableDTO recordTableDTO, User user) {
         RecordTable recordTable= recordTableRepository.findByLoginAndStartEventAndEndEvent(
@@ -81,15 +82,6 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
         return recordTableDTO;
     }
 
-    @Override
-    public RecordTableDTO update(RecordTableDTO recordTableDTO, Long id) {
-        RecordTable recordTable = recordTableRepository.findById(id)
-                .orElseThrow(() -> new RecordTableBadRequestException("Не найдена запись"));
-        recordTableDTO.setId(id);
-
-
-        return null;
-    }
 
     @Override
     public boolean checkPermissionByLoginAndRecordId(String login, Long recordId) {

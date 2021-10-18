@@ -34,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/login/**").anonymous()
                 .antMatchers("/enable/**").hasAnyAuthority("admin:read","user:read")
-               // .antMatchers("/admin/**").hasAnyAuthority("admin:read")
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
@@ -46,30 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                // FIXME: 16.07.2021 исправить JSESSISIONID
                 .deleteCookies("sessionone","remember-me")
                 .logoutSuccessUrl("/");
- /*       http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/login/**").anonymous()
-                .antMatchers("/department/**","/employees/**","/report/**").hasAuthority("admin:read")
-                .antMatchers("/reports/**").hasAnyAuthority("admin:read","user:read")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .and()
-                .rememberMe()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                //*.logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))*//*
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSISIONID","remember-me")
-                .logoutSuccessUrl("/login");
-*/
 
     }
     @Override

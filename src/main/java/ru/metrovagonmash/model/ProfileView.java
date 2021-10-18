@@ -20,7 +20,9 @@ import javax.persistence.Table;
 @Table(name = "profile_view")
 @Immutable
 @Builder
-@Subselect("select profile.id, employee.name, employee.surname, employee.middle_name, employee.phone, employee.email, profile.account_non_locked as banned from employee inner join profile on employee.profile_id = profile.id")
+@Subselect("select profile.id, employee.name, employee.surname, employee.middle_name, employee.phone," +
+        " employee.email, profile.account_non_locked as banned from employee inner join profile" +
+        " on employee.profile_id = profile.id")
 public class ProfileView {
     @Id
     @Column(name = "id")

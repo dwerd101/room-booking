@@ -15,11 +15,12 @@ public class EmployeeAndProfileServiceImpl implements EmployeeAndProfileService 
     private final EmployeeService employeeService;
     private final ProfileService profileService;
 
+    // FIXME: 11.10.2021 Посмотреть
     @Override
     @Transactional
     public void update(EmployeeDTO employeeDTO, Profile profile) {
-        EmployeeDTO tempEmployee = employeeService.findById(employeeDTO.getId());
-        Profile tempProfile = profileService.findById(profile.getId());
+        /*EmployeeDTO tempEmployee = employeeService.findById(employeeDTO.getId());
+        Profile tempProfile = profileService.findById(profile.getId());*/
         employeeService.save(employeeDTO);
         profileService.save(profile);
     }

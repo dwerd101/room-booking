@@ -37,14 +37,4 @@ public class HistoryRecordTableEmployeeAndRecordTableServiceImpl implements Hist
         return model ;
     }
 
-    //убрать
-
-    public List<RecordTableDTO> findAll() {
-        return null;
-    }
-
-    // убрать
-    public RecordTableDTO deleteById(Long aLong) {
-        return null;
-    }
 }

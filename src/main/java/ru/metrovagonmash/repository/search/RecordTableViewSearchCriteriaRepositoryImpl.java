@@ -1,7 +1,8 @@
-package ru.metrovagonmash.repository;
+package ru.metrovagonmash.repository.search;
 
 import org.springframework.stereotype.Repository;
 import ru.metrovagonmash.model.RecordTableView;
+import ru.metrovagonmash.repository.SearchCriteriaViewRepository;
 import ru.metrovagonmash.specification.ProfileViewConsumer;
 import ru.metrovagonmash.specification.SearchCriteria;
 
@@ -14,7 +15,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class RecordTableViewSearchCriteriaRepository implements SearchCriteriaView<RecordTableView> {
+public class RecordTableViewSearchCriteriaRepositoryImpl implements SearchCriteriaViewRepository<RecordTableView> {
     @PersistenceContext
     private EntityManager entityManager;
     @Override

@@ -26,11 +26,10 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
 
     private final JdbcTemplate jdbcTemplate;
 
-
     private final ProfileViewRepository profileViewRepository;
 
     private final ProfileService profileService;
-    private final EmployeeService employeeService;
+
 
     @Transactional
     @Override
@@ -46,12 +45,6 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
     @Override
     public List<ProfileView> findAll() {
         return profileViewRepository.findAll();
-        /*
-        return employeeService.findAll().stream()
-                .map(this::toProfileView)
-                .collect(Collectors.toList());
-
-         */
     }
 
     @Transactional
@@ -60,7 +53,7 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
         return null;
     }
 
-    //  Анотацию эту разберем с вами на занятии
+
     @Transactional
     public void batchUpdateProfileAndEmployee(List<ProfileView> profileViewList) {
 
@@ -128,17 +121,4 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
                 });
     }
 
-    private ProfileView toProfileView(EmployeeDTO employeeDTO) {
-
-
-        return ProfileView.builder()
-                .id(employeeDTO.getProfileId())
-                .name(employeeDTO.getName())
-                .surname(employeeDTO.getSurname())
-                .middleName(employeeDTO.getMiddleName())
-                .phone(employeeDTO.getPhone())
-                .email(employeeDTO.getEmail())
-                .banned(profileService.findById(employeeDTO.getProfileId()).getAccountNonLocked())
-                .build();
-    }
 }

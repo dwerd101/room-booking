@@ -25,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO save(EmployeeDTO model) {
-        return myMapper.toDTO(employeeRepository.save(myMapper.toModel(model)));
+        return myMapper.toDTO(employeeRepository.save(toEmployee(model)));
     }
 
     @Override
@@ -78,9 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
                 .orElseThrow(() -> new EmployeeBadRequestException("Не найден ID")));
     }
-}
 
-    /*   // изменить заглушку на будущее
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
         //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
@@ -92,28 +90,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setProfileId(profileService.findById(model.getProfileId()));
         return employee;
     }
-
-    @Override
-    public boolean isPresentByDepartmentId(Long aLong) {
-        return !employeeRepository.findAllByDepartmentId(aLong).isEmpty();
-    }
-
-    @Override
-    public EmployeeDTO findEmployeeByProfileId(Long aLong) {
-        return myMapper.toDTO(employeeRepository.findByProfileId(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
-    }
-
-    @Override
-    public EmployeeDTO findById(Long aLong) {
-        return myMapper.toDTO(employeeRepository.findById(aLong)
-                .orElseThrow(() -> new EmployeeException("Не найден ID")));
-    }
-
-    @Override
-    public EmployeeDTO findByLogin (String login) {
-        return myMapper.toDTO(employeeRepository.findByLogin(login)
-                .orElseThrow(() -> new EmployeeException("Логин не найден")));
-    }
 }
-*/

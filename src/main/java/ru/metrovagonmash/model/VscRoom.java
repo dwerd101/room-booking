@@ -10,9 +10,6 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "vsc_room")
-/*@SequenceGenerator(
-        name = "seqid-gen",
-        sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
 public class VscRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -21,9 +18,6 @@ public class VscRoom {
     @Column(name = "number_room")
     private Long numberRoom;
 
- /*   @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "date_time_records_id",referencedColumnName = "id")
-    private RecordTable dateTimeRecordsId;*/
 
     @Column(name = "is_active")
     private Boolean isActive;

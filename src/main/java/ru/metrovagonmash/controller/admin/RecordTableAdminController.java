@@ -8,8 +8,7 @@ import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.model.VscRoom;
-import ru.metrovagonmash.model.dto.RecordTableDTO;
-import ru.metrovagonmash.repository.RecordTableViewSearchCriteriaRepository;
+import ru.metrovagonmash.repository.search.RecordTableViewSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
 import ru.metrovagonmash.specification.SearchCriteria;
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
 public class RecordTableAdminController {
     private final RecordTableService recordTableService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
-    private final RecordTableViewSearchCriteriaRepository recordTableViewSearchCriteriaRepository;
+    private final RecordTableViewSearchCriteriaRepositoryImpl recordTableViewSearchCriteriaRepository;
 
     @GetMapping("/")
     public String records(@RequestParam(value = "search", required = false) String search,

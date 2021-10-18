@@ -1,6 +1,7 @@
 package ru.metrovagonmash.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +25,16 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class RegistrationController {
     private final RegistrationService registrationService;
 
     private final DepartmentService departmentService;
-    //public boolean loginErrorMessage;
+
 
     @GetMapping("/registration")
     public String registration(Model model) {
+        log.info("Создание регистрации");
         model.addAttribute("userData", new RegistrationDTO());
         model.addAttribute("departamentService", departmentService);
         return "registration";
@@ -41,12 +44,8 @@ public class RegistrationController {
     public String userRegistration(@ModelAttribute("userData")final @Valid RegistrationDTO registrationDTO, final BindingResult bindingResult, final Model model) {
         model.addAttribute("departamentService", departmentService);
 
-        /*if (bindingResult.hasErrors()) {
-            return "registration";
-        }*/
 
         if(!registrationService.doesUserExist(registrationDTO)) {
-            //loginErrorMessage = false;
             model.addAttribute("loginErrorMessage", false);
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
             String encodedPassword = passwordEncoder.encode(registrationDTO.getPassword());
@@ -60,36 +59,9 @@ public class RegistrationController {
 
             return "redirect:/";
         } else {
-            //loginErrorMessage = true;
             model.addAttribute("loginErrorMessage", true);
             return "registration";
         }
     }
 
-    /*
-    private final ProfileServiceImpl profileService;
-
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("userData", new Profile());
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    public String userRegistration(@ModelAttribute("userData")final @Valid Profile profile, final BindingResult bindingResult, final Model model) {
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y,12);
-        String encodedPassword = passwordEncoder.encode(profile.getPassword());
-        profile.setPassword(encodedPassword);
-
-        profile.setAccountNonLocked(true);
-        profile.setIsActive(true);
-        profile.setRole(Role.EMPLOYEE);
-        profileService.save(profile);
-        return "redirect:/";
-    }
-    */
 }

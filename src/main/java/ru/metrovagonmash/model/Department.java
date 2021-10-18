@@ -13,12 +13,8 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "department")
-/*@SequenceGenerator(
-        name = "seqid-gen",
-        sequenceName = "SEQ_GEN", initialValue = 1, allocationSize = 1)*/
 public class Department {
     @Id
-   // @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seqid-gen" )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name_department")
@@ -26,13 +22,4 @@ public class Department {
     @Column(name = "position")
     private String position;
 
-/*    @Override
-    public Long getId() {
-        return id;
-    }*/
-
-   /* @Override
-    public boolean isNew() {
-        return false;
-    }*/
 }

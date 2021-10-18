@@ -1,13 +1,11 @@
 package ru.metrovagonmash.controller.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.Department;
-import ru.metrovagonmash.model.ProfileView;
-import ru.metrovagonmash.repository.DepartmentSearchCriteriaRepository;
+import ru.metrovagonmash.repository.search.DepartmentSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeService;
 import ru.metrovagonmash.specification.SearchCriteria;
@@ -15,7 +13,6 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +22,7 @@ import java.util.regex.Pattern;
 public class DepartmentsAdminController {
     private final DepartmentService departmentService;
     private final EmployeeService employeeService;
-    private final DepartmentSearchCriteriaRepository departmentSearchCriteriaRepository;
+    private final DepartmentSearchCriteriaRepositoryImpl departmentSearchCriteriaRepository;
 
     @GetMapping("/")
     public String departments(@RequestParam(value = "search", required = false) String search,

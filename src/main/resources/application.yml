@@ -14,7 +14,7 @@ spring:
           auth: 'true'
     password: epusodgawlgpvahr
   datasource:
-    password: 123
+    password: postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
     url: jdbc:postgresql://localhost:5432/room
@@ -23,6 +23,6 @@ spring:
       ddl-auto: create
     show-sql: 'true'
 server:
-  port: 8080
+  port: 8002
 
 

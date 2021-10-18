@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
-import ru.metrovagonmash.repository.ProfileViewSearchCriteriaRepostitory;
+import ru.metrovagonmash.repository.search.ProfileViewSearchCriteriaRepostitoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeAndProfileService;
 import ru.metrovagonmash.service.ProfileViewService;
@@ -26,7 +26,7 @@ public class EmployeeAdminController {
     private final EmployeeAndProfileService employeeAndProfileService;
     private final DepartmentService departmentService;
     private final ProfileViewService profileViewService;
-    private final ProfileViewSearchCriteriaRepostitory profileViewSearchCriteriaRepostitory;
+    private final ProfileViewSearchCriteriaRepostitoryImpl profileViewSearchCriteriaRepostitory;
 
     @PostMapping("/save")
     public String updateUsers(@RequestParam(name = "id") String id,

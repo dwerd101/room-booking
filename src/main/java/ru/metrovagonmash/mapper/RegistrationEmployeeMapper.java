@@ -10,6 +10,7 @@ import ru.metrovagonmash.model.dto.RegistrationDTO;
 public interface RegistrationEmployeeMapper extends VCMapper<EmployeeDTO, RegistrationDTO> {
     @Override
     @Mappings({
+
             @Mapping(target="surname", source="employeeDTO.surname"),
             @Mapping(target="name", source="employeeDTO.name"),
             @Mapping(target="middleName", source="employeeDTO.middleName"),
