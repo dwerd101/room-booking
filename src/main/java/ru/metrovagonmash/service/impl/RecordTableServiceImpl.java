@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metrovagonmash.exception.RecordTableBadRequestException;
-import ru.metrovagonmash.mapper.Mapper;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.model.dto.RecordTableDTO;
@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 public class RecordTableServiceImpl implements RecordTableService {
     private final RecordTableRepository recordTableRepository;
     private final RecordTableViewRepository recordTableViewRepository;
-    private final Mapper<RecordTable, RecordTableDTO> mapper;
-    private final Mapper<RecordTableView, RecordTableDTO> mapperView;
+    private final VCMapper<RecordTable, RecordTableDTO> mapper;
+    private final VCMapper<RecordTableView, RecordTableDTO> mapperView;
     private final JdbcTemplate jdbcTemplate;
 
     @Override

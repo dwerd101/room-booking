@@ -7,7 +7,7 @@ import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
 
 @Mapper(componentModel = "spring")
-public interface RegistrationProfileMapper extends MyMapper<Profile, RegistrationDTO> {
+public interface RegistrationProfileMapper extends VCMapper<Profile, RegistrationDTO> {
     @Override
     @Mappings({
             @Mapping(target="id", source="profile.id"),

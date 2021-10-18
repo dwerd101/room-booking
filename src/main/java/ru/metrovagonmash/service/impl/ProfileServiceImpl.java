@@ -60,12 +60,8 @@ public class ProfileServiceImpl implements ProfileService {
                 .orElseThrow(() -> new ProfileNotFoundException("Не найден ID"));
     }
 
-    // FIXME: 13.07.2021 Настроить корректную реализацию метода
     @Override
     public Profile update(Profile model, Long id) {
-
-      /*  Profile profile =  profileRepository.findById(id)
-                .orElseThrow(() -> new ProfileException("Не найден ID"));*/
         model.setId(id);
         return profileRepository.save(model);
     }

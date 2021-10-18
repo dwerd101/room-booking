@@ -20,7 +20,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/room
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: 'true'
 server:
   port: 8002

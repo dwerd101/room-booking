@@ -3,7 +3,7 @@ package ru.metrovagonmash.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metrovagonmash.mapper.MyMapper;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.model.dto.RegistrationDTO;
@@ -21,8 +21,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final EmployeeService employeeService;
     private final ProfileService profileService;
     private final DepartmentService departmentService;
-    private final MyMapper<EmployeeDTO, RegistrationDTO> myEmployeeMapper;
-    private final MyMapper<Profile, RegistrationDTO> myProfileMapper;
+    private final VCMapper<EmployeeDTO, RegistrationDTO> myEmployeeMapper;
+    private final VCMapper<Profile, RegistrationDTO> myProfileMapper;
 
     @Override
     public RegistrationDTO save(RegistrationDTO model) {

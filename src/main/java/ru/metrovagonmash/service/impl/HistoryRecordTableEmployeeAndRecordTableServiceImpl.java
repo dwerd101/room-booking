@@ -15,8 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class HistoryRecordTableEmployeeAndRecordTableServiceImpl implements HistoryRecordTableEmployeeAndRecordTableService<
-        RecordTableDTO,User,Long> {
+public class HistoryRecordTableEmployeeAndRecordTableServiceImpl implements HistoryRecordTableEmployeeAndRecordTableService<RecordTableDTO,User,Long> {
 
     private final HistoryRecordTableEmployeeService historyRecordTableEmployeeService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;

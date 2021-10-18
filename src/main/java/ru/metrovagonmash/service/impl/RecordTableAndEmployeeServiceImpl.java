@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.metrovagonmash.exception.EmployeeBadRequestException;
 import ru.metrovagonmash.exception.RecordTableBadRequestException;
 import ru.metrovagonmash.exception.VscRoomBadRequestException;
-import ru.metrovagonmash.mapper.Mapper;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
@@ -28,8 +28,10 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     private final RecordTableViewRepository recordTableViewRepository;
     private final EmployeeRepository employeeRepository;
     private final VscRoomRepository vscRoomRepository;
-    private final Mapper<RecordTable, RecordTableDTO> mapper;
+    private final VCMapper<RecordTable, RecordTableDTO> mapper;
+    private final VCMapper<RecordTableView, RecordTableDTO> mapperView;
 
+    // FIXME: 17.09.2021 Добавить отпарвку почту в другой сервис (создать сервис)
     @Override
     public RecordTableDTO save(RecordTableDTO recordTableDTO, User user) {
         Optional<RecordTable> recordTable= recordTableRepository.findByLogin(user.getUsername());

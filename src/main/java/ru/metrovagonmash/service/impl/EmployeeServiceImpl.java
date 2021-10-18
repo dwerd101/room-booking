@@ -3,7 +3,7 @@ package ru.metrovagonmash.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.exception.EmployeeBadRequestException;
-import ru.metrovagonmash.mapper.MyMapper;
+import ru.metrovagonmash.mapper.VCMapper;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.EmployeeRepository;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final MyMapper<Employee, EmployeeDTO> myMapper;
+    private final VCMapper<Employee, EmployeeDTO> myMapper;
     private final DepartmentService departmentService;
     private final ProfileService profileService;
 
