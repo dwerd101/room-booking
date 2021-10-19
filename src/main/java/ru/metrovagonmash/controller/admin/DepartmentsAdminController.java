@@ -27,17 +27,9 @@ public class DepartmentsAdminController {
     @GetMapping("/")
     public String departments(@RequestParam(value = "search", required = false) String search,
                               ModelMap modelMap) {
-
         List<Department> departmentList;
         if (search != null) {
-            List<SearchCriteria> params = new ArrayList<>();
-            Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-            }
-
-            departmentList = departmentSearchCriteriaRepository.search(params);
+            departmentList = departmentSearchCriteriaRepository.search(getParamsFromSearch(search));
         }
         else {
             departmentList = departmentService.findAll();
@@ -50,24 +42,8 @@ public class DepartmentsAdminController {
     @PostMapping("/")
     public String findDepartments(@ModelAttribute("findDepartment") Department findDepartment,
                                   ModelMap modelMap) {
-        List<SearchCriteria> params = new ArrayList<>();
+        List<Department> list = departmentSearchCriteriaRepository.search(getParamsFromDepartment(findDepartment));
 
-
-
-        if (findDepartment.getId() != null)
-            params.add(new SearchCriteria("id",":",findDepartment.getId()));
-        if (findDepartment.getNameDepartment() != null)
-            params.add(new SearchCriteria("nameDepartment",":",findDepartment.getNameDepartment()));
-        if (findDepartment.getPosition() != null)
-            params.add(new SearchCriteria("position",":",findDepartment.getPosition()));
-
-        List<Department> list = departmentSearchCriteriaRepository.search(params);
-        /*
-        modelMap.addAttribute("findById", findById);
-        modelMap.addAttribute("findByDepartmentName", findByDepartmentName);
-        modelMap.addAttribute("findByPosition", findByPosition);
-
-         */
         modelMap.addAttribute("departmentList", list);
         return "departmentadminpage";
     }
@@ -99,11 +75,7 @@ public class DepartmentsAdminController {
     @GetMapping("/delete/{id}")
     public String askDeleteDepartment(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("departmentId", id);
-        String departmentName = departmentService.findById(Long.parseLong(id)).getNameDepartment();
-        if (employeeService.isPresentByDepartmentId(Long.parseLong(id)))
-            modelMap.addAttribute("message",
-                    "В департаменте " + departmentName + " остались сотрудники, удалить его?");
-        else modelMap.addAttribute("message", "Удалить департамент " + departmentName + "?");
+        modelMap.addAttribute("message", getMessageForDeleteDepartmentPage(Long.parseLong(id)));
         return "deletedepartment";
     }
 
@@ -125,4 +97,33 @@ public class DepartmentsAdminController {
         return "redirect:/admin/departments/";
     }
 
+    private List<SearchCriteria> getParamsFromSearch (String search) {
+        List<SearchCriteria> params = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+        }
+        return params;
+    }
+
+    private List<SearchCriteria> getParamsFromDepartment(Department findDepartment) {
+        List<SearchCriteria> params = new ArrayList<>();
+
+        if (findDepartment.getId() != null)
+            params.add(new SearchCriteria("id",":",findDepartment.getId()));
+        if (findDepartment.getNameDepartment() != null)
+            params.add(new SearchCriteria("nameDepartment",":",findDepartment.getNameDepartment()));
+        if (findDepartment.getPosition() != null)
+            params.add(new SearchCriteria("position",":",findDepartment.getPosition()));
+        return params;
+    }
+
+    private String getMessageForDeleteDepartmentPage (Long id) {
+        String departmentName = departmentService.findById(id).getNameDepartment();
+        if (employeeService.isPresentByDepartmentId(id))
+            return "В департаменте " + departmentName + " остались сотрудники, удалить его?";
+        else return "Удалить департамент " + departmentName + "?";
+    }
 }

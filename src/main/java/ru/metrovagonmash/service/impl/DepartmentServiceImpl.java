@@ -37,8 +37,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department deleteById(Long aLong) {
-        return departmentRepository.findById(aLong)
+        Department department = departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentBadRequestException("Не найден ID"));
+        departmentRepository.deleteById(aLong);
+        return department;
     }
 
     @Override
