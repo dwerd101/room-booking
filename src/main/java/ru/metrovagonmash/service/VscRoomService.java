@@ -9,5 +9,6 @@ import java.util.List;
 public interface VscRoomService extends RoomService<VscRoom, Long> {
    void findByNumberRoomIfNotFoundByNumberRoomThrowException(Long number);
    VscRoom findById(Long aLong);
+   VscRoom findByNumberRoomId(Long aLong);
     void batchUpdateVscRoom(List<VscRoom> vscRoomList);
 }

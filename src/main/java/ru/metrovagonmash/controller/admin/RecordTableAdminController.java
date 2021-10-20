@@ -11,6 +11,7 @@ import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.repository.search.RecordTableViewSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
+import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.specification.SearchCriteria;
 
 import java.time.ZonedDateTime;
@@ -26,20 +27,14 @@ public class RecordTableAdminController {
     private final RecordTableService recordTableService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
     private final RecordTableViewSearchCriteriaRepositoryImpl recordTableViewSearchCriteriaRepository;
+    private final VscRoomService vscRoomService;
 
     @GetMapping("/")
     public String records(@RequestParam(value = "search", required = false) String search,
                           ModelMap modelMap) {
         List<RecordTableView> recordTableViewList;
         if (search != null) {
-            List<SearchCriteria> params = new ArrayList<>();
-            Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-            }
-
-            recordTableViewList = recordTableViewSearchCriteriaRepository.search(params);
+            recordTableViewList = recordTableViewSearchCriteriaRepository.search(getParamFromSearch(search));
         }
         else {
             recordTableViewList = recordTableAndEmployeeService.findAll();
@@ -53,40 +48,12 @@ public class RecordTableAdminController {
     @PostMapping("/")
     public String findRecords(@ModelAttribute("findRecord") RecordTableView findRecord,
                                   ModelMap modelMap) {
-        List<SearchCriteria> params = new ArrayList<>();
-
-        if (findRecord.getId() != null)
-            params.add(new SearchCriteria("id",":",findRecord.getId()));
-        if (!findRecord.getEmail().isEmpty())
-            params.add(new SearchCriteria("email",":",findRecord.getEmail()));
-        if (findRecord.getEmployeeId()!= null)
-            params.add(new SearchCriteria("employeeId",":",findRecord.getEmployeeId()));
-        if (!findRecord.getEmployeeName().isEmpty())
-            params.add(new SearchCriteria("employeeName",":",findRecord.getEmployeeName()));
-        if (!findRecord.getEmployeeSurname().isEmpty())
-            params.add(new SearchCriteria("employeeSurname",":",findRecord.getEmployeeSurname()));
-        if (!findRecord.getEmployeeMiddleName().isEmpty())
-            params.add(new SearchCriteria("employeeMiddleName",":",findRecord.getEmployeeMiddleName()));
-        if (findRecord.getVcsRoomNumberRoom()!= null)
-            params.add(new SearchCriteria("vcsRoomNumberRoom",":",findRecord.getVcsRoomNumberRoom()));
-        if (findRecord.getIsActive() != null)
-            params.add(new SearchCriteria("isActive",":",findRecord.getIsActive()));
-        if (!findRecord.getTitle().isEmpty())
-            params.add(new SearchCriteria("title",":",findRecord.getTitle()));
-        if (findRecord.getStartEvent() != null)
-            params.add(new SearchCriteria("startEvent",":",findRecord.getStartEvent()));
-        if (findRecord.getEndEvent() != null)
-            params.add(new SearchCriteria("endEvent",":",findRecord.getEndEvent()));
-
-
-
-        List<RecordTableView> list = recordTableViewSearchCriteriaRepository.search(params);
+        List<RecordTableView> list = recordTableViewSearchCriteriaRepository
+                .search(getParamFromRecordTableView(findRecord));
 
         modelMap.addAttribute("recordTableViewList", list);
         return "recordadminpage";
     }
-
-
 
     @PostMapping("/save")
     public String updateRecords(@RequestParam(name = "id") String id,
@@ -114,7 +81,10 @@ public class RecordTableAdminController {
                             .id(Long.parseLong(idMas[i]))
                             .email(emailMas[i])
                             .employeeId(Employee.builder().id(Long.parseLong(employeeIdMas[i])).build())
-                            .numberRoomId(VscRoom.builder().id(Long.parseLong(vcsRoomNumberRoomMas[i])).build())
+                            .numberRoomId(VscRoom.builder()
+                                    .id(vscRoomService.findByNumberRoomId(Long.parseLong(vcsRoomNumberRoomMas[i]))
+                                            .getId())
+                                    .build())
                             .isActive(Boolean.valueOf(isActiveMas[i]))
                             .title(titleMas[i])
                             .startEvent(ZonedDateTime.parse(startEventMas[i]))
@@ -137,6 +107,45 @@ public class RecordTableAdminController {
     public String deleteRecord(@PathVariable String id) {
         recordTableService.deleteById(Long.parseLong(id));
         return "redirect:/admin/records/";
+    }
+
+    private List<SearchCriteria> getParamFromSearch (String search) {
+        List<SearchCriteria> params = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+        }
+        return params;
+    }
+
+    private List<SearchCriteria> getParamFromRecordTableView (RecordTableView findRecord) {
+        List<SearchCriteria> params = new ArrayList<>();
+
+        if (findRecord.getId() != null)
+            params.add(new SearchCriteria("id",":",findRecord.getId()));
+        if (!findRecord.getEmail().isEmpty())
+            params.add(new SearchCriteria("email",":",findRecord.getEmail()));
+        if (findRecord.getEmployeeId()!= null)
+            params.add(new SearchCriteria("employeeId",":",findRecord.getEmployeeId()));
+        if (!findRecord.getEmployeeName().isEmpty())
+            params.add(new SearchCriteria("employeeName",":",findRecord.getEmployeeName()));
+        if (!findRecord.getEmployeeSurname().isEmpty())
+            params.add(new SearchCriteria("employeeSurname",":",findRecord.getEmployeeSurname()));
+        if (!findRecord.getEmployeeMiddleName().isEmpty())
+            params.add(new SearchCriteria("employeeMiddleName",":",findRecord.getEmployeeMiddleName()));
+        if (findRecord.getVcsRoomNumberRoom()!= null)
+            params.add(new SearchCriteria("vcsRoomNumberRoom",":",findRecord.getVcsRoomNumberRoom()));
+        if (findRecord.getIsActive() != null)
+            params.add(new SearchCriteria("isActive",":",findRecord.getIsActive()));
+        if (!findRecord.getTitle().isEmpty())
+            params.add(new SearchCriteria("title",":",findRecord.getTitle()));
+        if (findRecord.getStartEvent() != null)
+            params.add(new SearchCriteria("startEvent",":",findRecord.getStartEvent()));
+        if (findRecord.getEndEvent() != null)
+            params.add(new SearchCriteria("endEvent",":",findRecord.getEndEvent()));
+
+        return params;
     }
 
 }
