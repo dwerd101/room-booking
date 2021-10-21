@@ -45,8 +45,4 @@ public class RecordTable {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employeeId;
 
-/*    @Override
-    public Long getId() {
-        return id;
-    }*/
 }

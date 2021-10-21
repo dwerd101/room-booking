@@ -3,7 +3,6 @@ package ru.metrovagonmash.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +25,7 @@ import java.util.concurrent.Callable;
 @PropertySource("classpath:record-text.properties")
 @RequestMapping("/record")
 public class RecordController {
-    @Value("${record.url}")
+    @Value("record.url")
     private String recordUrl;
     private final RecordTableService recordTableService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
@@ -47,11 +46,9 @@ public class RecordController {
 
     @PostMapping("/save/")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         String[] urlMassive = recordTableDTO.getRoomId().split("/");
         recordTableDTO.setRoomId(urlMassive[urlMassive.length - 1]);
-        RecordTableDTO resultRecordTableDto = historyRecordTableEmployeeAndRecordTableService.save(recordTableDTO, user);
+        RecordTableDTO resultRecordTableDto = historyRecordTableEmployeeAndRecordTableService.save(recordTableDTO, getUserAuth());
         String subject = "Бронирование комнаты №" + recordTableDTO.getRoomId();
         String message = "Вы забронировали комнату №" + recordTableDTO.getRoomId() + "\n"
                 + "Тема: " + resultRecordTableDto.getTitle() + "\n"
@@ -64,12 +61,12 @@ public class RecordController {
 
     }
 
+
+
     @PostMapping("/update/{id}")
     public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO,
                                                                  @PathVariable String id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        if (!recordTableAndEmployeeService.checkPermissionByLoginAndRecordId(user.getUsername(),Long.parseLong(id))) {
+        if (!recordTableAndEmployeeService.checkPermissionByLoginAndRecordId(getUserAuth().getUsername(),Long.parseLong(id))) {
             throw new RecordTableBadRequestException("Нет доступа к записи!");
         }
 
@@ -99,11 +96,9 @@ public class RecordController {
 
     @DeleteMapping("/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
         tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
-        RecordTableDTO resultRecordTableDTO = recordTableAndEmployeeService.delete(recordTableDTO, user);
+        RecordTableDTO resultRecordTableDTO = recordTableAndEmployeeService.delete(recordTableDTO, getUserAuth());
         String subject = "Отмена бронирования комнаты №" + tempRecordTableDTO.getRoomId();
         String message = "Отменено бронирование комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
                 + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
@@ -115,12 +110,16 @@ public class RecordController {
         return () -> ResponseEntity.ok(resultRecordTableDTO);
     }
 
-    //Подумать над названием
+
     @GetMapping("/findAll")
-    public Callable<ResponseEntity<List<RecordTableDTO>>> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom() {
-        return () -> ResponseEntity.ok(recordTableService.findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom());
+    public Callable<ResponseEntity<List<RecordTableDTO>>> findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom() {
+        return () -> ResponseEntity.ok(recordTableService.findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom());
     }
 
+    private User getUserAuth () {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
+    }
 
 
 }

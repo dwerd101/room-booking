@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final  JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     @Override
     public Department save(Department model) {
         return departmentRepository.save(model);

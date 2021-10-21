@@ -29,13 +29,13 @@
 
             <ul  class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
                 <div th:each="vscroom : ${vscroomlist}">
-                    <li><a class="dropdown-item" th:href="${'/calendar/' + vscroom.numberRoom}" th:text="${vscroom.numberRoom}"></a></li>
+                    <li><a class="dropdown-item" th:href="${'/room/' + vscroom.numberRoom}" th:text="${vscroom.numberRoom}"></a></li>
                 </div>
             </ul>
         </div>
         <div class="auth-panel">
             <a sec:authorize="hasAuthority('admin:read')" class="btn btn-outline-secondary" href="/admin/vscrooms/">Панель администратора</a>
-            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user">Профиль</a>
+            <a sec:authorize="hasAuthority('user:read')" class="btn btn-outline-info" href="/user/edit">Профиль</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/auth/login" role="button">Вход</a>
             <a sec:authorize="isAnonymous()" class="btn btn-outline-secondary" href="/registration">Регистрация</a>
             <a sec:authorize="isAuthenticated()" class="btn btn-danger" href="/auth/logout">Выход</a>
