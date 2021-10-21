@@ -34,7 +34,7 @@ public class RecordTableAdminController {
                           ModelMap modelMap) {
         List<RecordTableView> recordTableViewList;
         if (search != null) {
-            recordTableViewList = recordTableViewSearchCriteriaRepository.search(getParamFromSearch(search));
+            recordTableViewList = recordTableViewSearchCriteriaRepository.search(getParamsFromSearch(search));
         }
         else {
             recordTableViewList = recordTableAndEmployeeService.findAll();
@@ -49,7 +49,7 @@ public class RecordTableAdminController {
     public String findRecords(@ModelAttribute("findRecord") RecordTableView findRecord,
                                   ModelMap modelMap) {
         List<RecordTableView> list = recordTableViewSearchCriteriaRepository
-                .search(getParamFromRecordTableView(findRecord));
+                .search(getParamsFromRecordTableView(findRecord));
 
         modelMap.addAttribute("recordTableViewList", list);
         return "recordadminpage";
@@ -109,7 +109,7 @@ public class RecordTableAdminController {
         return "redirect:/admin/records/";
     }
 
-    private List<SearchCriteria> getParamFromSearch (String search) {
+    private List<SearchCriteria> getParamsFromSearch(String search) {
         List<SearchCriteria> params = new ArrayList<>();
         Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
         Matcher matcher = pattern.matcher(search + ",");
@@ -119,7 +119,7 @@ public class RecordTableAdminController {
         return params;
     }
 
-    private List<SearchCriteria> getParamFromRecordTableView (RecordTableView findRecord) {
+    private List<SearchCriteria> getParamsFromRecordTableView(RecordTableView findRecord) {
         List<SearchCriteria> params = new ArrayList<>();
 
         if (findRecord.getId() != null)
