@@ -47,8 +47,9 @@ public interface RecordTableRepository extends JpaRepository<RecordTable,Long> {
     @Query(nativeQuery = true, value = "select * from record_table" +
             " join employee e on e.id = record_table.employee_id " +
             "join profile p on p.id = e.profile_id " +
-            "where login=?1 and start_event= ?2 and end_event=?3")
-    Optional<RecordTable> findByLoginAndStartEventAndEndEvent(String login, ZonedDateTime startEvent, ZonedDateTime endEvent);
+            "where login=?1 and record_table.id=?2")
+    Optional<RecordTable> findByLoginAndId(String login, Long id);
+
 
     @Query(nativeQuery = true, value = "select * from record_table where number_room_id=?1")
     List<RecordTable> findAllByNumberRoomId(Long id);

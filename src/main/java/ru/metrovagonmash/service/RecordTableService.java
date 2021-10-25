@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecordTableService extends RoomService<RecordTableDTO, Long>{
-  List<RecordTableDTO> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom();
+  List<RecordTableDTO> findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom();
   RecordTableDTO save(RecordTableDTO recordTableDTO, User user);
   RecordTableDTO delete(RecordTableDTO recordTableDTO);
   RecordTableDTO findById(Long id);

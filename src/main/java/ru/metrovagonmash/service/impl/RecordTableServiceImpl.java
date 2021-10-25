@@ -84,7 +84,7 @@ public class RecordTableServiceImpl implements RecordTableService {
     }
 
     @Override
-    public List<RecordTableDTO> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom() {
+    public List<RecordTableDTO> findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom() {
         return recordTableViewRepository.findAll()
                 .stream()
                 .map(mapperView::toDTO)

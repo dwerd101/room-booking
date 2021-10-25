@@ -81,12 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private Employee toEmployee(EmployeeDTO model) {
         Employee employee = myMapper.toModel(model);
-        //Employee temp = employeeRepository.findByDepartmentIdAndProfileId(employee.getDepartmentId().getId(),
-        //        employee.getProfileId().getId()).orElseThrow(() -> new EmployeeException("Не найден"));
-
         employee.setDepartmentId(departmentService.findById(model.getDepartmentId()));
-
-
         employee.setProfileId(profileService.findById(model.getProfileId()));
         return employee;
     }

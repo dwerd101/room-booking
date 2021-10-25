@@ -59,7 +59,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
             }
             else {
                 Employee employee = employeeRepository.findByLogin(user.getUsername()).orElseThrow(
-                        () -> new EmployeeBadRequestException("Не найдена по логину запись"));
+                        () -> new EmployeeBadRequestException("Не найдена по запись логину"));
                 recordTableDTO.setEmail(employee.getEmail());
                 recordTableDTO.setIsActive(employee.getIsActive());
                 RecordTable recordTable1 = mapper.toModel(recordTableDTO);
@@ -75,8 +75,8 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     // FIXME: 01.10.2021 Проверить как работает если есть 2 одинаковые записи в разных комнатах
     @Override
     public RecordTableDTO delete(RecordTableDTO recordTableDTO, User user) {
-        RecordTable recordTable= recordTableRepository.findByLoginAndStartEventAndEndEvent(
-                user.getUsername(), recordTableDTO.getStart(), recordTableDTO.getEnd())
+        RecordTable recordTable= recordTableRepository.findByLoginAndId(
+                user.getUsername(), recordTableDTO.getId())
                 .orElseThrow(() -> new RecordTableBadRequestException("Не найдена запись"));
         recordTableRepository.delete(recordTable);
         return recordTableDTO;
