@@ -47,10 +47,7 @@ public class RegistrationController {
 
         if(!registrationService.doesUserExist(registrationDTO)) {
             model.addAttribute("loginErrorMessage", false);
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
-            String encodedPassword = passwordEncoder.encode(registrationDTO.getPassword());
-            registrationDTO.setPassword(encodedPassword);
-
+            registrationDTO.setPassword(passwordEncoder(registrationDTO.getPassword()));
             registrationDTO.setAccountNonLocked(true);
             registrationDTO.setIsActive(true);
             registrationDTO.setRole(Role.EMPLOYEE);
@@ -62,6 +59,11 @@ public class RegistrationController {
             model.addAttribute("loginErrorMessage", true);
             return "registration";
         }
+    }
+
+    private String passwordEncoder(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
+        return passwordEncoder.encode(password);
     }
 
 }

@@ -24,25 +24,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final VCMapper<EmployeeDTO, RegistrationDTO> myEmployeeMapper;
     private final VCMapper<Profile, RegistrationDTO> myProfileMapper;
 
-    @Override
-    public RegistrationDTO save(RegistrationDTO model) {
-        return null;
-    }
-
-    @Override
-    public RegistrationDTO update(RegistrationDTO model, Long aLong) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDTO> findAll() {
-        return null;
-    }
-
-    @Override
-    public RegistrationDTO deleteById(Long aLong) {
-        return null;
-    }
 
     @Override
     @Transactional

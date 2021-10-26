@@ -22,7 +22,7 @@ import java.util.UUID;
 @Controller
 @AllArgsConstructor
 public class PasswordController {
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final MailSenderService mailSenderService;
     private final PasswordConfirmationTokenService passwordConfirmationTokenService;
     private final EmployeeService employeeService;
@@ -34,17 +34,16 @@ public class PasswordController {
 
     @PostMapping("/forget-password/send")
     public String forgetPassword(@RequestParam(value = "username") String username, ModelMap modelMap) {
-        Optional<Profile> profileOptional = profileRepository.findByLogin(username);
+        Profile profile = profileService.findByLogin(username);
 
-        if(profileOptional.isPresent()) {
+        if(profile != null) {
             PasswordConfirmationToken passwordConfirmationToken = PasswordConfirmationToken.builder()
-                    .profileId(Profile.builder().id(profileOptional.get().getId()).build())
+                    .profileId(profile)
                     .token(UUID.randomUUID().toString())
                     .build();
 
             passwordConfirmationTokenService.save(passwordConfirmationToken);
-            EmployeeDTO employeeDTO = employeeService.findByProfileID(profileOptional.get().getId());
-            String email = employeeService.findByProfileID(profileOptional.get().getId()).getEmail();
+            String email = employeeService.findByProfileID(profile.getId()).getEmail();
 
             mailSenderService.send(email, "Forget password", "You forgot password" +
                     " link: " + "http://localhost:8080/reset-password?token=" + passwordConfirmationToken.getToken());
@@ -61,10 +60,8 @@ public class PasswordController {
     public String resetPassword(@RequestParam("token") String confirmationToken, ModelMap modelMap) {
         PasswordConfirmationToken passwordConfirmationToken = passwordConfirmationTokenService.findByToken(confirmationToken);
         if (passwordConfirmationToken != null) {
-            Profile profile = profileRepository.findById(passwordConfirmationToken.getProfileId().getId())
-                    .orElseThrow(() -> new ProfileNotFoundException("Не найден профиль"));
+            Profile profile = profileService.findById(passwordConfirmationToken.getProfileId().getId());
             modelMap.addAttribute("profileData", profile);
-            //Возможно это нужно реализовать по-другому
             passwordConfirmationTokenService.deleteById(passwordConfirmationToken.getId());
         }
         else {
@@ -75,13 +72,14 @@ public class PasswordController {
 
     @PostMapping("reset-password")
     public String saveNewPassword(@ModelAttribute("profileData") Profile newProfileData) {
-        Profile profile = profileRepository.findByLogin(newProfileData.getLogin())
-                .orElseThrow(() -> new ProfileNotFoundException("Не найден профиль"));
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
-        String encodedPassword = passwordEncoder.encode(newProfileData.getPassword());
-        profile.setPassword(encodedPassword);
-        profileRepository.save(profile);
-
+        Profile profile = profileService.findByLogin(newProfileData.getLogin());
+        profile.setPassword(passwordEncoder(newProfileData.getPassword()));
+        profileService.save(profile);
         return "succesfulSendEmailForgetPassword";
+    }
+
+    private String passwordEncoder(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
+        return passwordEncoder.encode(password);
     }
 }
