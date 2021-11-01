@@ -37,32 +37,11 @@ public class EmployeeAdminController {
                               @RequestParam(name = "email") String email,
                               @RequestParam(name = "banned") String banned
     ) {
-        String[] idMas = id.split(",");
-        String[] nameMas = name.split(",");
-        String[] surnameMas = surname.split(",");
-        String[] middleNameMas = middleName.split(",");
-        String[] phoneMas = phone.split(",");
-        String[] emailMas = email.split(",");
-        String[] bannedMas = banned.split(",");
-        List<ProfileView> profileViewList = new ArrayList<>();
-        for (int i=0; i<idMas.length; i++) {
-            profileViewList.add(
-                    ProfileView.builder()
-                            .id(Long.parseLong(idMas[i]))
-                            .name(nameMas[i])
-                            .surname(surnameMas[i])
-                            .middleName(middleNameMas[i])
-                            .phone(phoneMas[i])
-                            .email(emailMas[i])
-                            .banned(Boolean.parseBoolean(bannedMas[i]))
-                            .build()
-            );
-        }
-        profileViewService.batchUpdateProfileAndEmployee(profileViewList);
+        profileViewService.batchUpdateProfileAndEmployee(getProfileViewListFromParams(id, name, surname, middleName,
+                phone, email, banned));
 
         return "redirect:/admin/employees/";
     }
-
 
     @GetMapping("/")
     public String getByParamPage(@RequestParam(value = "search", required = false) String search,
@@ -158,5 +137,37 @@ public class EmployeeAdminController {
         employeeDTO.setId(tempEmployeeDTO.getId());
         employeeDTO.setProfileId(id);
         employeeAndProfileService.update(employeeDTO, profile);
+    }
+
+    private List<ProfileView> getProfileViewListFromParams(String id,
+                                                           String name,
+                                                           String surname,
+                                                           String middleName,
+                                                           String phone,
+                                                           String email,
+                                                           String banned) {
+        String[] idMas = id.split(",");
+        String[] nameMas = name.split(",");
+        String[] surnameMas = surname.split(",");
+        String[] middleNameMas = middleName.split(",");
+        String[] phoneMas = phone.split(",");
+        String[] emailMas = email.split(",");
+        String[] bannedMas = banned.split(",");
+
+        List<ProfileView> profileViewList = new ArrayList<>();
+        for (int i=0; i<idMas.length; i++) {
+            profileViewList.add(
+                    ProfileView.builder()
+                            .id(Long.parseLong(idMas[i]))
+                            .name(nameMas[i])
+                            .surname(surnameMas[i])
+                            .middleName(middleNameMas[i])
+                            .phone(phoneMas[i])
+                            .email(emailMas[i])
+                            .banned(Boolean.parseBoolean(bannedMas[i]))
+                            .build()
+            );
+        }
+        return profileViewList;
     }
 }

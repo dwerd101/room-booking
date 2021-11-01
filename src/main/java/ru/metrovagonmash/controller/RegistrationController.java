@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,8 +29,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RegistrationController {
     private final RegistrationService registrationService;
-
     private final DepartmentService departmentService;
+    private final PasswordEncoder passwordEncoder;
+
 
 
     @GetMapping("/registration")
@@ -44,10 +46,9 @@ public class RegistrationController {
     public String userRegistration(@ModelAttribute("userData")final @Valid RegistrationDTO registrationDTO, final BindingResult bindingResult, final Model model) {
         model.addAttribute("departamentService", departmentService);
 
-
         if(!registrationService.doesUserExist(registrationDTO)) {
             model.addAttribute("loginErrorMessage", false);
-            registrationDTO.setPassword(passwordEncoder(registrationDTO.getPassword()));
+            registrationDTO.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
             registrationDTO.setAccountNonLocked(true);
             registrationDTO.setIsActive(true);
             registrationDTO.setRole(Role.EMPLOYEE);
@@ -59,11 +60,6 @@ public class RegistrationController {
             model.addAttribute("loginErrorMessage", true);
             return "registration";
         }
-    }
-
-    private String passwordEncoder(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
-        return passwordEncoder.encode(password);
     }
 
 }

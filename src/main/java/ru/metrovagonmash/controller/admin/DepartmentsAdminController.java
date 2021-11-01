@@ -51,23 +51,8 @@ public class DepartmentsAdminController {
     @PostMapping("/save")
     public String updateDepartments(@RequestParam(name = "id") String id,
                               @RequestParam(name = "departmentName") String departmentName,
-                              @RequestParam(name = "position") String position
-    ) {
-        String[] idMas = id.split(",");
-        String[] departmentNameMas = departmentName.split(",");
-        String[] positionMas = position.split(",");
-
-        List<Department> departmentList = new ArrayList<>();
-        for (int i=0; i<idMas.length; i++) {
-            departmentList.add(
-                    Department.builder()
-                            .id(Long.parseLong(idMas[i]))
-                            .nameDepartment(departmentNameMas[i])
-                            .position(positionMas[i])
-                            .build()
-            );
-        }
-        departmentService.batchUpdateDepartment(departmentList);
+                              @RequestParam(name = "position") String position) {
+        departmentService.batchUpdateDepartment(getDepartmentListFromParams(id, departmentName, position));
 
         return "redirect:/admin/departments/";
     }
@@ -125,5 +110,25 @@ public class DepartmentsAdminController {
         if (employeeService.isPresentByDepartmentId(id))
             return "В департаменте " + departmentName + " остались сотрудники, удалить его?";
         else return "Удалить департамент " + departmentName + "?";
+    }
+
+    private List<Department> getDepartmentListFromParams(String id,
+                                                         String departmentName,
+                                                         String position) {
+        String[] idMas = id.split(",");
+        String[] departmentNameMas = departmentName.split(",");
+        String[] positionMas = position.split(",");
+
+        List<Department> departmentList = new ArrayList<>();
+        for (int i=0; i<idMas.length; i++) {
+            departmentList.add(
+                    Department.builder()
+                            .id(Long.parseLong(idMas[i]))
+                            .nameDepartment(departmentNameMas[i])
+                            .position(positionMas[i])
+                            .build()
+            );
+        }
+        return departmentList;
     }
 }

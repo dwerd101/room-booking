@@ -1,10 +1,13 @@
 package ru.metrovagonmash.controller.admin;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.exception.RecordTableBadRequestException;
 import ru.metrovagonmash.mapper.EmployeeMyMapper;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.VscRoom;
@@ -19,8 +22,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminRoomController {
+    @Value("${record.url}")
+    private String recordUrl;
 
     private final ProfileViewService profileViewService;
     private final VscRoomService vscRoomService;
@@ -45,29 +50,17 @@ public class AdminRoomController {
     }
 
 
-    @PostMapping("/admin/calendar/update/{id}")
-    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO,
-                                                                 @PathVariable String id) {
-        RecordTableDTO tempRecordTableDTO = recordTableService.findById(Long.parseLong(id));
-        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
-        String message = "Изменение в бронировании комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
-                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
-                + "Старое время: " + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n";
-        tempRecordTableDTO.setStart(recordTableDTO.getStart());
-        tempRecordTableDTO.setEnd(recordTableDTO.getEnd());
-        RecordTableDTO resultRecordTableDTO = historyRecordTableEmployeeAndRecordTableService.update(tempRecordTableDTO,
-                Long.parseLong(id));
-        String subject = "Изменение в бронирование комнаты №" + tempRecordTableDTO.getRoomId();
-        message = message
-                + "Новое время: " + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime() + "\n"
-                + "Подробнее: " + "http://localhost:8080/calendar/" + recordTableDTO.getRoomId();
-        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+    @PostMapping("/admin/calendar/update/")
+    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO) {
+        RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
+        recordTableDTO.setEmail(tempRecordTableDTO.getEmail());
+        recordTableDTO.setIsActive(tempRecordTableDTO.getIsActive());
+        recordTableDTO.setNumberRoomId(tempRecordTableDTO.getNumberRoomId());
+        recordTableDTO.setEmployeeId(tempRecordTableDTO.getEmployeeId());
+        recordTableDTO.setRoomId(vscRoomService.findById(recordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        RecordTableDTO resultRecordTableDTO = historyRecordTableEmployeeAndRecordTableService.update(recordTableDTO,
+                recordTableDTO.getId());
+        sendConfirmUpdateMessageToEmployee(tempRecordTableDTO, recordTableDTO);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
     }
 
@@ -75,53 +68,48 @@ public class AdminRoomController {
     @DeleteMapping("/admin/calendar/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
-        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
         RecordTableDTO resultRecordTableDTO = recordTableService.delete(recordTableDTO);
-        String subject = "Отмена бронирования комнаты №" + tempRecordTableDTO.getRoomId();
-        String message = "Отменено бронирование комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
-                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n"
-                + "Подробнее: " + "http://localhost:8080/calendar/" + tempRecordTableDTO.getRoomId();
-        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+        sendConfirmDeleteMessageToEmployee(tempRecordTableDTO);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
-
     }
 
-    @PostMapping("/admin/save-user")
-    public String updateUsers(@RequestParam(name = "id") String id,
-                              @RequestParam(name = "name") String name,
-                              @RequestParam(name = "surname") String surname,
-                              @RequestParam(name = "middleName") String middleName,
-                              @RequestParam(name = "phone") String phone,
-                              @RequestParam(name = "email") String email,
-                              @RequestParam(name = "banned") String banned
-    ) {
-        String[] idMas = id.split(",");
-        String[] nameMas = name.split(",");
-        String[] surnameMas = surname.split(",");
-        String[] middleNameMas = middleName.split(",");
-        String[] phoneMas = phone.split(",");
-        String[] emailMas = email.split(",");
-        String[] bannedMas = banned.split(",");
-        List<ProfileView> profileViewList = new ArrayList<>();
-        for (int i = 0; i < idMas.length; i++) {
-            profileViewList.add(
-                    ProfileView.builder()
-                            .id(Long.parseLong(idMas[i]))
-                            .name(nameMas[i])
-                            .surname(surnameMas[i])
-                            .middleName(middleNameMas[i])
-                            .phone(phoneMas[i])
-                            .email(emailMas[i])
-                            .banned(Boolean.parseBoolean(bannedMas[i]))
-                            .build()
-            );
-        }
-        profileViewService.batchUpdateProfileAndEmployee(profileViewList);
-
-        return "redirect:/admin/find-by-param";
+    private void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
+        String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
+        mailSenderService.send(recordTableDTO.getEmail(), subject, message);
     }
 
+    private String getMessageForUpdateRecord(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        return "Изменение в бронировании комнаты №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Старое время: " + "\n"
+                + "Дата бронирования: " + previousRecordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + previousRecordTableDTO.getStart().toLocalTime()
+                + " по " + previousRecordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Новое время: " + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + toCurrentZone(recordTableDTO.getStart()).toLocalTime()
+                + " по " + toCurrentZone(recordTableDTO.getEnd()).toLocalTime() + "\n"
+                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
+    }
+
+    private void sendConfirmDeleteMessageToEmployee(RecordTableDTO recordTableDTO) {
+        recordTableDTO.setRoomId(vscRoomService.findById(recordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        String subject = "Отмена бронирования комнаты №" + recordTableDTO.getRoomId();
+        mailSenderService.send(recordTableDTO.getEmail(), subject, getMessageForDeleteRecord(recordTableDTO));
+    }
+
+    private String getMessageForDeleteRecord(RecordTableDTO recordTableDTO) {
+        return "Отменено бронирование комнаты №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
+    }
+
+    // FIXME: 31.10.2021 Переделать получение времени в корректном часовом поясе
+    private ZonedDateTime toCurrentZone(ZonedDateTime dateTime) {
+        return dateTime.withZoneSameInstant(ZonedDateTime.now().getZone());
+    }
 }

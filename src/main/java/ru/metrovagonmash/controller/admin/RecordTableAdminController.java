@@ -65,34 +65,8 @@ public class RecordTableAdminController {
                                 @RequestParam(name = "startEvent") String startEvent,
                                 @RequestParam(name = "endEvent") String endEvent
     ) {
-        String[] idMas = id.split(",");
-        String[] emailMas = email.split(",");
-        String[] employeeIdMas = employeeId.split(",");
-        String[] vcsRoomNumberRoomMas = vcsRoomNumberRoom.split(",");
-        String[] isActiveMas = isActive.split(",");
-        String[] titleMas = title.split(",");
-        String[] startEventMas = startEvent.split(",");
-        String[] endEventMas = endEvent.split(",");
-
-        List<RecordTable> recordTableList = new ArrayList<>();
-        for (int i=0; i<idMas.length; i++) {
-            recordTableList.add(
-                    RecordTable.builder()
-                            .id(Long.parseLong(idMas[i]))
-                            .email(emailMas[i])
-                            .employeeId(Employee.builder().id(Long.parseLong(employeeIdMas[i])).build())
-                            .numberRoomId(VscRoom.builder()
-                                    .id(vscRoomService.findByNumberRoomId(Long.parseLong(vcsRoomNumberRoomMas[i]))
-                                            .getId())
-                                    .build())
-                            .isActive(Boolean.valueOf(isActiveMas[i]))
-                            .title(titleMas[i])
-                            .startEvent(ZonedDateTime.parse(startEventMas[i]))
-                            .endEvent(ZonedDateTime.parse(endEventMas[i]))
-                            .build()
-            );
-        }
-        recordTableService.batchUpdateRecords(recordTableList);
+        recordTableService.batchUpdateRecords(getRecordTableListFromParams(id, email, employeeId, vcsRoomNumberRoom,
+                isActive, title, startEvent, endEvent));
 
         return "redirect:/admin/records/";
     }
@@ -146,6 +120,44 @@ public class RecordTableAdminController {
             params.add(new SearchCriteria("endEvent",":",findRecord.getEndEvent()));
 
         return params;
+    }
+
+    private List<RecordTable> getRecordTableListFromParams(String id,
+                                                           String email,
+                                                           String employeeId,
+                                                           String vcsRoomNumberRoom,
+                                                           String isActive,
+                                                           String title,
+                                                           String startEvent,
+                                                           String endEvent) {
+        String[] idMas = id.split(",");
+        String[] emailMas = email.split(",");
+        String[] employeeIdMas = employeeId.split(",");
+        String[] vcsRoomNumberRoomMas = vcsRoomNumberRoom.split(",");
+        String[] isActiveMas = isActive.split(",");
+        String[] titleMas = title.split(",");
+        String[] startEventMas = startEvent.split(",");
+        String[] endEventMas = endEvent.split(",");
+
+        List<RecordTable> recordTableList = new ArrayList<>();
+        for (int i=0; i<idMas.length; i++) {
+            recordTableList.add(
+                    RecordTable.builder()
+                            .id(Long.parseLong(idMas[i]))
+                            .email(emailMas[i])
+                            .employeeId(Employee.builder().id(Long.parseLong(employeeIdMas[i])).build())
+                            .numberRoomId(VscRoom.builder()
+                                    .id(vscRoomService.findByNumberRoomId(Long.parseLong(vcsRoomNumberRoomMas[i]))
+                                            .getId())
+                                    .build())
+                            .isActive(Boolean.valueOf(isActiveMas[i]))
+                            .title(titleMas[i])
+                            .startEvent(ZonedDateTime.parse(startEventMas[i]))
+                            .endEvent(ZonedDateTime.parse(endEventMas[i]))
+                            .build()
+            );
+        }
+        return recordTableList;
     }
 
 }
