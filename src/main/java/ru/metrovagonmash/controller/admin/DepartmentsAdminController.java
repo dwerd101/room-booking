@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.config.search.Search;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.search.DepartmentSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
@@ -23,13 +24,14 @@ public class DepartmentsAdminController {
     private final DepartmentService departmentService;
     private final EmployeeService employeeService;
     private final DepartmentSearchCriteriaRepositoryImpl departmentSearchCriteriaRepository;
+    private final Search search;
 
     @GetMapping("/")
     public String departments(@RequestParam(value = "search", required = false) String search,
                               ModelMap modelMap) {
         List<Department> departmentList;
         if (search != null) {
-            departmentList = departmentSearchCriteriaRepository.search(getParamsFromSearch(search));
+            departmentList = departmentSearchCriteriaRepository.search(this.search.getParamsFromSearch(search));
         }
         else {
             departmentList = departmentService.findAll();
@@ -82,16 +84,6 @@ public class DepartmentsAdminController {
         return "redirect:/admin/departments/";
     }
 
-    private List<SearchCriteria> getParamsFromSearch (String search) {
-        List<SearchCriteria> params = new ArrayList<>();
-
-        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()) {
-            params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-        }
-        return params;
-    }
 
     private List<SearchCriteria> getParamsFromDepartment(Department findDepartment) {
         List<SearchCriteria> params = new ArrayList<>();
