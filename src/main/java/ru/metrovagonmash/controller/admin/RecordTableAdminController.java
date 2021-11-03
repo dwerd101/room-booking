@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.config.search.SearchByURLParams;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
@@ -17,8 +18,6 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,13 +27,14 @@ public class RecordTableAdminController {
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
     private final RecordTableViewSearchCriteriaRepositoryImpl recordTableViewSearchCriteriaRepository;
     private final VscRoomService vscRoomService;
+    private final SearchByURLParams searchByURLParams;
 
     @GetMapping("/")
     public String records(@RequestParam(value = "search", required = false) String search,
                           ModelMap modelMap) {
         List<RecordTableView> recordTableViewList;
         if (search != null) {
-            recordTableViewList = recordTableViewSearchCriteriaRepository.search(getParamsFromSearch(search));
+            recordTableViewList = recordTableViewSearchCriteriaRepository.search(searchByURLParams.getParamsFromSearch(search));
         }
         else {
             recordTableViewList = recordTableAndEmployeeService.findAll();
@@ -83,15 +83,7 @@ public class RecordTableAdminController {
         return "redirect:/admin/records/";
     }
 
-    private List<SearchCriteria> getParamsFromSearch(String search) {
-        List<SearchCriteria> params = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()) {
-            params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-        }
-        return params;
-    }
+
 
     private List<SearchCriteria> getParamsFromRecordTableView(RecordTableView findRecord) {
         List<SearchCriteria> params = new ArrayList<>();

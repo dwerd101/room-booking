@@ -16,7 +16,6 @@ import ru.metrovagonmash.service.RecordTableService;
 import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.service.mail.MailSenderService;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -47,9 +46,10 @@ public class RecordController {
     @PostMapping("/save/")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
         setCorrectRoomIdFormat(recordTableDTO);
+        setCurrentZone(recordTableDTO);
         RecordTableDTO resultRecordTableDto = historyRecordTableEmployeeAndRecordTableService.save(recordTableDTO, getUserAuth());
         sendConfirmMessageToEmployee(resultRecordTableDto, recordTableDTO.getRoomId());
-        return () -> ResponseEntity.ok(recordTableDTO);
+        return () -> ResponseEntity.ok(resultRecordTableDto);
     }
 
 
@@ -90,9 +90,9 @@ public class RecordController {
         return (User) authentication.getPrincipal();
     }
 
-    // FIXME: 31.10.2021 Переделать получение времени в корректном часовом поясе
-    private ZonedDateTime toCurrentZone(ZonedDateTime dateTime) {
-        return dateTime.withZoneSameInstant(ZonedDateTime.now().getZone());
+    private void setCurrentZone(RecordTableDTO recordTableDTO) {
+        recordTableDTO.setStart(recordTableDTO.getStart().withZoneSameInstant(recordTableDTO.getTimeZone()));
+        recordTableDTO.setEnd(recordTableDTO.getEnd().withZoneSameInstant(recordTableDTO.getTimeZone()));
     }
 
     private void sendConfirmMessageToEmployee(RecordTableDTO recordTableDTO, String roomId) {
@@ -106,8 +106,8 @@ public class RecordController {
         return "Вы забронировали комнату №" + recordTableDTO.getRoomId() + "\n"
                 + "Тема: " + recordTableDTO.getTitle() + "\n"
                 + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + toCurrentZone(recordTableDTO.getStart()).toLocalTime()
-                + " по " + toCurrentZone(recordTableDTO.getEnd()).toLocalTime() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
                 + "Подробнее: " + recordUrl + recordTableDTO.getRoomId();
     }
 
@@ -123,6 +123,7 @@ public class RecordController {
     }
 
     private void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        setCurrentZone(recordTableDTO);
         String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
         String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
         mailSenderService.send(recordTableDTO.getEmail(), subject, message);
@@ -137,8 +138,8 @@ public class RecordController {
                 + " по " + previousRecordTableDTO.getEnd().toLocalTime() + "\n"
                 + "Новое время: " + "\n"
                 + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + toCurrentZone(recordTableDTO.getStart()).toLocalTime()
-                + " по " + toCurrentZone(recordTableDTO.getEnd()).toLocalTime() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
                 + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
     }
 

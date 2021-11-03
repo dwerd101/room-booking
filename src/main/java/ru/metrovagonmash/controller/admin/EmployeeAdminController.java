@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.config.search.SearchByURLParams;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
@@ -16,8 +17,6 @@ import ru.metrovagonmash.specification.SearchCriteria;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +26,7 @@ public class EmployeeAdminController {
     private final DepartmentService departmentService;
     private final ProfileViewService profileViewService;
     private final ProfileViewSearchCriteriaRepostitoryImpl profileViewSearchCriteriaRepostitory;
+    private final SearchByURLParams searchByURLParams;
 
     @PostMapping("/save")
     public String updateUsers(@RequestParam(name = "id") String id,
@@ -48,7 +48,7 @@ public class EmployeeAdminController {
                                  ModelMap modelMap) {
         List<ProfileView> list;
         if (search != null) {
-            list = profileViewSearchCriteriaRepostitory.search(getParamsFromSearch(search));
+            list = profileViewSearchCriteriaRepostitory.search(searchByURLParams.getParamsFromSearch(search));
         }
         else {
             list = profileViewService.findAll();
@@ -95,16 +95,6 @@ public class EmployeeAdminController {
     public String deleteEmployee(@PathVariable String id) {
         employeeAndProfileService.deleteByProfileId(Long.parseLong(id));
         return "redirect:/admin/employees/";
-    }
-
-    private List<SearchCriteria> getParamsFromSearch(String search) {
-        List<SearchCriteria> params = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()) {
-            params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-        }
-        return params;
     }
 
     private List<SearchCriteria> getParamsFromProfileView (ProfileView profileView) {

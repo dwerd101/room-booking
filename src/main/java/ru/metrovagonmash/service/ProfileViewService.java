@@ -25,11 +25,7 @@ import java.util.stream.Collectors;
 public class ProfileViewService implements RoomService<ProfileView,Long> {
 
     private final JdbcTemplate jdbcTemplate;
-
     private final ProfileViewRepository profileViewRepository;
-
-    private final ProfileService profileService;
-
 
     @Transactional
     @Override
@@ -37,22 +33,11 @@ public class ProfileViewService implements RoomService<ProfileView,Long> {
         return profileViewRepository.save(model);
     }
 
-    @Override
-    public ProfileView update(ProfileView model, Long aLong) {
-        return null;
-    }
     @Transactional(readOnly = true)
     @Override
     public List<ProfileView> findAll() {
         return profileViewRepository.findAll();
     }
-
-    @Transactional
-    @Override
-    public ProfileView deleteById(Long aLong) {
-        return null;
-    }
-
 
     @Transactional
     public void batchUpdateProfileAndEmployee(List<ProfileView> profileViewList) {

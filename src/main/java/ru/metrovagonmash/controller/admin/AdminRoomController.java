@@ -74,6 +74,7 @@ public class AdminRoomController {
     }
 
     private void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        setCurrentZone(recordTableDTO);
         String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
         String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
         mailSenderService.send(recordTableDTO.getEmail(), subject, message);
@@ -88,8 +89,8 @@ public class AdminRoomController {
                 + " по " + previousRecordTableDTO.getEnd().toLocalTime() + "\n"
                 + "Новое время: " + "\n"
                 + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + toCurrentZone(recordTableDTO.getStart()).toLocalTime()
-                + " по " + toCurrentZone(recordTableDTO.getEnd()).toLocalTime() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
                 + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
     }
 
@@ -108,8 +109,8 @@ public class AdminRoomController {
                 + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
     }
 
-    // FIXME: 31.10.2021 Переделать получение времени в корректном часовом поясе
-    private ZonedDateTime toCurrentZone(ZonedDateTime dateTime) {
-        return dateTime.withZoneSameInstant(ZonedDateTime.now().getZone());
+    private void setCurrentZone(RecordTableDTO recordTableDTO) {
+        recordTableDTO.setStart(recordTableDTO.getStart().withZoneSameInstant(recordTableDTO.getTimeZone()));
+        recordTableDTO.setEnd(recordTableDTO.getEnd().withZoneSameInstant(recordTableDTO.getTimeZone()));
     }
 }

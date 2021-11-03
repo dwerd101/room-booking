@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 @Component
 @Data
-public class Search {
+public class SearchByURLParams {
 
     public List<SearchCriteria> getParamsFromSearch (String search) {
         List<SearchCriteria> params = new ArrayList<>();
