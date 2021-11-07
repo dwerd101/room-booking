@@ -42,6 +42,10 @@ public class RecordTableAdminController {
 
         modelMap.addAttribute("recordTableViewList", recordTableViewList);
         modelMap.addAttribute("findRecord",new RecordTableView());
+
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+
         return "recordadminpage";
     }
 
@@ -52,6 +56,10 @@ public class RecordTableAdminController {
                 .search(getParamsFromRecordTableView(findRecord));
 
         modelMap.addAttribute("recordTableViewList", list);
+
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+
         return "recordadminpage";
     }
 

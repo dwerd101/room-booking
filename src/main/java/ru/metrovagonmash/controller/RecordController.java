@@ -56,7 +56,7 @@ public class RecordController {
 
     @PostMapping("/update/")
     public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        checkPermissionToEditRecord(getUserAuth().getUsername(), recordTableDTO);
+        checkPermissionToEditRecord(getUserAuth(), recordTableDTO);
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
         recordTableDTO.setEmail(tempRecordTableDTO.getEmail());
         recordTableDTO.setIsActive(tempRecordTableDTO.getIsActive());
@@ -72,7 +72,7 @@ public class RecordController {
 
     @DeleteMapping("/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        checkPermissionToEditRecord(getUserAuth().getUsername(), recordTableDTO);
+        checkPermissionToEditRecord(getUserAuth(), recordTableDTO);
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
         RecordTableDTO resultRecordTableDTO = recordTableService.delete(recordTableDTO);
         sendConfirmDeleteMessageToEmployee(tempRecordTableDTO);
@@ -116,8 +116,8 @@ public class RecordController {
         recordTableDTO.setRoomId(urlMassive[urlMassive.length - 1]);
     }
 
-    private void checkPermissionToEditRecord(String login, RecordTableDTO recordTableDTO) {
-        if (!recordTableAndEmployeeService.checkPermissionByLoginAndRecordId(login,recordTableDTO.getId())) {
+    private void checkPermissionToEditRecord(User user, RecordTableDTO recordTableDTO) {
+        if (!recordTableAndEmployeeService.checkPermissionByUserAndRecordId(user,recordTableDTO.getId())) {
             throw new RecordTableBadRequestException("Нет доступа к записи!");
         }
     }

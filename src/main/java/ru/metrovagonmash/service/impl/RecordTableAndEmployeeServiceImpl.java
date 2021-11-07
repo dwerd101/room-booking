@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.config.security.Role;
 import ru.metrovagonmash.exception.EmployeeBadRequestException;
 import ru.metrovagonmash.exception.RecordTableBadRequestException;
 import ru.metrovagonmash.exception.VscRoomBadRequestException;
@@ -58,8 +59,10 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
 
 
     @Override
-    public boolean checkPermissionByLoginAndRecordId(String login, Long recordId) {
-        return recordTableRepository.findById(recordId).get().getEmployeeId().getProfileId().getLogin().equals(login);
+    public boolean checkPermissionByUserAndRecordId(User user, Long recordId) {
+        return ((user.getAuthorities().equals(Role.ADMIN.getAuthorities())) |
+                (recordTableRepository.findById(recordId).get()
+                .getEmployeeId().getProfileId().getLogin().equals(user.getUsername())));
     }
 
     public List<RecordTableView> findAll() {

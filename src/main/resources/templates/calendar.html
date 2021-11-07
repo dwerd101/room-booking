@@ -59,6 +59,8 @@
     var urlMassive = url.split('/');
     var index = urlMassive[urlMassive.length-1];
     var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    var adminPermission = [[${#authorization.expression('hasAuthority(''admin:update'')')}]];
+
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
       headerToolbar: {
@@ -73,7 +75,7 @@
       eventOverlap: false,
       views: {
           dayGridMonth: {
-              selectable: false
+              selectable: adminPermission
           },
           timeGridWeek: {
               selectable: true
