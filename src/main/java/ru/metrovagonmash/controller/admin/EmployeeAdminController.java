@@ -8,7 +8,7 @@ import ru.metrovagonmash.config.search.SearchByURLParams;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
-import ru.metrovagonmash.repository.search.ProfileViewSearchCriteriaRepostitoryImpl;
+import ru.metrovagonmash.repository.search.ProfileViewSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeAndProfileService;
 import ru.metrovagonmash.service.ProfileViewService;
@@ -25,7 +25,7 @@ public class EmployeeAdminController {
     private final EmployeeAndProfileService employeeAndProfileService;
     private final DepartmentService departmentService;
     private final ProfileViewService profileViewService;
-    private final ProfileViewSearchCriteriaRepostitoryImpl profileViewSearchCriteriaRepostitory;
+    private final ProfileViewSearchCriteriaRepositoryImpl profileViewSearchCriteriaRepository;
     private final SearchByURLParams searchByURLParams;
 
     @PostMapping("/save")
@@ -48,7 +48,7 @@ public class EmployeeAdminController {
                                  ModelMap modelMap) {
         List<ProfileView> list;
         if (search != null) {
-            list = profileViewSearchCriteriaRepostitory.search(searchByURLParams.getParamsFromSearch(search));
+            list = profileViewSearchCriteriaRepository.search(searchByURLParams.getParamsFromSearch(search));
         }
         else {
             list = profileViewService.findAll();
@@ -62,7 +62,7 @@ public class EmployeeAdminController {
     @PostMapping("/")
     public String findByParamPage(@ModelAttribute("findProfileView") ProfileView profileView,
                                   ModelMap modelMap) {
-        List<ProfileView> list = profileViewSearchCriteriaRepostitory.search(getParamsFromProfileView(profileView));
+        List<ProfileView> list = profileViewSearchCriteriaRepository.search(getParamsFromProfileView(profileView));
         modelMap.addAttribute("employeeList",list);
         return "adminpagefullfindemployee";
     }
