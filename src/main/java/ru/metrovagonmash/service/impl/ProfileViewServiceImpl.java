@@ -1,4 +1,4 @@
-package ru.metrovagonmash.service;
+package ru.metrovagonmash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -12,6 +12,7 @@ import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.ProfileViewRepository;
+import ru.metrovagonmash.service.RoomService;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileViewService implements RoomService<ProfileView,Long> {
+public class ProfileViewServiceImpl implements RoomService<ProfileView,Long> {
 
     private final JdbcTemplate jdbcTemplate;
     private final ProfileViewRepository profileViewRepository;

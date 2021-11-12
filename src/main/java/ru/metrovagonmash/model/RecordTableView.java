@@ -2,7 +2,9 @@ package ru.metrovagonmash.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,12 +14,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-
-
-@Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Entity
 @Table(name = "record_table_view")
 @Immutable
 @Subselect("select record_table.id, record_table.email, record_table.employee_id, employee.name, employee.surname, employee.middle_name, record_table.title, record_table.start_event, record_table.end_event, record_table.is_active, vsc_room.number_room\n" +
@@ -49,4 +50,39 @@ public class RecordTableView {
     @Column(name = "end_event")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime  endEvent;
+
+    @Override
+    public int hashCode() {
+        return 13;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RecordTableView other = (RecordTableView) obj;
+        if (id == null) {
+            return false;
+        } else return id.equals(other.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "RecordTableView{" +
+            "id=" + id +
+            ", email='" + email + '\'' +
+            ", employeeId=" + employeeId +
+            ", employeeName='" + employeeName + '\'' +
+            ", employeeSurname='" + employeeSurname + '\'' +
+            ", employeeMiddleName='" + employeeMiddleName + '\'' +
+            ", vcsRoomNumberRoom=" + vcsRoomNumberRoom +
+            ", isActive=" + isActive +
+            ", title='" + title + '\'' +
+            ", startEvent=" + startEvent +
+            ", endEvent=" + endEvent +
+            '}';
+    }
 }

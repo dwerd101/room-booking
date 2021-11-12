@@ -1,10 +1,11 @@
-package ru.metrovagonmash.service.mail;
+package ru.metrovagonmash.service.mail.impl;
 
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import ru.metrovagonmash.service.mail.MailSenderService;
 
 @Service
 public class MailSenderServiceImpl implements MailSenderService {

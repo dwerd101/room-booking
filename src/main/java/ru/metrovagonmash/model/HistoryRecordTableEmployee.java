@@ -3,18 +3,20 @@ package ru.metrovagonmash.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "history_record_table_employee")
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class HistoryRecordTableEmployee {
 
     @Id
@@ -40,4 +42,35 @@ public class HistoryRecordTableEmployee {
 
     private Long employeeId;
 
+    @Override
+    public int hashCode() {
+        return 13;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        HistoryRecordTableEmployee other = (HistoryRecordTableEmployee) obj;
+        if (id == null) {
+            return false;
+        } else return id.equals(other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "HistoryRecordTableEmployee{" +
+            "id=" + id +
+            ", email='" + email + '\'' +
+            ", title='" + title + '\'' +
+            ", startEvent=" + startEvent +
+            ", endEvent=" + endEvent +
+            ", isActive=" + isActive +
+            ", numberRoomId=" + numberRoomId +
+            ", employeeId=" + employeeId +
+            '}';
+    }
 }

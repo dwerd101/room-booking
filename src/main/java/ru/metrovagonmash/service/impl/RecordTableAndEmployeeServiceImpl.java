@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import ru.metrovagonmash.config.security.Role;
 import ru.metrovagonmash.exception.EmployeeBadRequestException;
+import ru.metrovagonmash.exception.RecordTableAndEmployeeException;
 import ru.metrovagonmash.exception.RecordTableBadRequestException;
 import ru.metrovagonmash.exception.VscRoomBadRequestException;
 import ru.metrovagonmash.mapper.VCMapper;
@@ -61,7 +62,7 @@ public class RecordTableAndEmployeeServiceImpl implements RecordTableAndEmployee
     @Override
     public boolean checkPermissionByUserAndRecordId(User user, Long recordId) {
         return ((user.getAuthorities().equals(Role.ADMIN.getAuthorities())) |
-                (recordTableRepository.findById(recordId).get()
+                (recordTableRepository.findById(recordId).orElseThrow(RecordTableAndEmployeeException::new)
                 .getEmployeeId().getProfileId().getLogin().equals(user.getUsername())));
     }
 

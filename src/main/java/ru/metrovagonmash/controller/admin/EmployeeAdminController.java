@@ -11,7 +11,7 @@ import ru.metrovagonmash.model.dto.EmployeeDTO;
 import ru.metrovagonmash.repository.search.ProfileViewSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeAndProfileService;
-import ru.metrovagonmash.service.ProfileViewService;
+import ru.metrovagonmash.service.impl.ProfileViewServiceImpl;
 import ru.metrovagonmash.specification.SearchCriteria;
 
 import javax.validation.Valid;
@@ -24,7 +24,7 @@ import java.util.List;
 public class EmployeeAdminController {
     private final EmployeeAndProfileService employeeAndProfileService;
     private final DepartmentService departmentService;
-    private final ProfileViewService profileViewService;
+    private final ProfileViewServiceImpl profileViewService;
     private final ProfileViewSearchCriteriaRepositoryImpl profileViewSearchCriteriaRepository;
     private final SearchByURLParams searchByURLParams;
 

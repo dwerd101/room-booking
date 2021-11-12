@@ -2,19 +2,22 @@ package ru.metrovagonmash.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "employee")
 public class Employee {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -52,4 +55,34 @@ public class Employee {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department departmentId;
 
+    @Override
+    public int hashCode() {
+        return 13;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Employee other = (Employee) obj;
+        if (id == null) {
+            return false;
+        } else return id.equals(other.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+            "id=" + id +
+            ", surname='" + surname + '\'' +
+            ", name='" + name + '\'' +
+            ", middleName='" + middleName + '\'' +
+            ", phone='" + phone + '\'' +
+            ", email='" + email + '\'' +
+            ", isActive=" + isActive +
+            '}';
+    }
 }

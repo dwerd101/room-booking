@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.metrovagonmash.model.ProfileView;
 
-import ru.metrovagonmash.service.*;
+import ru.metrovagonmash.service.impl.ProfileViewServiceImpl;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class AdminRoomController {
-    private final ProfileViewService profileViewService;
+    private final ProfileViewServiceImpl profileViewService;
 
 
     @GetMapping("/admin")
