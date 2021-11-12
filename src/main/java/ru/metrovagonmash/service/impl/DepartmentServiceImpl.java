@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final  JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     @Override
     public Department save(Department model) {
         return departmentRepository.save(model);
@@ -37,8 +37,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department deleteById(Long aLong) {
-        return departmentRepository.findById(aLong)
+        Department department = departmentRepository.findById(aLong)
                 .orElseThrow(() -> new DepartmentBadRequestException("Не найден ID"));
+        departmentRepository.deleteById(aLong);
+        return department;
     }
 
     @Override

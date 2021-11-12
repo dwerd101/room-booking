@@ -20,9 +20,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/room
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: 'true'
 server:
-  port: 8002
-
+  port: 8080
+  error:
+    include-message: always
 

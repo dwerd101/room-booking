@@ -5,7 +5,7 @@ import ru.metrovagonmash.model.dto.EmployeeDTO;
 
 import java.util.Optional;
 
-public interface EmployeeService extends RoomService<EmployeeDTO, Long> {
+public interface EmployeeService extends RoomServiceCRUD<EmployeeDTO, Long> {
     EmployeeDTO findByProfileID(Long profileID);
     EmployeeDTO findByLogin(String login);
     Boolean isPresentByDepartmentId(Long id);

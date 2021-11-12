@@ -15,7 +15,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class ProfileViewSearchCriteriaRepostitoryImpl implements SearchCriteriaViewRepository<ProfileView> {
+public class ProfileViewSearchCriteriaRepositoryImpl implements SearchCriteriaViewRepository<ProfileView> {
     @PersistenceContext
     private EntityManager entityManager;
     @Override

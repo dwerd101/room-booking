@@ -54,6 +54,12 @@ public class VscRoomServiceImpl implements VscRoomService {
                 .orElseThrow(() -> new VscRoomBadRequestException("Не найден ID"));
     }
 
+    @Override
+    public VscRoom findByNumberRoomId(Long aLong) {
+        return vscRepository.findByNumberRoom(aLong)
+                .orElseThrow(() -> new VscRoomBadRequestException("Не найден NumberRoomID"));
+    }
+
     @Transactional
     @Override
     public void batchUpdateVscRoom(List<VscRoom> vscRoomList) {

@@ -3,7 +3,6 @@ package ru.metrovagonmash.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +16,6 @@ import ru.metrovagonmash.service.RecordTableService;
 import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.service.mail.MailSenderService;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -47,80 +45,118 @@ public class RecordController {
 
     @PostMapping("/save/")
     public Callable<ResponseEntity<RecordTableDTO>> saveRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        String[] urlMassive = recordTableDTO.getRoomId().split("/");
-        recordTableDTO.setRoomId(urlMassive[urlMassive.length - 1]);
-        RecordTableDTO resultRecordTableDto = historyRecordTableEmployeeAndRecordTableService.save(recordTableDTO, user);
-        String subject = "Бронирование комнаты №" + recordTableDTO.getRoomId();
-        String message = "Вы забронировали комнату №" + recordTableDTO.getRoomId() + "\n"
-                + "Тема: " + resultRecordTableDto.getTitle() + "\n"
-                + "Дата бронирования: " + resultRecordTableDto.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + resultRecordTableDto.getStart().toLocalTime()
-                + " по " + resultRecordTableDto.getEnd().toLocalTime() + "\n"
-                + "Подробнее: " + recordUrl + recordTableDTO.getRoomId();
-        mailSenderService.send(resultRecordTableDto.getEmail(), subject, message);
-        return () -> ResponseEntity.ok(recordTableDTO);
-
+        setCorrectRoomIdFormat(recordTableDTO);
+        setCurrentZone(recordTableDTO);
+        RecordTableDTO resultRecordTableDto = historyRecordTableEmployeeAndRecordTableService.save(recordTableDTO, getUserAuth());
+        sendConfirmMessageToEmployee(resultRecordTableDto, recordTableDTO.getRoomId());
+        return () -> ResponseEntity.ok(resultRecordTableDto);
     }
 
-    @PostMapping("/update/{id}")
-    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO,
-                                                                 @PathVariable String id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        if (!recordTableAndEmployeeService.checkPermissionByLoginAndRecordId(user.getUsername(),Long.parseLong(id))) {
-            throw new RecordTableBadRequestException("Нет доступа к записи!");
-        }
 
-        RecordTableDTO tempRecordTableDTO = recordTableService.findById(Long.parseLong(id));
-        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
-        String message = "Изменение в бронировании комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
-                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
-                + "Старое время: " + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n";
-        tempRecordTableDTO.setStart(recordTableDTO.getStart());
-        tempRecordTableDTO.setEnd(recordTableDTO.getEnd());
-        RecordTableDTO resultRecordTableDTO = historyRecordTableEmployeeAndRecordTableService.update(tempRecordTableDTO,
-                Long.parseLong(id));
-        String subject = "Изменение в бронирование комнаты №" + tempRecordTableDTO.getRoomId();
-        message = message
-                + "Новое время: " + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().withZoneSameInstant(ZonedDateTime.now().getZone()).toLocalTime() + "\n"
-                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
-        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+
+    @PostMapping("/update/")
+    public Callable<ResponseEntity<RecordTableDTO>> updateRecord(@RequestBody RecordTableDTO recordTableDTO) {
+        checkPermissionToEditRecord(getUserAuth(), recordTableDTO);
+        RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
+        recordTableDTO.setEmail(tempRecordTableDTO.getEmail());
+        recordTableDTO.setIsActive(tempRecordTableDTO.getIsActive());
+        recordTableDTO.setNumberRoomId(tempRecordTableDTO.getNumberRoomId());
+        recordTableDTO.setEmployeeId(tempRecordTableDTO.getEmployeeId());
+        recordTableDTO.setRoomId(vscRoomService.findById(recordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        RecordTableDTO resultRecordTableDTO = historyRecordTableEmployeeAndRecordTableService.update(recordTableDTO,
+                recordTableDTO.getId());
+        sendConfirmUpdateMessageToEmployee(tempRecordTableDTO, recordTableDTO);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
     }
 
 
     @DeleteMapping("/delete/")
     public Callable<ResponseEntity<RecordTableDTO>> deleteRecord(@RequestBody RecordTableDTO recordTableDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
+        checkPermissionToEditRecord(getUserAuth(), recordTableDTO);
         RecordTableDTO tempRecordTableDTO = recordTableService.findById(recordTableDTO.getId());
-        tempRecordTableDTO.setRoomId(vscRoomService.findById(tempRecordTableDTO.getNumberRoomId()).getNumberRoom().toString());
-        RecordTableDTO resultRecordTableDTO = recordTableAndEmployeeService.delete(recordTableDTO, user);
-        String subject = "Отмена бронирования комнаты №" + tempRecordTableDTO.getRoomId();
-        String message = "Отменено бронирование комнаты №" + tempRecordTableDTO.getRoomId() + "\n"
-                + "Тема: " + tempRecordTableDTO.getTitle() + "\n"
-                + "Дата бронирования: " + tempRecordTableDTO.getStart().toLocalDate() + "\n"
-                + "Время бронирования: с " + tempRecordTableDTO.getStart().toLocalTime()
-                + " по " + tempRecordTableDTO.getEnd().toLocalTime() + "\n"
-                + "Подробнее: " + recordUrl  + tempRecordTableDTO.getRoomId();
-        mailSenderService.send(tempRecordTableDTO.getEmail(), subject, message);
+        RecordTableDTO resultRecordTableDTO = recordTableService.delete(recordTableDTO);
+        sendConfirmDeleteMessageToEmployee(tempRecordTableDTO);
         return () -> ResponseEntity.ok(resultRecordTableDTO);
     }
 
-    //Подумать над названием
+
     @GetMapping("/findAll")
-    public Callable<ResponseEntity<List<RecordTableDTO>>> findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom() {
-        return () -> ResponseEntity.ok(recordTableService.findAllByEmployeeNameAndSurnameAndMiddleNameAndRecordAndIsActiveAndNumberRoom());
+    public Callable<ResponseEntity<List<RecordTableDTO>>> findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom() {
+        return () -> ResponseEntity.ok(recordTableService.findAllByEmployeeFullNameAndRecordAndIsActiveAndNumberRoom());
     }
 
+    private User getUserAuth () {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
+    }
+
+    private void setCurrentZone(RecordTableDTO recordTableDTO) {
+        recordTableDTO.setStart(recordTableDTO.getStart().withZoneSameInstant(recordTableDTO.getTimeZone()));
+        recordTableDTO.setEnd(recordTableDTO.getEnd().withZoneSameInstant(recordTableDTO.getTimeZone()));
+    }
+
+    private void sendConfirmMessageToEmployee(RecordTableDTO recordTableDTO, String roomId) {
+        recordTableDTO.setRoomId(roomId);
+        String subject = "Бронирование комнаты №" + recordTableDTO.getRoomId();
+        String message = getMessageForSaveRecord(recordTableDTO);
+        mailSenderService.send(recordTableDTO.getEmail(), subject, message);
+    }
+
+    private String getMessageForSaveRecord(RecordTableDTO recordTableDTO) {
+        return "Вы забронировали комнату №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + recordUrl + recordTableDTO.getRoomId();
+    }
+
+    private void setCorrectRoomIdFormat (RecordTableDTO recordTableDTO) {
+        String[] urlMassive = recordTableDTO.getRoomId().split("/");
+        recordTableDTO.setRoomId(urlMassive[urlMassive.length - 1]);
+    }
+
+    private void checkPermissionToEditRecord(User user, RecordTableDTO recordTableDTO) {
+        if (!recordTableAndEmployeeService.checkPermissionByUserAndRecordId(user,recordTableDTO.getId())) {
+            throw new RecordTableBadRequestException("Нет доступа к записи!");
+        }
+    }
+
+    private void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        setCurrentZone(recordTableDTO);
+        String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
+        String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
+        mailSenderService.send(recordTableDTO.getEmail(), subject, message);
+    }
+
+    private String getMessageForUpdateRecord(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+        return "Изменение в бронировании комнаты №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Старое время: " + "\n"
+                + "Дата бронирования: " + previousRecordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + previousRecordTableDTO.getStart().toLocalTime()
+                + " по " + previousRecordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Новое время: " + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
+    }
+
+    private void sendConfirmDeleteMessageToEmployee(RecordTableDTO recordTableDTO) {
+        recordTableDTO.setRoomId(vscRoomService.findById(recordTableDTO.getNumberRoomId()).getNumberRoom().toString());
+        String subject = "Отмена бронирования комнаты №" + recordTableDTO.getRoomId();
+        mailSenderService.send(recordTableDTO.getEmail(), subject, getMessageForDeleteRecord(recordTableDTO));
+    }
+
+    private String getMessageForDeleteRecord(RecordTableDTO recordTableDTO) {
+        return "Отменено бронирование комнаты №" + recordTableDTO.getRoomId() + "\n"
+                + "Тема: " + recordTableDTO.getTitle() + "\n"
+                + "Дата бронирования: " + recordTableDTO.getStart().toLocalDate() + "\n"
+                + "Время бронирования: с " + recordTableDTO.getStart().toLocalTime()
+                + " по " + recordTableDTO.getEnd().toLocalTime() + "\n"
+                + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
+    }
 
 
 }

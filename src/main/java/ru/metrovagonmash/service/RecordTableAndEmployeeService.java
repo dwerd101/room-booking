@@ -9,6 +9,6 @@ import java.util.List;
 public interface RecordTableAndEmployeeService  {
     RecordTableDTO save(RecordTableDTO recordTableDTO, User user);
     RecordTableDTO delete(RecordTableDTO recordTableDTO, User user);
-    boolean checkPermissionByLoginAndRecordId(String login, Long recordId);
+    boolean checkPermissionByUserAndRecordId(User user, Long recordId);
     List<RecordTableView> findAll();
 }

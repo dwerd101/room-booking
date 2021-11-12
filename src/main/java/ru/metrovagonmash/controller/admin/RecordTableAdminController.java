@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.metrovagonmash.config.search.SearchByURLParams;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
@@ -11,13 +12,12 @@ import ru.metrovagonmash.model.VscRoom;
 import ru.metrovagonmash.repository.search.RecordTableViewSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
+import ru.metrovagonmash.service.VscRoomService;
 import ru.metrovagonmash.specification.SearchCriteria;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,20 +26,15 @@ public class RecordTableAdminController {
     private final RecordTableService recordTableService;
     private final RecordTableAndEmployeeService recordTableAndEmployeeService;
     private final RecordTableViewSearchCriteriaRepositoryImpl recordTableViewSearchCriteriaRepository;
+    private final VscRoomService vscRoomService;
+    private final SearchByURLParams searchByURLParams;
 
     @GetMapping("/")
     public String records(@RequestParam(value = "search", required = false) String search,
                           ModelMap modelMap) {
         List<RecordTableView> recordTableViewList;
         if (search != null) {
-            List<SearchCriteria> params = new ArrayList<>();
-            Pattern pattern = Pattern.compile("(\\w+?)([:<>])(\\w+?|.*?),", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
-            }
-
-            recordTableViewList = recordTableViewSearchCriteriaRepository.search(params);
+            recordTableViewList = recordTableViewSearchCriteriaRepository.search(searchByURLParams.getParamsFromSearch(search));
         }
         else {
             recordTableViewList = recordTableAndEmployeeService.findAll();
@@ -47,12 +42,58 @@ public class RecordTableAdminController {
 
         modelMap.addAttribute("recordTableViewList", recordTableViewList);
         modelMap.addAttribute("findRecord",new RecordTableView());
+
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+
         return "recordadminpage";
     }
 
     @PostMapping("/")
     public String findRecords(@ModelAttribute("findRecord") RecordTableView findRecord,
                                   ModelMap modelMap) {
+        List<RecordTableView> list = recordTableViewSearchCriteriaRepository
+                .search(getParamsFromRecordTableView(findRecord));
+
+        modelMap.addAttribute("recordTableViewList", list);
+
+        List<VscRoom> vscRoomList = vscRoomService.findAll();
+        modelMap.addAttribute("vscroomlist", vscRoomList);
+
+        return "recordadminpage";
+    }
+
+    @PostMapping("/save")
+    public String updateRecords(@RequestParam(name = "id") String id,
+                                @RequestParam(name = "email") String email,
+                                @RequestParam(name = "employeeId") String employeeId,
+                                @RequestParam(name = "vcsRoomNumberRoom") String vcsRoomNumberRoom,
+                                @RequestParam(name = "isActive") String isActive,
+                                @RequestParam(name = "title") String title,
+                                @RequestParam(name = "startEvent") String startEvent,
+                                @RequestParam(name = "endEvent") String endEvent
+    ) {
+        recordTableService.batchUpdateRecords(getRecordTableListFromParams(id, email, employeeId, vcsRoomNumberRoom,
+                isActive, title, startEvent, endEvent));
+
+        return "redirect:/admin/records/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String askDeleteRecord(@PathVariable String id, ModelMap modelMap) {
+        modelMap.addAttribute("recordTableId", id);
+        return "deleterecord";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteRecord(@PathVariable String id) {
+        recordTableService.deleteById(Long.parseLong(id));
+        return "redirect:/admin/records/";
+    }
+
+
+
+    private List<SearchCriteria> getParamsFromRecordTableView(RecordTableView findRecord) {
         List<SearchCriteria> params = new ArrayList<>();
 
         if (findRecord.getId() != null)
@@ -78,26 +119,17 @@ public class RecordTableAdminController {
         if (findRecord.getEndEvent() != null)
             params.add(new SearchCriteria("endEvent",":",findRecord.getEndEvent()));
 
-
-
-        List<RecordTableView> list = recordTableViewSearchCriteriaRepository.search(params);
-
-        modelMap.addAttribute("recordTableViewList", list);
-        return "recordadminpage";
+        return params;
     }
 
-
-
-    @PostMapping("/save")
-    public String updateRecords(@RequestParam(name = "id") String id,
-                                @RequestParam(name = "email") String email,
-                                @RequestParam(name = "employeeId") String employeeId,
-                                @RequestParam(name = "vcsRoomNumberRoom") String vcsRoomNumberRoom,
-                                @RequestParam(name = "isActive") String isActive,
-                                @RequestParam(name = "title") String title,
-                                @RequestParam(name = "startEvent") String startEvent,
-                                @RequestParam(name = "endEvent") String endEvent
-    ) {
+    private List<RecordTable> getRecordTableListFromParams(String id,
+                                                           String email,
+                                                           String employeeId,
+                                                           String vcsRoomNumberRoom,
+                                                           String isActive,
+                                                           String title,
+                                                           String startEvent,
+                                                           String endEvent) {
         String[] idMas = id.split(",");
         String[] emailMas = email.split(",");
         String[] employeeIdMas = employeeId.split(",");
@@ -114,7 +146,10 @@ public class RecordTableAdminController {
                             .id(Long.parseLong(idMas[i]))
                             .email(emailMas[i])
                             .employeeId(Employee.builder().id(Long.parseLong(employeeIdMas[i])).build())
-                            .numberRoomId(VscRoom.builder().id(Long.parseLong(vcsRoomNumberRoomMas[i])).build())
+                            .numberRoomId(VscRoom.builder()
+                                    .id(vscRoomService.findByNumberRoomId(Long.parseLong(vcsRoomNumberRoomMas[i]))
+                                            .getId())
+                                    .build())
                             .isActive(Boolean.valueOf(isActiveMas[i]))
                             .title(titleMas[i])
                             .startEvent(ZonedDateTime.parse(startEventMas[i]))
@@ -122,21 +157,7 @@ public class RecordTableAdminController {
                             .build()
             );
         }
-        recordTableService.batchUpdateRecords(recordTableList);
-
-        return "redirect:/admin/records/";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String askDeleteRecord(@PathVariable String id, ModelMap modelMap) {
-        modelMap.addAttribute("recordTableId", id);
-        return "deleterecord";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteRecord(@PathVariable String id) {
-        recordTableService.deleteById(Long.parseLong(id));
-        return "redirect:/admin/records/";
+        return recordTableList;
     }
 
 }

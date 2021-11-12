@@ -29,7 +29,7 @@
 
             <ul class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
                 <div th:each="vscroom : ${vscroomlist}">
-                    <li><a class="dropdown-item" th:href="${'/calendar/' + vscroom.numberRoom}" th:text="${vscroom.numberRoom}"></a></li>
+                    <li><a class="dropdown-item" th:href="${'/room/' + vscroom.numberRoom}" th:text="${vscroom.numberRoom}"></a></li>
                 </div>
             </ul>
         </div>

@@ -27,10 +27,9 @@ public class UserEditController {
 
     @GetMapping("/user/edit")
     public String editEmployee(ModelMap modelMap) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        EmployeeDTO employeeDTO = employeeAndProfileService.findByLogin(user.getUsername());
+        EmployeeDTO employeeDTO = employeeAndProfileService.findByLogin(getUserAuth().getUsername());
         Profile profile = employeeAndProfileService.findProfileById(employeeDTO.getProfileId());
+
         modelMap.addAttribute("employeeData", employeeDTO);
         modelMap.addAttribute("profileData", profile);
         modelMap.addAttribute("departmentData", departmentService.findAll());
@@ -51,14 +50,13 @@ public class UserEditController {
         tempEmployeeDTO.setEmail(employeeDTO.getEmail());
         tempEmployeeDTO.setDepartmentId(employeeDTO.getDepartmentId());
 
-        /*profile.setId(tempProfile.getId());
-        profile.setPassword(tempProfile.getPassword());
-        employeeDTO.setIsActive(tempEmployeeDTO.getIsActive());
-        employeeDTO.setId(tempEmployeeDTO.getId());
-        employeeDTO.setProfileId(tempProfile.getId());*/
-
         employeeAndProfileService.update(tempEmployeeDTO, tempProfile);
         return "redirect:/user/edit";
+    }
+
+    private User getUserAuth () {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
     }
 }
 

@@ -28,21 +28,7 @@ public class VscRoomAdminController {
                                     @RequestParam(name = "isActive") String isActive,
                                     @RequestParam(name = "numberRoom") String numberRoom
     ) {
-        String[] idMas = id.split(",");
-        String[] isActiveMas = isActive.split(",");
-        String[] numberRoomMas = numberRoom.split(",");
-
-        List<VscRoom> vscRoomList = new ArrayList<>();
-        for (int i=0; i<idMas.length; i++) {
-            vscRoomList.add(
-                    VscRoom.builder()
-                            .id(Long.parseLong(idMas[i]))
-                            .isActive(Boolean.valueOf(isActiveMas[i]))
-                            .numberRoom(Long.parseLong(numberRoomMas[i]))
-                            .build()
-            );
-        }
-        vscRoomService.batchUpdateVscRoom(vscRoomList);
+        vscRoomService.batchUpdateVscRoom(getVscRoomListFromParams(id, isActive, numberRoom));
 
         return "redirect:/admin/vscrooms/";
     }
@@ -69,5 +55,25 @@ public class VscRoomAdminController {
     public String saveNewRoom(@ModelAttribute("roomData")final @Valid VscRoom vscRoom) {
         vscRoomService.save(vscRoom);
         return "redirect:/admin/vscrooms/";
+    }
+
+    private List<VscRoom> getVscRoomListFromParams(String id,
+                                                   String isActive,
+                                                   String numberRoom) {
+        String[] idMas = id.split(",");
+        String[] isActiveMas = isActive.split(",");
+        String[] numberRoomMas = numberRoom.split(",");
+
+        List<VscRoom> vscRoomList = new ArrayList<>();
+        for (int i=0; i<idMas.length; i++) {
+            vscRoomList.add(
+                    VscRoom.builder()
+                            .id(Long.parseLong(idMas[i]))
+                            .isActive(Boolean.valueOf(isActiveMas[i]))
+                            .numberRoom(Long.parseLong(numberRoomMas[i]))
+                            .build()
+            );
+        }
+        return vscRoomList;
     }
 }
