@@ -1,7 +1,8 @@
 package ru.metrovagonmash.repository;
 
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
 import ru.metrovagonmash.model.RecordTableView;
-import ru.metrovagonmash.specification.SearchCriteria;
+
 
 import java.util.List;
 

@@ -5,11 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.config.search.SearchByURLParams;
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
 import ru.metrovagonmash.model.Department;
 import ru.metrovagonmash.repository.search.DepartmentSearchCriteriaRepositoryImpl;
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeService;
-import ru.metrovagonmash.specification.SearchCriteria;
+
 
 import javax.validation.Valid;
 import java.util.ArrayList;

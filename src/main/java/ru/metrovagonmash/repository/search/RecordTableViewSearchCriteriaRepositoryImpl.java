@@ -1,10 +1,11 @@
 package ru.metrovagonmash.repository.search;
 
 import org.springframework.stereotype.Repository;
+import ru.metrovagonmash.config.search.specification.ProfileViewConsumer;
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
 import ru.metrovagonmash.model.RecordTableView;
 import ru.metrovagonmash.repository.SearchCriteriaViewRepository;
-import ru.metrovagonmash.specification.ProfileViewConsumer;
-import ru.metrovagonmash.specification.SearchCriteria;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

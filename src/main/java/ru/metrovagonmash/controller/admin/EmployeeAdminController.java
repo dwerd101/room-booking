@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.config.search.SearchByURLParams;
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
 import ru.metrovagonmash.model.Profile;
 import ru.metrovagonmash.model.ProfileView;
 import ru.metrovagonmash.model.dto.EmployeeDTO;
@@ -12,7 +13,7 @@ import ru.metrovagonmash.repository.search.ProfileViewSearchCriteriaRepositoryIm
 import ru.metrovagonmash.service.DepartmentService;
 import ru.metrovagonmash.service.EmployeeAndProfileService;
 import ru.metrovagonmash.service.impl.ProfileViewServiceImpl;
-import ru.metrovagonmash.specification.SearchCriteria;
+
 
 import javax.validation.Valid;
 import java.util.ArrayList;

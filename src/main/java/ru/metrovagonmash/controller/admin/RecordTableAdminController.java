@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.metrovagonmash.config.search.SearchByURLParams;
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
 import ru.metrovagonmash.model.Employee;
 import ru.metrovagonmash.model.RecordTable;
 import ru.metrovagonmash.model.RecordTableView;
@@ -13,7 +14,7 @@ import ru.metrovagonmash.repository.search.RecordTableViewSearchCriteriaReposito
 import ru.metrovagonmash.service.RecordTableAndEmployeeService;
 import ru.metrovagonmash.service.RecordTableService;
 import ru.metrovagonmash.service.VscRoomService;
-import ru.metrovagonmash.specification.SearchCriteria;
+
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

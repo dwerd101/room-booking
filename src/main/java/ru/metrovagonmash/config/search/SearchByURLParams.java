@@ -2,7 +2,8 @@ package ru.metrovagonmash.config.search;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.metrovagonmash.specification.SearchCriteria;
+import ru.metrovagonmash.config.search.specification.SearchCriteria;
+
 
 import java.util.ArrayList;
 import java.util.List;
